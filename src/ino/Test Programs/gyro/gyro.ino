@@ -1,6 +1,6 @@
 // Required libraries
 #include "rgb_lcd.h"
-#include "gyro.h"
+#include ""
 
 void setup()
 {
