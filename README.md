@@ -1,5 +1,3 @@
-testtetarfad
-
 # WRO World Finals 2023 by Team SmartiecarV2 🌍🤖🏆
 
 ## Table of Contents 📚👇
