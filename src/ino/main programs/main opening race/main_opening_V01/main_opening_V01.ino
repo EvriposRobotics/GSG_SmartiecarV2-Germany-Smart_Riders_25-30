@@ -372,7 +372,7 @@ void PRGstop()
         }
         Alignment = TD;
         runMotor(SlowSpeed);               
-        while(angle > TD - correction_L)
+        while(angle > TD + correction_L)
         {
            
            angle = IMU_getAngle();
@@ -585,7 +585,7 @@ if(Distance_R < 10)
   //TargedDirection check
   if(TD == 'U')
   {
-    if(Distance_L > 60)
+    if(Distance_L > 80)
     {
       TD = 'L';
     lcd.setCursor(0,0);
@@ -594,7 +594,7 @@ if(Distance_R < 10)
 
     }
 
-    else if(Distance_R > 60)
+    else if(Distance_R > 80)
     {
       TD = 'R';
     lcd.setCursor(0,1);
