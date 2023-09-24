@@ -16,14 +16,14 @@ Servo servo;
 //Servo steering
 
 //left steering  
- void left(int Angle) {
+ void right(int Angle) {
    int P1;
    P1 = centered + Angle;
   servo.write(P1);
  }
 
 //right steering
- void right(int Angle) {
+ void left(int Angle) {
    int P2;
    P2  = centered - Angle;
  servo.write(P2);
@@ -40,8 +40,7 @@ Servo servo;
 
 void servosetup()
 {
-  //SERVO SETUP
-  // Connect servo to pin 9
+  //SERVO SETUPs
   servo.attach(Servopin);
   center();
 }

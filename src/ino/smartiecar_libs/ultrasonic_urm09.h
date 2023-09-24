@@ -6,7 +6,7 @@
 
 
 //US sensor pin definiton
-#define trigechoPin_F 8
+#define trigechoPin_F A1
 
 #define trigechoPin_L A2
 

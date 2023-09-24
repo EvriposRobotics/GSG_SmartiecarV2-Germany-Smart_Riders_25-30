@@ -13,7 +13,7 @@ int rounds;
 int orientation;
 
 //target direction
-char TD = 'K';
+char TD = 'U';
 
 
 /************************* Imu Functions *************************/

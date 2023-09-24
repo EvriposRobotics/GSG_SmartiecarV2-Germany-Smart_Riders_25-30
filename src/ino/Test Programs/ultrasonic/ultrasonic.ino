@@ -31,5 +31,5 @@ void loop()
     lcd.print(Distance);
     lcd.print("  ");
     lcd.print(Distance_R);
-
+    lcd.print("  ");
 }

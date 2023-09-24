@@ -56,10 +56,10 @@ unsigned long start_time;
 //--------------------------------------------------
 
  //speeds
-  int NormalSpeed =  170;
-  int SlowSpeed =  155;
-  int CurveSpeed =  200; 
-  int StartSpeed = 160;
+  int NormalSpeed =  120;
+  int SlowSpeed   =  120;
+  int CurveSpeed  =  120; 
+  int StartSpeed  =  120;
 
 
 //LCD connection
@@ -71,8 +71,8 @@ unsigned long start_time;
  rgb_lcd lcd;
 
 //laps/corners
-int corners = 0;
-int laps = 0; 
+int corners  = 0;
+int laps     = 0; 
 int quadrant = 0;
 
 //Distances own funcs (calc values)
@@ -82,8 +82,8 @@ int quadrant = 0;
  
  float angle;
  float danger;
- float correction_L = -35.0;
- float correction_R = 35.0;
+ float correction_L = 15.0;
+ float correction_R = 15.0;
  float Alignment;
 
  
@@ -93,9 +93,9 @@ int quadrant = 0;
   //obstacles
   char Block = 'U';
 
- //last kurve measure
- unsigned long Mcorner;
- unsigned long ZKurve = 2000;
+ //last curve measured
+ unsigned long LastCurveTime = 0;
+ unsigned long NextCurveDelay = 2000;
   
   //both alignments (L/R)
   int Walldistance = 25;
@@ -148,7 +148,7 @@ void PRGstop()
     lcd.setCursor(0,0);
     lcd.print(angle);
     left(30);
-    while(angle > TD - correction_L)
+    while(angle > TD + correction_L)
     {
       
       angle = IMU_getAngle();
@@ -346,7 +346,7 @@ void PRGstop()
   }
 
 
-  void Corner_L()
+  void Curve_L()
   {
          int Speed;
          float TD;
@@ -395,10 +395,10 @@ void PRGstop()
       delay(10);
     }
     lcd.setRGB(0, 255, 0);
-    Mcorner = millis();
+    LastCurveTime = millis();
   }
 
-void Corner_R()
+void Curve_R()
     {
          int Speed;
          float TD;
@@ -448,7 +448,7 @@ void Corner_R()
       delay(10);
     }
     lcd.setRGB(0, 255, 0);
-    Mcorner = millis();
+    LastCurveTime = millis();
   }
 
 ///////////////////////////////////////////
@@ -534,13 +534,13 @@ if(Distance_R < 10)
 
   // Speichere die aktuelle Zeit
   start_time = millis();
-  Mcorner = millis() - ZKurve;
+  LastCurveTime = millis() - NextCurveDelay;
 
   //Steering center  
   center();
 
   // Langsam erste Kurve finden
-  if(TD == 'K')
+  if(TD == 'U')
   {
     runMotor(StartSpeed);
   }
@@ -577,28 +577,29 @@ if(Distance_R < 10)
  {
 
  // Distance to Corner show current reading values
- //Distance = SpaceUS_F(); 
+ Distance = SpaceUS_F();
  Distance_L = SpaceUS_L();
  Distance_R = SpaceUS_R();
 
 
   //TargedDirection check
-  if(TD == 'K')
+  if(TD == 'U')
   {
     if(Distance_L > 60)
     {
       TD = 'L';
     lcd.setCursor(0,0);
     lcd.print(Distance_L);
-      Corner_L();
+      Curve_L();
 
     }
-    else if(Distance_R >60)
+
+    else if(Distance_R > 60)
     {
-        TD = 'R';
+      TD = 'R';
     lcd.setCursor(0,1);
     lcd.print(Distance_R);
-        Corner_R();
+        Curve_R();
 
     }        
   }
@@ -606,19 +607,19 @@ if(Distance_R < 10)
 
   
   //check if L turn
-  if((TD == 'L') && (Distance_L > 80) && (millis() - Mcorner >= ZKurve))
+  if((TD == 'L') && (Distance_L > 80) && (millis() - LastCurveTime >= NextCurveDelay))
   {
-    Corner_L();
+    Curve_L();
   }
  
     //check if R turn
-  if((TD == 'R') && (Distance_R > 80) && (millis() - Mcorner >= ZKurve))
+  if((TD == 'R') && (Distance_R > 80) && (millis() - LastCurveTime >= NextCurveDelay))
   {
-    Corner_R();
+    Curve_R();
   }
 
- //calls Alignmentsfunktion
- if(TD == 'K')
+ //calls allign function
+ if(TD == 'U')
  {
   align();
   delay(20);

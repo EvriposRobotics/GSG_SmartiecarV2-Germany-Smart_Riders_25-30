@@ -1,17 +1,11 @@
 #include <Servo.h>
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\steering.h"
 
-// create servo object to control a servo
-Servo servo;
-
 unsigned long start_time;
 
 void setup() 
 {
-  // initalise serial communication
-  servo.attach(3);
-
-  servo.write(85);
+  servosetup();
 }
 
 void loop() 
