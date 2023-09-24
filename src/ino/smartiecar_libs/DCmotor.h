@@ -41,7 +41,7 @@ int in2 = 7;
  void runMotor(int Speed)  
  {
   int tmpSpeed;
-  digitalWrite(in1, HIGH);  // Motor 1 beginnt zu rotieren
+  digitalWrite(in1, HIGH);  // motor 1 starts
   digitalWrite(in2, LOW);
   if(Speed < 185)
   {
@@ -52,26 +52,6 @@ int in2 = 7;
   analogWrite(GSM1, Speed);
 
  }
-
-
-
-//Stop programm
-void PRGstopp() 
-{
-  unsigned long FZ;  
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, LOW);
-    analogWrite(GSM1, 0);
-  // Speichere die aktuelle Zeit
-  FZ = millis() - start_time;
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("zeit: ");
-    lcd.print(FZ);
-    delay(9999999);
-
-}
-
 
 
 void motorsetup()

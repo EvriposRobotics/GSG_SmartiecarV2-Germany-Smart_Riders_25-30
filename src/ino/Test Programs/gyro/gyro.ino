@@ -1,6 +1,6 @@
 // Required libraries
 #include "rgb_lcd.h"
-#include ""
+#include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\gyro.h"
 
 void setup()
 {

@@ -9,13 +9,8 @@
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 sensors_event_t event;
 
-//lcd object
- rgb_lcd lcd;
-
 int rounds;
 int orientation;
-int corners;
-int quadrant;
 
 //target direction
 char TD = 'K';
