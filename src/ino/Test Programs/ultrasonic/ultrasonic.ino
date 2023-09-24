@@ -1,0 +1,35 @@
+#include "ultrasonic_urm09.h"
+#include "rgb_lcd.h"
+
+//create the lcd object
+rgb_lcd lcd;
+
+//setup the ultrasonic sensor
+void setup()
+{
+    Serial.begin(9600);
+    ultrasonicstart();
+    lcd.begin(16,2);
+    //set the color of the lcd
+    lcd.setRGB(255,255,255);
+}
+
+
+
+//loop to print the distance for all three sensors
+void loop()
+{
+    //distance definitions
+    int Distance_L = SpaceUS_L();
+    int Distance = SpaceUS_F();
+    int Distance_R = SpaceUS_R();
+
+    //print all distances
+    lcd.setCursor(0,0);
+    lcd.print(Distance_L);
+    lcd.print("  ");
+    lcd.print(Distance);
+    lcd.print("  ");
+    lcd.print(Distance_R);
+
+}
