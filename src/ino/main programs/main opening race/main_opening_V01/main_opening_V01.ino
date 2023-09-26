@@ -82,8 +82,8 @@ int quadrant = 0;
  
  float angle;
  float danger;
- float correction_L = 15.0;
- float correction_R = 15.0;
+ float correction_L = 25.0;
+ float correction_R = 25.0;
  float Alignment;
 
  
@@ -245,21 +245,11 @@ void PRGstop()
     {
       Steering = Steering *(-1);
       right(Steering);
-      /*
-      lcd.setCursor(0, 1);
-      lcd.print("R ");
-      lcd.print(Steering);
-      */
     }
     
     else
     {
       left(Steering);
-      /*
-      lcd.setCursor(0, 1);
-      lcd.print("L ");
-      lcd.print(Steering);
-      */
     }
 
     delay(20);
