@@ -76,14 +76,14 @@ int laps     = 0;
 int quadrant = 0;
 
 //Distances own funcs (calculate values)
- int Distance;
+ int Distance_F;
  int Distance_L;
  int Distance_R;
  
  float angle;
  float danger;
- float correction_L = 25.0;
- float correction_R = 25.0;
+ float correction_L = 20.0;
+ float correction_R = 20.0;
  float Alignment;
 
  
@@ -96,7 +96,7 @@ int quadrant = 0;
  unsigned long NextCurveDelay = 2000;
   
   //both alignments (L/R)
-  int Walldistance = 25;
+  int Walldistance = 20;
 
   
 //own Modules
@@ -466,19 +466,16 @@ Wire.begin();
  servosetup();
 
 
-  //setup von ultraschall.h
+  //setup gyroscope IMU
   startGyroscope();
 
   //initalisiert motor pinmodes von DCmotor.h
   motorsetup();
 
   delay(5000); // 5 Sekunden warten
-
-  //gyro setup gyro.h
-  startGyroscope();  
     
- // Distance to Kurve ZEIGE MESSWERTE
- Distance = SpaceUS_F(); 
+ // distance to curve show current reading values
+ Distance_F = SpaceUS_F(); 
  Distance_L = SpaceUS_L();
  Distance_R = SpaceUS_R();
 
@@ -493,13 +490,13 @@ if(Distance_R < 10)
 }
 
   
-  //corners zählen
+  //count corners
    Alignment = IMU_getAngle(); 
 
     lcd.setCursor(0,0);
     lcd.print(Distance_L);
     lcd.print("  ");
-    lcd.print(Distance);
+    lcd.print(Distance_F);
     lcd.print("  ");
     lcd.print(Distance_R);
     lcd.setCursor(0,1);
@@ -565,7 +562,7 @@ if(Distance_R < 10)
  {
 
  // Distance to Corner show current reading values
- Distance = SpaceUS_F();
+ //Distance = SpaceUS_F();
  Distance_L = SpaceUS_L();
  Distance_R = SpaceUS_R();
 
@@ -627,13 +624,6 @@ if(Distance_R < 10)
    delay(40);
  }
 
-
-  //drive slow if distance to wall is small
-  if(Distance < 90)
-  {
-    runMotor(SlowSpeed);
-  }
-
   //all corners check
   if(corners == 12)
   {
@@ -641,22 +631,23 @@ if(Distance_R < 10)
     if(DD == 'R')
     {
       left(10);
-      delay(200);
+      delay(500);
       center();
       delay(400);
     }
     else
     {
       right(10);
-      delay(200);
+      delay(500);
       center();
       delay(400);
     }
-    // Drive until to center of the side
-    Distance = SpaceUS_F(); 
-    while (Distance > 140)
+    
+    //drive straight to finish and stop
+    Distance_F = SpaceUS_F();
+    while (Distance_F > 140)
     {
-      Distance = SpaceUS_F(); 
+      Distance_F = SpaceUS_F();
     }
     PRGstop();
   }

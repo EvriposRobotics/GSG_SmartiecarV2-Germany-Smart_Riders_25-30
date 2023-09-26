@@ -4,7 +4,7 @@
 
 //servo pin
 int Servopin = 3;
-int centered = 72;
+int centered = 70;
 
 // create servo object
 Servo servo;
