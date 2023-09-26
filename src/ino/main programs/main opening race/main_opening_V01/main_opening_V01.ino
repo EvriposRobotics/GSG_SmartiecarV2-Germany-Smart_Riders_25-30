@@ -38,7 +38,7 @@
 #include <NewPing.h>
 #include "QuickMedianLib.h"
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
  ██████╗ ██╗      ██████╗ ██████╗  █████╗ ██╗         ██╗   ██╗ █████╗ ██████╗ ██╗ █████╗ ██████╗ ██╗     ███████╗███████╗
 ██╔════╝ ██║     ██╔═══██╗██╔══██╗██╔══██╗██║         ██║   ██║██╔══██╗██╔══██╗██║██╔══██╗██╔══██╗██║     ██╔════╝██╔════╝
@@ -47,7 +47,7 @@
 ╚██████╔╝███████╗╚██████╔╝██████╔╝██║  ██║███████╗     ╚████╔╝ ██║  ██║██║  ██║██║██║  ██║██████╔╝███████╗███████╗███████║
  ╚═════╝ ╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝      ╚═══╝  ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═════╝ ╚══════╝╚══════╝╚══════╝
 */
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -70,12 +70,12 @@ unsigned long start_time;
  //LCD screen itself
  rgb_lcd lcd;
 
-//laps/corners
+//laps corners and quadrant
 int corners  = 0;
 int laps     = 0; 
 int quadrant = 0;
 
-//Distances own funcs (calc values)
+//Distances own funcs (calculate values)
  int Distance;
  int Distance_L;
  int Distance_R;
@@ -87,12 +87,10 @@ int quadrant = 0;
  float Alignment;
 
  
-  //DrivingDirection
+  //DrivingDirection is 'U' for uknown
   char DD = 'U';
-
-  //obstacles
-  char Block = 'U';
-
+  
+  
  //last curve measured
  unsigned long LastCurveTime = 0;
  unsigned long NextCurveDelay = 2000;
@@ -107,28 +105,28 @@ int quadrant = 0;
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\steering.h"
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\ultrasonic_urm09.h"
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
  ██████╗ ██╗    ██╗███╗   ██╗    ███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
 ██╔═══██╗██║    ██║████╗  ██║    ██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
 ██║   ██║██║ █╗ ██║██╔██╗ ██║    █████╗  ██║   ██║██╔██╗ ██║██║        ██║   ██║██║   ██║██╔██╗ ██║███████╗
 ██║   ██║██║███╗██║██║╚██╗██║    ██╔══╝  ██║   ██║██║╚██╗██║██║        ██║   ██║██║   ██║██║╚██╗██║╚════██║
 ╚██████╔╝╚███╔███╔╝██║ ╚████║    ██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
- ╚═════╝  ╚══╝╚══╝ ╚═╝  ╚═══╝    ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝                                                                                                    
+ ╚═════╝  ╚══╝╚══╝ ╚═╝  ╚═══╝    ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 */
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Stop programm
 void PRGstop()
 {
-  unsigned long FZ;  
+  unsigned long DT;  //driving time
   stopMotor();
   // save time
-  FZ = millis() - start_time;
+  DT = millis() - start_time;
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("time: ");
-    lcd.print(FZ);
+    lcd.print(DT);
     delay(9999999);
 
 }
@@ -486,12 +484,12 @@ Wire.begin();
 
 if(Distance_L < 10)
 {
-  TD = 'L';
+  DD = 'L';
 }
 
 if(Distance_R < 10)
 {
-  TD = 'R';  
+  DD = 'R';  
 }
 
   
@@ -507,7 +505,7 @@ if(Distance_R < 10)
     lcd.setCursor(0,1);
     lcd.print(Alignment);
     lcd.print("  ");    
-    lcd.print(TD);  
+    lcd.print(DD);  
 
   //setup fertig, AmpGe schalten == knopf drücken
   lcd.setRGB(255, 130, 0);
@@ -529,8 +527,8 @@ if(Distance_R < 10)
   //Steering center  
   center();
 
-  // Langsam erste Kurve finden
-  if(TD == 'U')
+  // find drivingdirection slowly
+  if(DD == 'U')
   {
     runMotor(StartSpeed);
   }
@@ -572,12 +570,12 @@ if(Distance_R < 10)
  Distance_R = SpaceUS_R();
 
 
-  //TargedDirection check
-  if(TD == 'U')
+  //Drivingdirection check
+  if(DD == 'U')
   {
     if(Distance_L > 80)
     {
-      TD = 'L';
+      DD = 'L';
     lcd.setCursor(0,0);
     lcd.print(Distance_L);
       Curve_L();
@@ -586,7 +584,7 @@ if(Distance_R < 10)
 
     else if(Distance_R > 80)
     {
-      TD = 'R';
+      DD = 'R';
     lcd.setCursor(0,1);
     lcd.print(Distance_R);
         Curve_R();
@@ -597,32 +595,32 @@ if(Distance_R < 10)
 
   
   //check if L turn
-  if((TD == 'L') && (Distance_L > 80) && (millis() - LastCurveTime >= NextCurveDelay))
+  if((DD == 'L') && (Distance_L > 80) && (millis() - LastCurveTime >= NextCurveDelay))
   {
     Curve_L();
   }
  
     //check if R turn
-  if((TD == 'R') && (Distance_R > 80) && (millis() - LastCurveTime >= NextCurveDelay))
+  if((DD == 'R') && (Distance_R > 80) && (millis() - LastCurveTime >= NextCurveDelay))
   {
     Curve_R();
   }
 
  //calls allign function
- if(TD == 'U')
+ if(DD == 'U')
  {
   align();
   delay(20);
  }
  
- else if(TD == 'L')
+ else if(DD == 'L')
  {
    align_L();
    //align_gyro();
    delay(40);
  }
 
- else if(TD == 'R')
+ else if(DD == 'R')
  {
    align_R();
    //align_gyro();
@@ -640,7 +638,7 @@ if(Distance_R < 10)
   if(corners == 12)
   {
     //slight countersteering to avoid crash with inside wall
-    if(TD == 'R')
+    if(DD == 'R')
     {
       left(10);
       delay(200);
