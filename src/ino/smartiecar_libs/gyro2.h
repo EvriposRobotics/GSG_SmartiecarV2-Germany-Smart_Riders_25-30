@@ -9,9 +9,6 @@
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 sensors_event_t event;
 
-//lcd object
- rgb_lcd lcd;
-
 static float save_orientation = 0.0;
 static float total_turn = 0.0;
 

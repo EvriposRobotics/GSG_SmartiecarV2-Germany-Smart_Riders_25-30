@@ -57,7 +57,7 @@ unsigned long start_time;
 
  //speeds
   int NormalSpeed =  120;
-  int SlowSpeed   =  120;
+  int SlowSpeed   =  90;
   int CurveSpeed  =  120; 
   int StartSpeed  =  120;
 
@@ -114,6 +114,8 @@ int quadrant = 0;
  ╚═════╝  ╚══╝╚══╝ ╚═╝  ╚═══╝    ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 //Stop programm
 void PRGstop()
@@ -291,8 +293,8 @@ void PRGstop()
   }
 
 
-   //align gyro
-  void align_gyro()
+   //
+  void Gyro_steer_straight()
   {
     float angle;
     int Speed;
@@ -300,7 +302,7 @@ void PRGstop()
     angle = IMU_getAngle();
 
     //Steering = (Distance_L - Walldistance)*0.9;
-    Steering = (angle - StraightAngle)*0.8;
+    Steering = (angle - StraightAngle)*0.8; //0.8 = wiggle factor
     if (Steering > 15.0)
     {
       Steering = 15;
@@ -435,8 +437,8 @@ Wire.begin();
   lcd.setRGB(255, 0, 0);
 
 
- //von dem Steering.h
- servosetup();
+  //setup servo
+  servosetup();
 
 
   //setup gyroscope IMU
@@ -500,8 +502,30 @@ if(Distance_R < 10)
   // find drivingdirection slowly
   if(DD == 'U')
   {
-    runMotor(StartSpeed);
+    runMotor(SlowSpeed);
+    while ((Distance_L < 80.0) && (Distance_R < 80.0))
+    {
+      Distance_L = SpaceUS_L();
+      Distance_R = SpaceUS_R();
+      Gyro_steer_straight();
+    }
+    if (Distance_L >= 80.0)
+    {
+      DD = 'L';
+      Curve_L();
+    }
+    else if(Distance_R >= 80.0)
+    {
+      DD = 'R';
+      Curve_R();
+    }
+    else
+    {
+      DD = 'U';
+    }
+    
   }
+
   else
   {
     runMotor(SlowSpeed);
@@ -535,7 +559,6 @@ if(Distance_R < 10)
  {
 
  // Distance to Corner show current reading values
- //Distance = SpaceUS_F();
  Distance_L = SpaceUS_L();
  Distance_R = SpaceUS_R();
 
@@ -586,14 +609,12 @@ if(Distance_R < 10)
  else if(DD == 'L')
  {
    align_L();
-   //align_gyro();
    delay(40);
  }
 
  else if(DD == 'R')
  {
    align_R();
-   //align_gyro();
    delay(40);
  }
 
@@ -604,14 +625,14 @@ if(Distance_R < 10)
     if(DD == 'R')
     {
       left(10);
-      delay(500);
+      delay(400);
       center();
       delay(400);
     }
     else
     {
       right(10);
-      delay(500);
+      delay(400);
       center();
       delay(400);
     }
