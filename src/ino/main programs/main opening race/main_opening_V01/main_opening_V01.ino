@@ -84,7 +84,7 @@ int quadrant = 0;
  float danger;
  float correction_L = 20.0;
  float correction_R = 20.0;
- float Alignment;
+ float StraightAngle = 0.0;
 
  
   //DrivingDirection is 'U' for uknown
@@ -95,13 +95,12 @@ int quadrant = 0;
  unsigned long LastCurveTime = 0;
  unsigned long NextCurveDelay = 2000;
   
-  //both alignments (L/R)
+  //both StraightAngles (L/R)
   int Walldistance = 20;
-
   
-//own Modules
+//include own modules from local library
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\DCmotor.h"
-#include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\gyro.h"
+#include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\gyro2.h"
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\steering.h"
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\ultrasonic_urm09.h"
 
@@ -121,7 +120,7 @@ void PRGstop()
 {
   unsigned long DT;  //driving time
   stopMotor();
-  // save time
+  // save current time
   DT = millis() - start_time;
     lcd.clear();
     lcd.setCursor(0, 0);
@@ -301,7 +300,7 @@ void PRGstop()
     angle = IMU_getAngle();
 
     //Steering = (Distance_L - Walldistance)*0.9;
-    Steering = (angle - Alignment)*0.8;
+    Steering = (angle - StraightAngle)*0.8;
     if (Steering > 15.0)
     {
       Steering = 15;
@@ -336,33 +335,17 @@ void PRGstop()
 
   void Curve_L()
   {
-         int Speed;
-         float TD;
-         Speed = SlowSpeed;
+        int Speed;
+        float TD;
+        Speed = CurveSpeed;
         left(40);
         lcd.setRGB(0, 0, 255);
+        TD = StraightAngle - 90.0;
         angle = IMU_getAngle();
-        if(quadrant == 0)
-        {
-          TD = 270.0;
-        }
-        else if(quadrant == 1)
-        {
-          TD = 180.0;
-        }
-        else if(quadrant == 2)
-        {
-          TD = 90.0;
-        }
-        else if(quadrant == 3)
-        {
-          TD = 0.0;
-        }
-        Alignment = TD;
-        runMotor(SlowSpeed);               
+        StraightAngle = TD;
+        runMotor(SlowSpeed);
         while(angle > TD + correction_L)
-        {
-           
+        {       
            angle = IMU_getAngle();
             Speed = Speed + 5;
             if (Speed > CurveSpeed)
@@ -373,48 +356,35 @@ void PRGstop()
               delay(50);
         }
       corners = corners + 1;
+      StraightAngle = TD;
       center();
-    runMotor(NormalSpeed);
-    Distance_L = SpaceUS_L;
-    while(Distance_L > 60)
-    {
-      Distance_L = SpaceUS_L();
-      angle = IMU_getAngle();
-      delay(10);
-    }
-    lcd.setRGB(0, 255, 0);
-    LastCurveTime = millis();
+      runMotor(NormalSpeed);
+      Distance_L = SpaceUS_L;
+
+      //try to find the inside wall again
+      while(Distance_L > 60)
+      {
+        Distance_L = SpaceUS_L();
+        angle = IMU_getAngle();
+        delay(10);
+      }
+      lcd.setRGB(0, 255, 0);
+      LastCurveTime = millis();
   }
 
 void Curve_R()
     {
-         int Speed;
-         float TD;
-         Speed = SlowSpeed;
+        int Speed;
+        float TD;
+        Speed = CurveSpeed;
         right(40);
         lcd.setRGB(0, 0, 255);
+        TD = StraightAngle + 90.0;
         angle = IMU_getAngle();
-        if(quadrant == 0)
-        {
-          TD = 90.0;
-        }
-        else if(quadrant == 1)
-        {
-          TD = 180.0;
-        }
-        else if(quadrant == 2)
-        {
-          TD = 270.0;
-        }
-        else if(quadrant == 3)
-        {
-          TD = 360.0;
-        }
-        Alignment = TD;
+        StraightAngle = TD;
         runMotor(SlowSpeed);
         while(angle < TD - correction_R)
         {
-        
            angle = IMU_getAngle();
             Speed = Speed + 5;
             if (Speed > CurveSpeed)
@@ -426,17 +396,20 @@ void Curve_R()
         }
 
       corners = corners + 1;
+      StraightAngle = TD;
       center();
-    runMotor(NormalSpeed);
-    Distance_R = SpaceUS_R;
-    while(Distance_R > 60)
-    {
-      Distance_R = SpaceUS_R();
-      angle = IMU_getAngle();
-      delay(10);
-    }
-    lcd.setRGB(0, 255, 0);
-    LastCurveTime = millis();
+      runMotor(NormalSpeed);
+      Distance_R = SpaceUS_R;
+
+      //try to find the inside wall again
+      while(Distance_R > 60)
+      {
+        Distance_R = SpaceUS_R();
+        angle = IMU_getAngle();
+        delay(10);
+      }
+      lcd.setRGB(0, 255, 0);
+      LastCurveTime = millis();
   }
 
 ///////////////////////////////////////////
@@ -491,7 +464,7 @@ if(Distance_R < 10)
 
   
   //count corners
-   Alignment = IMU_getAngle(); 
+   StraightAngle = IMU_getAngle(); 
 
     lcd.setCursor(0,0);
     lcd.print(Distance_L);
@@ -500,7 +473,7 @@ if(Distance_R < 10)
     lcd.print("  ");
     lcd.print(Distance_R);
     lcd.setCursor(0,1);
-    lcd.print(Alignment);
+    lcd.print(StraightAngle);
     lcd.print("  ");    
     lcd.print(DD);  
 

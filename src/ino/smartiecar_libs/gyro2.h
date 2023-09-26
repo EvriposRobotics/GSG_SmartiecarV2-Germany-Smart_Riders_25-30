@@ -12,12 +12,20 @@ sensors_event_t event;
 //lcd object
  rgb_lcd lcd;
 
-
 static float save_orientation = 0.0;
 static float total_turn = 0.0;
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+██╗███╗   ███╗██╗   ██╗    ███████╗██╗   ██╗███╗   ██╗ ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
+██║████╗ ████║██║   ██║    ██╔════╝██║   ██║████╗  ██║██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
+██║██╔████╔██║██║   ██║    █████╗  ██║   ██║██╔██╗ ██║██║        ██║   ██║██║   ██║██╔██╗ ██║███████╗
+██║██║╚██╔╝██║██║   ██║    ██╔══╝  ██║   ██║██║╚██╗██║██║        ██║   ██║██║   ██║██║╚██╗██║╚════██║
+██║██║ ╚═╝ ██║╚██████╔╝    ██║     ╚██████╔╝██║ ╚████║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
+╚═╝╚═╝     ╚═╝ ╚═════╝     ╚═╝      ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
+*/
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/************************* Imu Functions *************************/
 
 byte IMU_start()
 {
@@ -74,7 +82,8 @@ void IMU_calculate()
   return;
 }
 
-float IMU_getAngle()
+//returns orientation in degrees
+float IMU_getOrientation()
 {
 	float angle;
 	IMU_calculate();
@@ -82,7 +91,8 @@ float IMU_getAngle()
 	return angle;
 }
 
-float IMU_getTotalTurn()
+//gets total turn in degrees
+float IMU_getAngle()
 {
 	float angle;
 	IMU_calculate();
@@ -91,7 +101,7 @@ float IMU_getTotalTurn()
 }
 
 
-
+//setup the gyroscope
 void startGyroscope()
 {    
   byte status = IMU_start();
