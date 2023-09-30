@@ -440,14 +440,13 @@ Wire.begin();
   //setup servo
   servosetup();
 
+  delay(5000); // 5 second stop in order for the gyro to calibrate
 
   //setup gyroscope IMU
   startGyroscope();
 
-  //initalisiert motor pinmodes von DCmotor.h
+  //initalises motor pinmodes from DCmotor.h
   motorsetup();
-
-  delay(5000); // 5 Sekunden warten
     
  // distance to curve show current reading values
  Distance_F = SpaceUS_F(); 
@@ -561,7 +560,13 @@ if(Distance_R < 10)
  // Distance to Corner show current reading values
  Distance_L = SpaceUS_L();
  Distance_R = SpaceUS_R();
-
+ 
+ //temporary value prints
+ lcd.setCursor(0,0);
+ lcd.print(Distance_L);
+ lcd.print("  "); 
+ lcd.print(Distance_R);
+ lcd.print("  ");
 
   //Drivingdirection check
   if(DD == 'U')
