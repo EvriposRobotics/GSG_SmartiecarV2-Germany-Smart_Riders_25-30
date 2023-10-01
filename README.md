@@ -1,4 +1,7 @@
+
 # WRO World Finals 2023 by Team SmartiecarV2 🌍🤖🏆
+
+![237132296-5d9d468e-8dde-4f72-8bcc-868d23993b3d](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/b29ec77a-3cb7-48e6-8916-f56428b12d9a)
 
 ## Table of Contents 📚👇
 
@@ -7,6 +10,7 @@
     - [Assembly Instructions](#assembly-instructions) 🛠
     - [Schematics](#schematics) 📐👀
     - [Components List](#components-list) 🔍
+
 3. [Software](#software) 💻👨‍💻
     - [Setup Instructions](#setup-instructions) 🚀
     - [Programming Languages](#programming-languages) 👩‍💻
