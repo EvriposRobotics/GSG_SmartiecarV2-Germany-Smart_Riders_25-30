@@ -103,6 +103,7 @@ int quadrant = 0;
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\gyro2.h"
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\steering.h"
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\ultrasonic_urm09.h"
+#include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\raspi.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -448,6 +449,9 @@ Wire.begin();
   //initalises motor pinmodes from DCmotor.h
   motorsetup();
     
+  //handshake with raspberry pi
+  raspi_handshake();
+
  // distance to curve show current reading values
  Distance_F = SpaceUS_F(); 
  Distance_L = SpaceUS_L();
