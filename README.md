@@ -2,16 +2,16 @@
 
 ## Table of Contents 📚👇
 
-1. [Overview](#overview) 🌟✨
-2. [Hardware](#hardware) 🔩🔧
-    - [Assembly Instructions](#assembly-instructions) 🛠🗒
+1. [Overview](#overview) 🌟
+2. [Hardware](#hardware) 🔧
+    - [Assembly Instructions](#assembly-instructions) 🛠
     - [Schematics](#schematics) 📐👀
-    - [Components List](#components-list) 📦🔍
+    - [Components List](#components-list) 🔍
 3. [Software](#software) 💻👨‍💻
-    - [Setup Instructions](#setup-instructions) 🚀👌
-    - [Programming Languages](#programming-languages) 👩‍💻👨‍💻
-    - [Dependencies](#dependencies) 📚🔗
-4. [Utilities](#utilities) 🛠⚙️
+    - [Setup Instructions](#setup-instructions) 🚀
+    - [Programming Languages](#programming-languages) 👩‍💻
+    - [Dependencies](#dependencies) 
+4. [Utilities](#utilities) 🛠
     - [Debugging Tools](#debugging-tools) 🐞🔍 
 5. [Team Photos](#team-photos) 📸
 6. [Demonstration Videos](#demonstration-videos) 🎥
@@ -35,7 +35,7 @@ Welcome to the official GitHub repository for Team SmartiecarV2, participating i
 
 ### Assembly Instructions 🛠
 
-Detailed assembly instructions can be found in the [Assembly Guide](./hardware/Readme.md).
+Detailed assembly instructions can be found in the [Assembly Guide](./hardware/README.md).
 
 
 <a name="schematics"></a>
@@ -51,7 +51,7 @@ Circuit schematics and hardware layouts are available in the [Schematics folder]
 
 ### Components List 📦
 
-A list of all hardware components used in the project can be found [here](./hardware/Readme.md).
+A list of all hardware components used in the project can be found [here](./hardware/README.md).
 
 
 <a name="software"></a>
@@ -65,7 +65,7 @@ A list of all hardware components used in the project can be found [here](./hard
 
 ### Setup Instructions 🚀
 
-Follow the [Software Setup Guide](./software/Readme.md) to set up the development environment.
+Follow the [Software Setup Guide](./software/README.md) to set up the development environment.
 
 
 <a name="programming-languages"></a>
@@ -74,7 +74,7 @@ Follow the [Software Setup Guide](./software/Readme.md) to set up the developmen
 ### Programming Languages 👩‍💻
 
 - Python
-- C++
+- C++ (Arduino)
 - C
 
 
@@ -99,7 +99,9 @@ Follow the [Software Setup Guide](./software/Readme.md) to set up the developmen
 
 ### Debugging Tools 🔍
 
-We have developed custom debugging tools to assist in the development process. More information can be found [here](./utilities/DebuggingTools.md).
+Debugging tools:
+for python = visual studio code
+for arduino = arduino IDE
 
 
 <a name="team-photos"></a>
