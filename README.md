@@ -25,7 +25,8 @@
 9. [sources](#sources) ℹ
 <a name="overview"></a>
 ## Overview 🌟
-![Foto 01 10 23, 13 22 02](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/e5d293ae-ab5c-4559-b600-50a91aaaf3c1)
+
+![Foto 01 10 23, 13 22 02](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/60bbc2ea-8552-432e-a204-dabbc420be3d)
 
 Welcome to the official GitHub repository for Team SmartiecarV2, participating in the WRO World Finals 2023. This repository contains all the code, documentation, and resources for our project, SmartiecarV2.
 
