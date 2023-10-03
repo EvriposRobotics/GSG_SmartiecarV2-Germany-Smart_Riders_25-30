@@ -1,5 +1,5 @@
 
-# WRO World Finals 2023 by Team Smartriders 🌍🤖🏆
+# WRO World Finals 2023 by Team Smart Riders 🌍🤖🏆
 
 ![logo](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/b29ec77a-3cb7-48e6-8916-f56428b12d9a)
 
