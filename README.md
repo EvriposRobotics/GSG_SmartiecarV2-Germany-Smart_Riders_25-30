@@ -32,6 +32,8 @@ Welcome to the official GitHub repository for Team SmartiecarV2, participating i
 
 ![blockdiagram_overview](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/7b0c5513-870f-475c-9993-cfca6aa5659f)
 
+For the wold final we decided to redesign our future engineers car.
+Now our car consists of an arduino which controls the sensors and the motors and a raspbarry pi which does all the image prossesing in the obstacle race.
 
 <a name="hardware"></a>
 
