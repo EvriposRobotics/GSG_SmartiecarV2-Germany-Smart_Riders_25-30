@@ -33,11 +33,6 @@
 #include <Wire.h>
 #include "rgb_lcd.h"
 
-//--------------------------------------------------
-
-#include <NewPing.h>
-#include "QuickMedianLib.h"
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
  ██████╗ ██╗      ██████╗ ██████╗  █████╗ ██╗         ██╗   ██╗ █████╗ ██████╗ ██╗ █████╗ ██████╗ ██╗     ███████╗███████╗
@@ -82,8 +77,8 @@ int quadrant = 0;
  
  float angle;
  float danger;
- float correction_L = 20.0;
- float correction_R = 20.0;
+ float correction_L = 25.0;
+ float correction_R = 25.0;
  float StraightAngle = 0.0;
 
  //DrivingDirection is 'U' for uknown
@@ -120,299 +115,297 @@ int quadrant = 0;
 //Stop programm
 void PRGstop()
 {
-  unsigned long DT;  //driving time
-  stopMotor();
-  // save current time
-  DT = millis() - start_time;
+    unsigned long DT;  //driving time
+    stopMotor();
+    // save current time
+    DT = millis() - start_time;
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("time: ");
     lcd.print(DT);
     delay(9999999);
-
 }
 
  
-  // startnarrow
-  void StartNarrow_L()
+// startnarrow Left
+void StartNarrow_L()
+{
+  float angle;
+  float TD = 360.0;
+  int Speed = SlowSpeed;
+  right(30);
+  delay(500);
+  center();
+  delay(500);
+  angle = IMU_getAngle();
+  lcd.setCursor(0,0);
+  lcd.print(angle);
+  left(30);
+  while(angle > TD + correction_L)
   {
-    float angle;
-    float TD = 360.0;
-    int Speed = SlowSpeed;
-    right(30);
-    delay(500);
-    center();
-    delay(500);
+    
     angle = IMU_getAngle();
-    lcd.setCursor(0,0);
-    lcd.print(angle);
-    left(30);
-    while(angle > TD + correction_L)
-    {
-      
-      angle = IMU_getAngle();
-        Speed = Speed + 5;
-        if (Speed > CurveSpeed)
-        {
-          Speed = CurveSpeed;
-        }
-          runMotor(Speed);
-          delay(50);
-    }
-    center();
-    runMotor(SlowSpeed);
-  }
-
-    
-  void StartNarrow_R()
-  {
-    float angle;
-    float TD = 0.0;
-    int Speed;
-    left(30);
-    delay(500);
-    center();
-    delay(500);
-    angle = IMU_getAngle();
-    lcd.setCursor(0,0);
-    lcd.print(angle);
-    right(30);
-    while(angle < TD - correction_R)
-    {
-    
-        angle = IMU_getAngle();
-        Speed = Speed + 5;
-        if (Speed > CurveSpeed)
-        {
-          Speed = CurveSpeed;
-        }
-          runMotor(Speed);
-          delay(50);
-    }
-    center();
-    runMotor(SlowSpeed);
-
-  }
-
-
-  //align
-  void align()
-  {
-    int Steering;
-    Steering = (Distance_L - Distance_R)*0.3;
-    if (Steering > 30.0)
-    {
-      Steering = 30;
-    }
-    else if (Steering < -30.0)
-    {
-      Steering = -30;
-    }
-
-    if(Steering < 0)
-    {
-      Steering = Steering *(-1);
-      right(Steering);
-    }
-    
-    else
-    {
-      left(Steering);
-    }
-
-    delay(20);
-
-  }
-
-   //align_L
-  void align_L()
-  {
-    int Steering;
-    Distance_L = SpaceUS_L();
-    Steering = (Distance_L - Walldistance)*0.9;
-    if (Steering > 30.0)
-    {
-      Steering = 30;
-    }
-    else if (Steering < -30.0)
-    {
-      Steering = -30;
-    }
-
-
-    if(Steering < 0)
-    {
-      Steering = Steering *(-1);
-      right(Steering);
-    }
-    
-    else
-    {
-      left(Steering);
-    }
-
-    delay(20);
-
-  }
-
-   //align_R
-  void align_R()
-  {
-    int Steering;
-    Distance_R = SpaceUS_R();
-    Steering = (Walldistance - Distance_R)*0.9;
-    if (Steering > 30.0)
-    {
-      Steering = 30;
-    }
-    else if (Steering < -30.0)
-    {
-      Steering = -30;
-    }
-
-
-    if(Steering < 0)
-    {
-      Steering = Steering *(-1);
-      right(Steering);
-      lcd.setCursor(0, 1);
-      lcd.print("R ");
-      lcd.print(Steering);
-    }
-    
-    else
-    {
-      left(Steering);
-      lcd.setCursor(0, 1);
-      lcd.print("L ");
-      lcd.print(Steering);
-    }
-
-    delay(20);
-
-  }
-
-
-   //
-  void Gyro_steer_straight()
-  {
-    float angle;
-    int Speed;
-    int Steering;
-    angle = IMU_getAngle();
-
-    //Steering = (Distance_L - Walldistance)*0.9;
-    Steering = (angle - StraightAngle)*0.8; //0.8 = wiggle factor
-    if (Steering > 15.0)
-    {
-      Steering = 15;
-    }
-    else if (Steering < -15.0)
-    {
-      Steering = -15;
-    }
-
-
-    if(Steering < 0)
-    {
-      Steering = Steering *(-1);
-      right(Steering);
-      lcd.setCursor(0, 1);
-      lcd.print("R ");
-      lcd.print(Steering);
-    }
-    
-    else
-    {
-      left(Steering);
-      lcd.setCursor(0, 1);
-      lcd.print("L ");
-      lcd.print(Steering);
-    }
-
-    delay(50);
-
-  }
-
-
-  void Curve_L()
-  {
-        int Speed;
-        float TD;
-        Speed = CurveSpeed;
-        left(40);
-        lcd.setRGB(0, 0, 255);
-        TD = StraightAngle - 90.0;
-        angle = IMU_getAngle();
-        StraightAngle = TD;
-        runMotor(SlowSpeed);
-        while(angle > TD + correction_L)
-        {       
-           angle = IMU_getAngle();
-            Speed = Speed + 5;
-            if (Speed > CurveSpeed)
-            {
-              Speed = CurveSpeed;
-            }
-              runMotor(Speed);
-              delay(50);
-        }
-      corners = corners + 1;
-      StraightAngle = TD;
-      center();
-      runMotor(NormalSpeed);
-      Distance_L = SpaceUS_L;
-
-      //try to find the inside wall again
-      while(Distance_L > 60)
+      Speed = Speed + 5;
+      if (Speed > CurveSpeed)
       {
-        Distance_L = SpaceUS_L();
-        angle = IMU_getAngle();
-        delay(10);
+        Speed = CurveSpeed;
       }
-      lcd.setRGB(0, 255, 0);
-      LastCurveTime = millis();
+        runMotor(Speed);
+        delay(50);
   }
+  center();
+  runMotor(SlowSpeed);
+}
+
+// startnarrow Right 
+void StartNarrow_R()
+{
+  float angle;
+  float TD = 0.0;
+  int Speed;
+  left(30);
+  delay(500);
+  center();
+  delay(500);
+  angle = IMU_getAngle();
+  lcd.setCursor(0,0);
+  lcd.print(angle);
+  right(30);
+  while(angle < TD - correction_R)
+  {
+  
+      angle = IMU_getAngle();
+      Speed = Speed + 5;
+      if (Speed > CurveSpeed)
+      {
+        Speed = CurveSpeed;
+      }
+        runMotor(Speed);
+        delay(50);
+  }
+  center();
+  runMotor(SlowSpeed);
+}
+
+
+//align
+void align()
+{
+  int Steering;
+  Steering = (Distance_L - Distance_R)*0.3;
+  if (Steering > 30.0)
+  {
+    Steering = 30;
+  }
+  else if (Steering < -30.0)
+  {
+    Steering = -30;
+  }
+
+  if(Steering < 0)
+  {
+    Steering = Steering *(-1);
+    right(Steering);
+  }
+  
+  else
+  {
+    left(Steering);
+  }
+
+  delay(20);
+
+}
+
+  //align_L
+void align_L()
+{
+  int Steering;
+  Distance_L = SpaceUS_L();
+  Steering = (Distance_L - Walldistance)*0.9;
+  if (Steering > 30.0)
+  {
+    Steering = 30;
+  }
+  else if (Steering < -30.0)
+  {
+    Steering = -30;
+  }
+
+
+  if(Steering < 0)
+  {
+    Steering = Steering *(-1);
+    right(Steering);
+  }
+  
+  else
+  {
+    left(Steering);
+  }
+
+  delay(20);
+
+}
+
+//align_R
+void align_R()
+{
+  int Steering;
+  Distance_R = SpaceUS_R();
+  Steering = (Walldistance - Distance_R)*0.9;
+  if (Steering > 30.0)
+  {
+  Steering = 30;
+  }
+  else if (Steering < -30.0)
+  {
+  Steering = -30;
+  }
+
+
+  if(Steering < 0)
+  {
+  Steering = Steering *(-1);
+  right(Steering);
+  lcd.setCursor(0, 1);
+  lcd.print("R ");
+  lcd.print(Steering);
+  }
+
+  else
+  {
+  left(Steering);
+  lcd.setCursor(0, 1);
+  lcd.print("L ");
+  lcd.print(Steering);
+  }
+
+  delay(20);
+
+}
+
+
+//Gyro_steer_straight
+void Gyro_steer_straight()
+{
+  float angle;
+  int Speed;
+  int Steering;
+  angle = IMU_getAngle();
+
+  //Steering = (Distance_L - Walldistance)*0.9;
+  Steering = (angle - StraightAngle)*0.8; //0.8 = wiggle factor
+  if (Steering > 15.0)
+  {
+    Steering = 15;
+  }
+  else if (Steering < -15.0)
+  {
+    Steering = -15;
+  }
+
+
+  if(Steering < 0)
+  {
+    Steering = Steering *(-1);
+    right(Steering);
+    lcd.setCursor(0, 1);
+    lcd.print("R ");
+    lcd.print(Steering);
+  }
+  
+  else
+  {
+    left(Steering);
+    lcd.setCursor(0, 1);
+    lcd.print("L ");
+    lcd.print(Steering);
+  }
+
+  delay(50);
+
+}
+
+//Curve_L
+void Curve_L()
+{
+      int Speed;
+      float TD;
+      Speed = CurveSpeed;
+      left(40);
+      lcd.setRGB(0, 0, 255);
+      TD = StraightAngle - 90.0;
+      angle = IMU_getAngle();
+      StraightAngle = TD;
+      runMotor(SlowSpeed);
+      while(angle > TD + correction_L)
+      {       
+          angle = IMU_getAngle();
+          Speed = Speed + 5;
+          if (Speed > CurveSpeed)
+          {
+            Speed = CurveSpeed;
+          }
+            runMotor(Speed);
+            delay(50);
+      }
+    corners = corners + 1;
+    StraightAngle = TD;
+    center();
+    runMotor(NormalSpeed);
+    Distance_L = SpaceUS_L;
+
+    //try to find the inside wall again
+    while(Distance_L > 60)
+    {
+      Distance_L = SpaceUS_L();
+      angle = IMU_getAngle();
+      delay(10);
+    }
+    lcd.setRGB(0, 255, 0);
+    LastCurveTime = millis();
+}
 
 void Curve_R()
-    {
-        int Speed;
-        float TD;
-        Speed = CurveSpeed;
-        right(40);
-        lcd.setRGB(0, 0, 255);
-        TD = StraightAngle + 90.0;
-        angle = IMU_getAngle();
-        StraightAngle = TD;
-        runMotor(SlowSpeed);
-        while(angle < TD - correction_R)
-        {
-           angle = IMU_getAngle();
-            Speed = Speed + 5;
-            if (Speed > CurveSpeed)
-            {
-              Speed = CurveSpeed;
-            }
-              runMotor(Speed);
-              delay(50);
-        }
-
-      corners = corners + 1;
+  {
+      int Speed;
+      float TD;
+      Speed = CurveSpeed;
+      right(40);
+      lcd.setRGB(0, 0, 255);
+      TD = StraightAngle + 90.0;
+      angle = IMU_getAngle();
       StraightAngle = TD;
-      center();
-      runMotor(NormalSpeed);
-      Distance_R = SpaceUS_R;
-
-      //try to find the inside wall again
-      while(Distance_R > 60)
+      runMotor(SlowSpeed);
+      while(angle < TD - correction_R)
       {
-        Distance_R = SpaceUS_R();
-        angle = IMU_getAngle();
-        delay(10);
+          angle = IMU_getAngle();
+          Speed = Speed + 5;
+          if (Speed > CurveSpeed)
+          {
+            Speed = CurveSpeed;
+          }
+            runMotor(Speed);
+            delay(50);
       }
-      lcd.setRGB(0, 255, 0);
-      LastCurveTime = millis();
-  }
+
+    corners = corners + 1;
+    StraightAngle = TD;
+    center();
+    runMotor(NormalSpeed);
+    Distance_R = SpaceUS_R;
+
+    //try to find the inside wall again
+    while(Distance_R > 60)
+    {
+      Distance_R = SpaceUS_R();
+      angle = IMU_getAngle();
+      delay(10);
+    }
+    lcd.setRGB(0, 255, 0);
+    LastCurveTime = millis();
+}
 
 ///////////////////////////////////////////
 /*
@@ -481,20 +474,20 @@ if(Distance_R < 10)
     lcd.print("  ");    
     lcd.print(DD);  
 
-  //setup fertig, AmpGe schalten == knopf drücken
+  // setup done - show green light
   lcd.setRGB(255, 130, 0);
   
   while (digitalRead(Button) == LOW) 
-  { // Warten, until Knopf gedrückt wird
+  { // wait until button is pressed
     delay(50);
   }
 
   lcd.clear();
   
-  //ampel grün weh
+  //lcd green 
   lcd.setRGB(0, 255, 0);  
 
-  // Speichere die aktuelle Zeit
+  // save current time
   start_time = millis();
   LastCurveTime = millis() - NextCurveDelay;
 
@@ -594,7 +587,6 @@ if(Distance_R < 10)
   }
 
 
-  
   //check if L turn
   if((DD == 'L') && (Distance_L > 80) && (millis() - LastCurveTime >= NextCurveDelay))
   {
