@@ -86,17 +86,16 @@ int quadrant = 0;
  float correction_R = 20.0;
  float StraightAngle = 0.0;
 
- 
-  //DrivingDirection is 'U' for uknown
-  char DD = 'U';
+ //DrivingDirection is 'U' for uknown
+ char DD = 'U';
   
   
  //last curve measured
  unsigned long LastCurveTime = 0;
  unsigned long NextCurveDelay = 2000;
   
-  //both StraightAngles (L/R)
-  int Walldistance = 20;
+ //both StraightAngles (L/R)
+ int Walldistance = 20;
   
 //include own modules from local library
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\DCmotor.h"
