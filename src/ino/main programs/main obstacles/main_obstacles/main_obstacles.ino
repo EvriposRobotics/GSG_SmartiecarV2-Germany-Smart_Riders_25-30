@@ -613,6 +613,8 @@ Serial.begin(115200);
   //gyro setup gyro.h
   gyrostart();  
 
+  //raspi handshake
+  raspi_handshake();
 
  // distance to wall
  Distance = SpaceUS_F(); 
