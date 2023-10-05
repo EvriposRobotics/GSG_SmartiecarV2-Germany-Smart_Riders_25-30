@@ -102,12 +102,11 @@ int orientation;
   int walldistance = 40;
 
 //own Module
-#include "DCmotor.h"
-#include "gyro.h"
-#include "steering.h"
-#include "ultrasonic.h"
-#include "cam.h"
-
+#include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\DCmotor.h"
+#include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\ultrasonic.h"
+#include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\gyro.h"
+#include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\Steering.h"
+#include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\raspi.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
