@@ -10,12 +10,12 @@ void raspi_handshake()
     Serial.print("ready");
     delay(1000);
 
-        //while no data is available
-        while (Serial.available() == 0)
-        {
-            //delay
-            delay(100);
-        }
+    //while no data is available
+    while (Serial.available() == 0)
+    {
+        //delay
+        delay(100);
+    }
 
     //read answer
     lcd.clear();
@@ -32,12 +32,12 @@ String raspi_get_data()
     
     Serial.print("req"); //request data from raspi
 
-        //while no data is available
-        while (Serial.available() == 0)
-        {
-            //delay
-            delay(10);
-        }
+    //while no data is available
+    while (Serial.available() == 0)
+    {
+        //delay
+        delay(10);
+    }
 
     //read answer
     data = Serial.readStringUntil('\n');

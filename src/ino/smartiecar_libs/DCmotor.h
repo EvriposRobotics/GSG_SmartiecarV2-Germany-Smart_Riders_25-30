@@ -1,9 +1,9 @@
-// Gleichstrommotor 1
+// DC Motor 1
 int GSM1 = 5;
 int in1 = 6;
 int in2 = 7; 
 
-// rückwärts
+// backward
  void runMotor_R(int Speed) 
  {
   int tmpSpeed;
@@ -19,13 +19,13 @@ int in2 = 7;
  }
 
 
- // Stoppen
+ // stop
  void stopMotor() 
  {
   digitalWrite(in1, LOW);  
   digitalWrite(in2, LOW);
   analogWrite(GSM1, 0); 
-  //aktives bremsen durch kurzes rückwärts fahren
+  //active breaking then stop
   digitalWrite(in1, LOW);  
   digitalWrite(in2, HIGH);
   analogWrite(GSM1, 185);
@@ -37,16 +37,16 @@ int in2 = 7;
 
 
 
- //motor run
+ //run motor
  void runMotor(int Speed)  
  {
   int tmpSpeed;
-  digitalWrite(in1, HIGH);  // motor 1 starts
+  digitalWrite(in1, HIGH);  // motor 1 begins to rotate forward
   digitalWrite(in2, LOW);
   if(Speed < 185)
   {
     tmpSpeed = 185;
-    analogWrite(GSM1, Speed);   // Motor 1 soll mit der Geschwindigkeit "200" (max. 255) rotieren
+    analogWrite(GSM1, Speed);   // motor 1 should drive forward with the maximum speed
     delay(100);
   }
   analogWrite(GSM1, Speed);
