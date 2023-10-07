@@ -10,10 +10,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // button                      = D4
-// camera                      = 10-13
 // Ultrasonic F,R,L            = A0-A2
 // I2C Bus                     = A4-A5 -> LCD, Gyro
-// MotorSpeed                  = 9
+// MotorSpeed                  = D5
 // Moto direction              = D6
 // Servo steering (pwm signal) = D3
 
@@ -101,7 +100,7 @@ int walldistance = 20;
 
 // own Module
 #include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\DCmotor.h"
-#include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\ultrasonic.h"
+#include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\ultrasonic_urm09.h"
 #include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\gyro2.h"
 #include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\Steering.h"
 #include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\raspi.h"

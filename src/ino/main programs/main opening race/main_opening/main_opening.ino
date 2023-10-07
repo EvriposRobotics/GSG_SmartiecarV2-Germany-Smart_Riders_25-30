@@ -1,14 +1,20 @@
-// main program without obstacles 01
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+██████╗ ██╗███╗   ██╗     █████╗ ███████╗███████╗██╗ ██████╗ ███╗   ██╗███╗   ███╗███████╗███╗   ██╗████████╗
+██╔══██╗██║████╗  ██║    ██╔══██╗██╔════╝██╔════╝██║██╔════╝ ████╗  ██║████╗ ████║██╔════╝████╗  ██║╚══██╔══╝
+██████╔╝██║██╔██╗ ██║    ███████║███████╗███████╗██║██║  ███╗██╔██╗ ██║██╔████╔██║█████╗  ██╔██╗ ██║   ██║
+██╔═══╝ ██║██║╚██╗██║    ██╔══██║╚════██║╚════██║██║██║   ██║██║╚██╗██║██║╚██╔╝██║██╔══╝  ██║╚██╗██║   ██║
+██║     ██║██║ ╚████║    ██║  ██║███████║███████║██║╚██████╔╝██║ ╚████║██║ ╚═╝ ██║███████╗██║ ╚████║   ██║
+╚═╝     ╚═╝╚═╝  ╚═══╝    ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝
+*/
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Pin assignment
-// button = 4
-// camera = 10-13
-// ultrasonic = 5-6
-// I2C Bus = A4-A5
-// MotorSpeed = 9
-// Motor direction = 7-8
-// distance sensor = A0-A1
-// Servo steering = 3
+// button                      = D4
+// Ultrasonic F,R,L            = A0-A2
+// I2C Bus                     = A4-A5 -> LCD, Gyro
+// MotorSpeed                  = D5
+// Moto direction              = D6
+// Servo steering (pwm signal) = D3
 
 ///////////////////////////////////////////////////////////////
 /*
@@ -46,19 +52,11 @@
 unsigned long start_time;
 //--------------------------------------------------
 
-<<<<<<< HEAD:src/ino/main programs/main opening race/main_opening_V01/main_opening_V01.ino
- //speeds
-  int NormalSpeed =  150;
-  int SlowSpeed   =  100;
-  int CurveSpeed  =  120; 
-  int StartSpeed  =  120;
-=======
 // speeds
 int NormalSpeed = 120;
 int SlowSpeed = 90;
 int CurveSpeed = 120;
 int StartSpeed = 120;
->>>>>>> f4d8e3db53c18ea53644de6f9156d3633dce7b3a:src/ino/main programs/main opening race/main_opening/main_opening.ino
 
 // LCD connection
 int Button = 4;
@@ -73,32 +71,6 @@ int corners = 0;
 int laps = 0;
 int quadrant = 0;
 
-<<<<<<< HEAD:src/ino/main programs/main opening race/main_opening_V01/main_opening_V01.ino
-//Distances own funcs (calculate values)
- int Distance_F;
- int Distance_L;
- int Distance_R;
- 
- float angle;
- float danger;
- float correction_L = 25.0;
- float correction_R = 25.0;
- float StraightAngle = 0.0;
-
- 
-  //DrivingDirection is 'U' for uknown
-  char DD = 'U';
-  
-  
- //last curve measured
- unsigned long LastCurveTime = 0;
- unsigned long NextCurveDelay = 2000;
-  
-  //both StraightAngles (L/R)
-  int Walldistance = 25;
-  
-//include own modules from local library
-=======
 // Distances own funcs (calculate values)
 int Distance_F;
 int Distance_L;
@@ -121,7 +93,6 @@ unsigned long NextCurveDelay = 2000;
 int Walldistance = 20;
 
 // include own modules from local library
->>>>>>> f4d8e3db53c18ea53644de6f9156d3633dce7b3a:src/ino/main programs/main opening race/main_opening/main_opening.ino
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\DCmotor.h"
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\gyro2.h"
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\steering.h"
@@ -143,6 +114,30 @@ int Walldistance = 20;
 void PRGstop()
 {
   unsigned long DT; // driving time
+  // slight countersteering to avoid crash with inside wall
+  if (DD == 'R')
+  {
+    left(10);
+    delay(400);
+    center();
+    delay(400);
+  }
+
+  else
+  {
+    right(10);
+    delay(400);
+    center();
+    delay(400);
+  }
+
+  // drive straight to finish and stop
+  Distance_F = SpaceUS_F();
+  while (Distance_F > 140)
+  {
+    Distance_F = SpaceUS_F();
+  }
+
   stopMotor();
   // save current time
   DT = millis() - start_time;
@@ -437,6 +432,21 @@ void Curve_R()
 
 void setup()
 {
+
+  //////////////////////////////////////////////////////
+  /*
+   _       _ _           _
+  (_)     (_) |         | |
+   _ _ __  _| |_   _ __ | |__   __ _ ___  ___
+  | | '_ \| | __| | '_ \| '_ \ / _` / __|/ _ \
+  | | | | | | |_  | |_) | | | | (_| \__ \  __/
+  |_|_| |_|_|\__| | .__/|_| |_|\__,_|___/\___|
+                  | |
+                  |_|
+  init phase initalises all components and waits for button press
+  */
+  //////////////////////////////////////////////////////
+
   Wire.begin();
 
   // LCD SETUP
@@ -496,6 +506,23 @@ void setup()
   { // wait until button is pressed
     delay(50);
   }
+
+  //////////////////////////////////////////////////////
+  /*
+        _             _           _
+       | |           | |         | |
+    ___| |_ __ _ _ __| |_   _ __ | |__   __ _ ___  ___
+   / __| __/ _` | '__| __| | '_ \| '_ \ / _` / __|/ _ \
+   \__ \ || (_| | |  | |_  | |_) | | | | (_| \__ \  __/
+   |___/\__\__,_|_|   \__| | .__/|_| |_|\__,_|___/\___|
+                           | |
+                           |_|
+  Start phase run:
+  drive straight until first curve is detected,
+  detect driving direction clockwise or counterclockwise
+  run until first curve is completed
+  */
+  //////////////////////////////////////////////////////
 
   lcd.clear();
 
@@ -564,6 +591,23 @@ void setup()
 
 void loop()
 {
+  /////////////////////////////////////////////////////
+  /*
+                             _
+                            | |
+    _ __ _   _ _ __    _ __ | |__   __ _ ___  ___
+   | '__| | | | '_ \  | '_ \| '_ \ / _` / __|/ _ \
+   | |  | |_| | | | | | |_) | | | | (_| \__ \  __/
+   |_|   \__,_|_| |_| | .__/|_| |_|\__,_|___/\___|
+                      | |
+                      |_|
+  run phase:
+  checks if curve is detected and calls curve(L/R) function
+  if no curve alligned to inner wall with fixxed distance
+  runs until 12 curves are counted
+
+  */
+  /////////////////////////////////////////////////////
 
   // Distance to Corner show current reading values
   Distance_L = SpaceUS_L();
@@ -630,28 +674,22 @@ void loop()
   // all corners check
   if (corners == 12)
   {
-    // slight countersteering to avoid crash with inside wall
-    if (DD == 'R')
-    {
-      left(10);
-      delay(400);
-      center();
-      delay(400);
-    }
-    else
-    {
-      right(10);
-      delay(400);
-      center();
-      delay(400);
-    }
 
-    // drive straight to finish and stop
-    Distance_F = SpaceUS_F();
-    while (Distance_F > 140)
-    {
-      Distance_F = SpaceUS_F();
-    }
+    ////////////////////////////////////////////////////
+    /*
+                     _         _
+                    | |       | |
+       ___ _ __   __| |  _ __ | |__   __ _ ___  ___
+      / _ \ '_ \ / _` | | '_ \| '_ \ / _` / __|/ _ \
+     |  __/ | | | (_| | | |_) | | | | (_| \__ \  __/
+      \___|_| |_|\__,_| | .__/|_| |_|\__,_|___/\___|
+                        | |
+                        |_|
+    end phase:
+    stops car and shows counted time in milliseconds
+    */
+    ////////////////////////////////////////////////////
+
     PRGstop();
   }
 }
