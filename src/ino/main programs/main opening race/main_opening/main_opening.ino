@@ -556,25 +556,34 @@ void setup()
       DD = 'R';
       Curve_R();
     }
-    else
-    {
-      DD = 'U';
-    }
   }
 
-  else
+  else if (DD == 'R')
   {
     runMotor(SlowSpeed);
     delay(100);
-    if (Distance_L < 10)
+    StartNarrow_R();
+    Distance_R = SpaceUS_R();
+    while (Distance_R < 80.0)
     {
-      StartNarrow_L();
+      Distance_R = SpaceUS_R();
+      Gyro_steer_straight();
     }
+    Curve_R();
+  }
 
-    else if (Distance_R < 10)
+  else if (DD == 'L')
+  {
+    runMotor(SlowSpeed);
+    delay(100);
+    StartNarrow_L();
+    Distance_L = SpaceUS_L();
+    while (Distance_L < 80.0)
     {
-      StartNarrow_R();
+      Distance_L = SpaceUS_L();
+      Gyro_steer_straight();
     }
+    Curve_L();
   }
 }
 
@@ -610,86 +619,82 @@ void loop()
   /////////////////////////////////////////////////////
 
   // Distance to Corner show current reading values
-  Distance_L = SpaceUS_L();
-  Distance_R = SpaceUS_R();
-
-  // temporary value prints
-  lcd.setCursor(0, 0);
-  lcd.print(Distance_L);
-  lcd.print("  ");
-  lcd.print(Distance_R);
-  lcd.print("  ");
-
-  // Drivingdirection check
-  if (DD == 'U')
+  if (DD == 'R')
   {
-    if (Distance_L > 80)
+    // run is clockwise for R
+    Distance_R = SpaceUS_R();
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print(Distance_R);
+    lcd.print("  ");
+    // check if R turn
+    if ((Distance_R > 80) && (millis() - LastCurveTime >= NextCurveDelay))
     {
-      DD = 'L';
-      lcd.setCursor(0, 0);
-      lcd.print(Distance_L);
-      Curve_L();
-    }
-
-    else if (Distance_R > 80)
-    {
-      DD = 'R';
-      lcd.setCursor(0, 1);
-      lcd.print(Distance_R);
       Curve_R();
     }
-  }
+    Distance_R = SpaceUS_R();
+    align_R();
+    delay(40);
 
-  // check if L turn
-  if ((DD == 'L') && (Distance_L > 80) && (millis() - LastCurveTime >= NextCurveDelay))
-  {
-    Curve_L();
-  }
+    // all corners check
+    if (corners == 12)
+    {
 
-  // check if R turn
-  if ((DD == 'R') && (Distance_R > 80) && (millis() - LastCurveTime >= NextCurveDelay))
-  {
-    Curve_R();
-  }
+      ////////////////////////////////////////////////////
+      /*
+                 _         _
+                | |       | |
+   ___ _ __   __| |  _ __ | |__   __ _ ___  ___
+  / _ \ '_ \ / _` | | '_ \| '_ \ / _` / __|/ _ \
+ |  __/ | | | (_| | | |_) | | | | (_| \__ \  __/
+  \___|_| |_|\__,_| | .__/|_| |_|\__,_|___/\___|
+                    | |
+                    |_|
+  end phase:
+  stops car and shows counted time in milliseconds
+  */
+      ////////////////////////////////////////////////////
 
-  // calls allign function
-  if (DD == 'U')
-  {
-    align();
-    delay(20);
+      PRGstop();
+    }
   }
 
   else if (DD == 'L')
   {
+    // run is counterclockwise for L
+    Distance_L = SpaceUS_L();
+    lcd.setCursor(0, 0);
+    lcd.print(Distance_L);
+    lcd.print("  ");
+    // check if L turn
+    if ((Distance_L > 80) && (millis() - LastCurveTime >= NextCurveDelay))
+    {
+      Curve_L();
+    }
+    Distance_L = SpaceUS_L();
     align_L();
     delay(40);
-  }
 
-  else if (DD == 'R')
-  {
-    align_R();
-    delay(40);
-  }
+    // all corners check
+    if (corners == 12)
+    {
 
-  // all corners check
-  if (corners == 12)
-  {
+      ////////////////////////////////////////////////////
+      /*
+                 _         _
+                | |       | |
+   ___ _ __   __| |  _ __ | |__   __ _ ___  ___
+  / _ \ '_ \ / _` | | '_ \| '_ \ / _` / __|/ _ \
+ |  __/ | | | (_| | | |_) | | | | (_| \__ \  __/
+  \___|_| |_|\__,_| | .__/|_| |_|\__,_|___/\___|
+                    | |
+                    |_|
+  end phase:
+  stops car and shows counted time in milliseconds
+  */
+      ////////////////////////////////////////////////////
 
-    ////////////////////////////////////////////////////
-    /*
-                     _         _
-                    | |       | |
-       ___ _ __   __| |  _ __ | |__   __ _ ___  ___
-      / _ \ '_ \ / _` | | '_ \| '_ \ / _` / __|/ _ \
-     |  __/ | | | (_| | | |_) | | | | (_| \__ \  __/
-      \___|_| |_|\__,_| | .__/|_| |_|\__,_|___/\___|
-                        | |
-                        |_|
-    end phase:
-    stops car and shows counted time in milliseconds
-    */
-    ////////////////////////////////////////////////////
-
-    PRGstop();
+      PRGstop();
+    }
   }
 }
