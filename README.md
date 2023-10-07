@@ -40,6 +40,9 @@ Now our car consists of an arduino which controls the sensors and the motors and
 
 ## Hardware 🔩
 
+### Mobility management 
+
+### Power and Sense Management
 
 <a name="assemly-instructions"></a>
 
