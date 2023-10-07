@@ -15,7 +15,7 @@ We are all in 11th grade and this is our first time participating in the WRO. Ou
 ![Foto 07 10 23, 15 21 44 (1)](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/3855b1e6-948d-455e-8aa3-0863e56568fc)
 
 
-
+# in the Germany final in Freiburg 
 
 ![Foto 07 10 23, 15 21 58 (1)](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/fae3b959-deba-4750-9a18-3ec62ad98029)
 
