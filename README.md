@@ -28,7 +28,7 @@
 
 ![Foto 01 10 23, 13 22 02](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/60bbc2ea-8552-432e-a204-dabbc420be3d)
 
-Welcome to the official GitHub repository for Team Smartiecar, participating in the WRO World Finals 2023. This repository contains all the code, documentation, and resources for our project, SmartiecarV2.
+Welcome to the official GitHub repository for Team Smart Riders from Germany, participating in the WRO World Finals 2023. This repository contains all the code, documentation, and resources for our project, SmartiecarV2.
 
 ![blockdiagram_overview](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/7b0c5513-870f-475c-9993-cfca6aa5659f)
 
