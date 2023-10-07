@@ -56,8 +56,8 @@ unsigned long start_time;
 //--------------------------------------------------
 
  //speeds
-  int NormalSpeed =  120;
-  int SlowSpeed   =  90;
+  int NormalSpeed =  150;
+  int SlowSpeed   =  100;
   int CurveSpeed  =  120; 
   int StartSpeed  =  120;
 
@@ -82,8 +82,8 @@ int quadrant = 0;
  
  float angle;
  float danger;
- float correction_L = 20.0;
- float correction_R = 20.0;
+ float correction_L = 25.0;
+ float correction_R = 25.0;
  float StraightAngle = 0.0;
 
  
@@ -96,7 +96,7 @@ int quadrant = 0;
  unsigned long NextCurveDelay = 2000;
   
   //both StraightAngles (L/R)
-  int Walldistance = 20;
+  int Walldistance = 25;
   
 //include own modules from local library
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\DCmotor.h"
