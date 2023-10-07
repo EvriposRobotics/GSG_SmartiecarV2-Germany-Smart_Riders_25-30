@@ -16,7 +16,7 @@ In Chemnitz we found out that we took second place in the future engineers categ
 which meant we were allowed to take part in the Germany finals in Freiburg
 
 
-![Foto 07 10 23, 15 21 44 (1)](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/3855b1e6-948d-455e-8aa3-0863e56568fc)
+
 
 
 # In the Germany final in Freiburg 
