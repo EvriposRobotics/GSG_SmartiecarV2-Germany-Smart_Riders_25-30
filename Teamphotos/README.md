@@ -37,4 +37,8 @@ which meant we were allowed to take part in the Germany finals in Freiburg
 
 
 
+#Here you can see us taking second place
+in theFuture Engineers category in the German final in Freiburg
+![Foto 17 06 23, 13 52 11 (1) (1)](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/4e446931-e4f8-4051-bf2b-734fa1abc750)
+
 ### Team Members 
