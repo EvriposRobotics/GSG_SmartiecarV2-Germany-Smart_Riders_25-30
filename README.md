@@ -40,7 +40,8 @@ Now our car consists of an arduino which controls the sensors and the motors and
 
 ## Hardware 🔩
 
-![Hardweare](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/e100f18b-64e8-488f-952e-b7e70017b971)
+![Hardweare](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/40d8d0fe-efb5-4642-bb60-c71df9333944)
+
 
 
 
