@@ -77,19 +77,19 @@ char TD = 'U';
 // Speeds
 int NormG = 145;
 int LongG = 145;
-int Cornspeed = 195;
+int CurveSpeed = 195;
 
 // obstacle block 'U' for unknown
 char Block = 'U';
 
 // Block
-int B_ID = 0;
-int B_x = 0;
-int B_y = 0;
-int B_height = 0;
-int B_width = 0;
-int B_Bottom_edge = 0;
-int B_Distance = 0;
+char P_color = 'U'; // uknown
+int P_x = 0;
+int P_y = 0;
+int P_height = 0;
+int P_width = 0;
+int P_Bottom_edge = 0;
+int P_Distance = 0;
 
 // last counted corners
 unsigned long LastCurveTime;
@@ -104,6 +104,7 @@ int walldistance = 20;
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\steering.h"
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\ultrasonic_urm09.h"
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\raspi.h"
+#include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\cam.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -201,9 +202,9 @@ void turn_L()
     angle = IMU_getAngle();
     //
     Speed = Speed + 5;
-    if (Speed > Cornspeed)
+    if (Speed > CurveSpeed)
     {
-      Speed = Cornspeed;
+      Speed = CurveSpeed;
     }
     runMotor_R(Speed);
     // delay(20);
@@ -237,9 +238,9 @@ void turn_R()
     angle = IMU_getAngle();
     //
     Speed = Speed + 5;
-    if (Speed > Cornspeed)
+    if (Speed > CurveSpeed)
     {
-      Speed = Cornspeed;
+      Speed = CurveSpeed;
     }
     runMotor_R(Speed);
     // delay(20);
@@ -352,9 +353,9 @@ void corners_L_MO()
 
     angle = IMU_getAngle();
     Speed = Speed + 5;
-    if (Speed > Cornspeed)
+    if (Speed > CurveSpeed)
     {
-      Speed = Cornspeed;
+      Speed = CurveSpeed;
     }
     runMotor(Speed);
     delay(20);
@@ -388,9 +389,9 @@ void corners_R_MO()
   {
     angle = IMU_getAngle();
     Speed = Speed + 5;
-    if (Speed > Cornspeed)
+    if (Speed > CurveSpeed)
     {
-      Speed = Cornspeed;
+      Speed = CurveSpeed;
     }
     runMotor(Speed);
     delay(20);
@@ -411,21 +412,23 @@ void corners_R_MO()
 
 void to_Red()
 {
-
-  if (B_x > Picture - 10)
+  findNextPillar();
+  if (P_x > Picturemiddle_x - 10)
   {
     right(25);
-    while (B_x > Picturemiddle_x - 10)
+    while (P_x > Picturemiddle_x - 10)
     {
       delay(20);
+      findNextPillar();
     }
   }
-  else if (B_x < Picturemiddle_x)
+  else if (P_x < Picturemiddle_x)
   {
     left(25);
-    while (B_x > Picturemiddle_x - 10)
+    while (P_x > Picturemiddle_x - 10)
     {
       delay(20);
+      findNextPillar();
     }
   }
   center();
@@ -439,21 +442,23 @@ void to_Red()
 
 void to_Green()
 {
-
-  if (B_x > Picturemiddle_x - 10)
+  findNextPillar();
+  if (P_x > Picturemiddle_x - 10)
   {
     left(25);
-    while (B_x > Picturemiddle_x - 10)
+    while (P_x > Picturemiddle_x - 10)
     {
       delay(20);
+      findNextPillar();
     }
   }
-  else if (B_x < Picturemiddle_x)
+  else if (P_x < Picturemiddle_x)
   {
     right(25);
-    while (B_x > Picturemiddle_x - 10)
+    while (P_x > Picturemiddle_x - 10)
     {
       delay(20);
+      findNextPillar();
     }
   }
   center();
@@ -474,18 +479,19 @@ void Evade_L()
   // save orientation and quadrant
   TD = IMU_getAngle();
   left(25);
-  runMotor(Cornspeed);
+  runMotor(CurveSpeed);
   // turn until block not in sight
-  while (B_ID == 2)
+  while (P_color == 2)
   {
     delay(20);
+    findNextPillar();
   }
   runMotor(LongG);
   center();
 
   delay(40); // straight after delay
   right(25);
-  runMotor(Cornspeed);
+  runMotor(CurveSpeed);
   // steer until orientation reached
   // TD = IMU_TD_gerade();
   angle = IMU_getAngle();
@@ -510,18 +516,19 @@ void Evade_R()
   // save orientation and quadrant
   TD = IMU_getAngle();
   right(25);
-  runMotor(Cornspeed);
+  runMotor(CurveSpeed);
   // drive until block not in sight
-  while (B_ID == 1)
+  while (P_color == 1)
   {
     delay(20);
+    findNextPillar();
   }
   runMotor(LongG);
   center();
 
   delay(50); // straight after delay
   left(25);
-  runMotor(Cornspeed);
+  runMotor(CurveSpeed);
   // TD = IMU_TD_gerade();
   angle = IMU_getAngle();
   while (angle > TD /*- correction_L*/)
@@ -553,29 +560,24 @@ void setup()
   Serial.begin(115200);
   // LCD SETUP
   pinMode(Button, INPUT); // button
-                          // set up the LCD's number of columns and rows:
+  // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
   lcd.setRGB(255, 0, 0);
-
-  // Kamera initialiesieren
-  Serial.println("Cam Start");
-  Kamera_Start();
-  Serial.println("Cam Started");
 
   //------------------------------------------------
   // from Steering.h
   servosetup();
 
-  // setup from ultraschall.h
-  ultraschallstart();
+  // setup from ultrasonic_urm09.h
+  ultrasonicstart();
 
   // initalises motor pinmodes from DCmotor.h
   motorsetup();
 
   delay(5000); // wait for 5 seconds
 
-  // gyro setup gyro.h
-  gyrostart();
+  // gyro setup gyro2.h
+  startGyroscope();
 
   // raspi handshake
   raspi_handshake();
@@ -585,7 +587,8 @@ void setup()
   Distance_L = SpaceUS_L();
   Distance_R = SpaceUS_R();
 
-  // detects block and prints it on the LCD
+  // get block
+  findNextPillar();
   lcd.clear();
 
   // corners count
@@ -602,7 +605,7 @@ void setup()
   lcd.print("  ");
   lcd.print(TD);
   lcd.print("  ");
-  lcd.print(B_ID);
+  lcd.print(P_color);
 
   // setup Done, switch LCD Green == press the button
   lcd.setRGB(255, 130, 0);
@@ -620,7 +623,7 @@ void setup()
 
   // saves current time
   start_time = millis();
-  LastCurveTime = millis() - ZKurve;
+  LastCurveTime = millis() - NextCurveDelay;
 
   // Steering middle
   center();
@@ -647,14 +650,15 @@ void loop()
   int coincidence;
   // check for block
 
+  findNextPillar();
   Distance = SpaceUS_F();
 
   // show block on LCD
-  if (B_ID == 1)
+  if (P_color == 1)
   {
     lcd.setRGB(255, 0, 0);
   }
-  else if (B_ID == 2)
+  else if (P_color == 2)
   {
     lcd.setRGB(0, 255, 0);
   }
@@ -664,10 +668,10 @@ void loop()
   }
 
   // red: check if block in sight
-  if ((B_ID == 1) && (B_x > 80) && (B_Bottom_edge > 150))
+  if ((P_color == 1) && (P_x > 80) && (P_Bottom_edge > 150))
   {
     // if too close = slight reverse
-    if (B_Bottom_edge > 200)
+    if (P_Bottom_edge > 200)
     {
       runMotor_R(180);
       delay(500);
@@ -678,10 +682,10 @@ void loop()
     Evade_R();
   }
 
-  else if ((B_ID == 2) && (B_x < 240) && (B_Bottom_edge > 150))
+  else if ((P_color == 2) && (P_x < 240) && (P_Bottom_edge > 150))
   {
     // if too close = slight reverse
-    if (B_Bottom_edge > 200)
+    if (P_Bottom_edge > 200)
     {
       runMotor_R(180);
       delay(500);
@@ -716,7 +720,7 @@ void loop()
 
       stopMotor();
 
-      if (millis() - LastCurveTime > ZKurve) // corners detected
+      if (millis() - LastCurveTime > NextCurveDelay) // corners detected
       {
         if (TD == 'K')
         {
@@ -755,7 +759,7 @@ void loop()
           Distance_L = SpaceUS_L();
           if (Distance_L > 35)
           {
-            wenden_R();
+            turn_R();
           }
           else
           {
@@ -776,7 +780,7 @@ void loop()
           Distance_R = SpaceUS_R();
           if (Distance_R > 35)
           {
-            wenden_L();
+            turn_L();
           }
           else
           {

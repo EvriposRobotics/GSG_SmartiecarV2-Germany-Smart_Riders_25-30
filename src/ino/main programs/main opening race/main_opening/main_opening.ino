@@ -148,7 +148,7 @@ void PRGstop()
   delay(9999999);
 }
 
-// startnarrow Left
+// startnarrow Left (start close to left inside wall)
 void StartNarrow_L()
 {
   float angle;
@@ -178,7 +178,7 @@ void StartNarrow_L()
   runMotor(SlowSpeed);
 }
 
-// startnarrow Right
+// startnarrow Right (start close to right inside wall)
 void StartNarrow_R()
 {
   float angle;
@@ -241,7 +241,7 @@ void align_L()
 {
   int Steering;
   Distance_L = SpaceUS_L();
-  Steering = (Distance_L - Walldistance) * 0.9;
+  Steering = (Distance_L - Walldistance) * 1.5;
   if (Steering > 30.0)
   {
     Steering = 30;
@@ -255,11 +255,17 @@ void align_L()
   {
     Steering = Steering * (-1);
     right(Steering);
+    lcd.setCursor(0, 1);
+    lcd.print("R ");
+    lcd.print(Steering);
   }
 
   else
   {
     left(Steering);
+    lcd.setCursor(0, 1);
+    lcd.print("L ");
+    lcd.print(Steering);
   }
 
   delay(20);
@@ -270,7 +276,7 @@ void align_R()
 {
   int Steering;
   Distance_R = SpaceUS_R();
-  Steering = (Walldistance - Distance_R) * 0.9;
+  Steering = (Walldistance - Distance_R) * 1.5;
   if (Steering > 30.0)
   {
     Steering = 30;
@@ -362,6 +368,7 @@ void Curve_L()
     runMotor(Speed);
     delay(50);
   }
+
   corners = corners + 1;
   StraightAngle = TD;
   center();
@@ -468,7 +475,7 @@ void setup()
   motorsetup();
 
   // handshake with raspberry pi
-  raspi_handshake();
+  // raspi_handshake();
 
   // distance to curve show current reading values
   Distance_F = SpaceUS_F();
@@ -614,7 +621,6 @@ void loop()
   checks if curve is detected and calls curve(L/R) function
   if no curve alligned to inner wall with fixxed distance
   runs until 12 curves are counted
-
   */
   /////////////////////////////////////////////////////
 
@@ -623,16 +629,17 @@ void loop()
   {
     // run is clockwise for R
     Distance_R = SpaceUS_R();
-    lcd.clear();
+    /*lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print(Distance_R);
-    lcd.print("  ");
+    lcd.print("  ");*/
     // check if R turn
-    if ((Distance_R > 80) && (millis() - LastCurveTime >= NextCurveDelay))
+    // if ((Distance_R > 80) && (millis() - LastCurveTime >= NextCurveDelay))
+    if (Distance_R > 80)
     {
       Curve_R();
     }
-    Distance_R = SpaceUS_R();
+    // Distance_R = SpaceUS_R();
     align_R();
     delay(40);
 
@@ -663,15 +670,17 @@ void loop()
   {
     // run is counterclockwise for L
     Distance_L = SpaceUS_L();
-    lcd.setCursor(0, 0);
+    /*lcd.setCursor(0, 0);
     lcd.print(Distance_L);
     lcd.print("  ");
+    */
     // check if L turn
-    if ((Distance_L > 80) && (millis() - LastCurveTime >= NextCurveDelay))
+    // if ((Distance_L > 80) && (millis() - LastCurveTime >= NextCurveDelay))
+    if (Distance_L > 80)
     {
       Curve_L();
     }
-    Distance_L = SpaceUS_L();
+    // Distance_L = SpaceUS_L();
     align_L();
     delay(40);
 
@@ -697,4 +706,6 @@ void loop()
       PRGstop();
     }
   }
+
+  delay(20);
 }
