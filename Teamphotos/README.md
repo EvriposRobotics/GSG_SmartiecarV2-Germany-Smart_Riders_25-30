@@ -10,8 +10,9 @@ We are all in 11th grade and this is our first time participating in the WRO. Ou
 
 ![Arduino first version](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131178788/6dd0a7be-6d12-4a21-8942-087e7516830d)
 
-
-
+# In chemnitz 
+In Chemnitz we found out that we took second place in the future engineers category,
+which meant we were allowed to take part in the Germany finals in Freiburg
 ![Foto 07 10 23, 15 21 44 (1)](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/3855b1e6-948d-455e-8aa3-0863e56568fc)
 
 
