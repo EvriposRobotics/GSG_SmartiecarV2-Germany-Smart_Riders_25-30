@@ -20,9 +20,8 @@
     - [Debugging Tools](#debugging-tools) 🐞🔍 
 5. [Team Photos](#team-photos) 📸
 6. [Demonstration Videos](#demonstration-videos) 🎥
-7. [Safety Guidelines](#safety-guidelines) ⚠️
-8. [Contributors](#contributors) 👥
-9. [sources](#sources) ℹ
+7. [Contributors](#contributors) 👥
+8. [sources](#sources) ℹ
 <a name="overview"></a>
 ## Overview 🌟
 
