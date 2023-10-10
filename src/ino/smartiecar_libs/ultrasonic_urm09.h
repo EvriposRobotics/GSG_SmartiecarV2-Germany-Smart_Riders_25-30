@@ -12,9 +12,9 @@ uint16_t distance;
 
 uint32_t pulseWidthUs;
 
-int16_t dist_L = 0;
-int16_t dist_R = 0;
-int16_t dist_F = 0;
+int16_t dist_Left = 0;
+int16_t dist_Right = 0;
+int16_t dist_Front = 0;
 
 int SpaceUS_F()
 {
@@ -35,12 +35,12 @@ int SpaceUS_F()
 
         if ((dist < 2) || (dist > 350))
         {
-                dist = dist_F;
+                dist = dist_Front;
         }
 
         else
         {
-                dist_F = dist;
+                dist_Front = dist;
         }
         delay(20);
         // gives back as an integer in cm
@@ -66,12 +66,12 @@ int SpaceUS_L()
 
         if ((dist < 2) || (dist > 350))
         {
-                dist = dist_L;
+                dist = dist_Left;
         }
 
         else
         {
-                dist_L = dist;
+                dist_Left = dist;
         }
         delay(20);
         // gives back as an integer in cm
@@ -97,12 +97,12 @@ int SpaceUS_R()
 
         if ((dist < 2) || (dist > 350))
         {
-                dist = dist_R;
+                dist = dist_Right;
         }
 
         else
         {
-                dist_R = dist;
+                dist_Right = dist;
         }
         delay(20);
         // gives back as an integer in cm

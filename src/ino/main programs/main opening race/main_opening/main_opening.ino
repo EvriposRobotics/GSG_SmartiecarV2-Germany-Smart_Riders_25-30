@@ -578,6 +578,51 @@ void wallDirectionCheck()
   }
 }
 
+
+/////////////////////////////////////////////////////////////////////
+//operateNavigationThroughTurns()
+//uses the gyro to navigate through the turns while counting corners
+/////////////////////////////////////////////////////////////////////
+
+  if (DrivingDirection == 'R')
+  {
+    while (corners < 12)
+    {
+      // clockwise running for right
+      Distance_Right = SpaceUS_R();
+
+      // check for Right Turn
+      if ((Distance_Right > 80) && (milliseconds() - LastCurveTime >= NextCurveDelay))
+      {
+        Curve_R();
+      }
+      else
+      {
+        alignRight();
+      }
+    }
+  }
+
+  else
+  {
+    while (corners < 12)
+    {
+
+      // counterclockwise running for left
+      Distance_Left = SpaceUS_L();
+      // check for Left Turn
+      if ((Distance_Left > 80) && (milliseconds() - LastCurveTime >= NextCurveDelay))
+      {
+        Curve_L();
+      }
+      else
+      {
+        alignLeft();
+      }
+    }
+  }
+
+
 ///////////////////////////////////////////
 /*
 ███████╗███████╗████████╗██╗   ██╗██████╗
@@ -707,43 +752,6 @@ void loop()
   /////////////////////////////////////////////////////
 
   // 
-  if (DrivingDirection == 'R')
-  {
-    while (corners < 12)
-    {
-      // clockwise running for right
-      Distance_Right = SpaceUS_R();
-
-      // check for Right Turn
-      if ((Distance_Right > 80) && (milliseconds() - LastCurveTime >= NextCurveDelay))
-      {
-        Curve_R();
-      }
-      else
-      {
-        alignRight();
-      }
-    }
-  }
-
-  else
-  {
-    while (corners < 12)
-    {
-
-      // counterclockwise running for left
-      Distance_Left = SpaceUS_L();
-      // check for Left Turn
-      if ((Distance_Left > 80) && (milliseconds() - LastCurveTime >= NextCurveDelay))
-      {
-        Curve_L();
-      }
-      else
-      {
-        alignLeft();
-      }
-    }
-  }
 
   ////////////////////////////////////////////////////
   /*

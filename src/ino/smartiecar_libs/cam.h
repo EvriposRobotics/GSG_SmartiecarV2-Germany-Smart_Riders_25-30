@@ -1,5 +1,3 @@
-// #include "raspi.h"
-
 int Picturemiddle_x = 0;
 int Picturemiddle_y = 0;
 

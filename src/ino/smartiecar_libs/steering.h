@@ -33,14 +33,12 @@ Servo servo;
 //steering straight
  void center() 
  {
-  //steering straight
  servo.write(centered);
  }
 
-
+//servo setup
 void servosetup()
 {
-  //SERVO SETUPs
   servo.attach(Servopin);
   center();
 }
