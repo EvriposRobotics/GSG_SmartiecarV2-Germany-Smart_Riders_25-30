@@ -9,7 +9,7 @@
 1. [Overview](#overview) 🌟
 2. [Hardware](#hardware) 🔧
     - [Mobility Management](#Mobility-Management)
-    - [Power and Sense Managemet](Power-and-Sense-Management)  
+    - [Power and Sense Management](Power-and-Sense-Management)  
     - [Assembly Instructions](#assembly-instructions) 🛠
     - [Schematics](#schematics) 📐👀
     - [Components List](#components-list) 🔍
