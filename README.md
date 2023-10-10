@@ -8,20 +8,21 @@
 
 1. [Overview](#overview) 🌟
 2. [Hardware](#hardware) 🔧
+    - [Mobility Management](#Mobility Management)
     - [Assembly Instructions](#assembly-instructions) 🛠
     - [Schematics](#schematics) 📐👀
     - [Components List](#components-list) 🔍
 
-3. [Software](#software) 💻👨‍💻
+4. [Software](#software) 💻👨‍💻
     - [Setup Instructions](#setup-instructions) 🚀
     - [Programming Languages](#programming-languages) 👩‍💻
     - [Dependencies](#dependencies) 
-4. [Utilities](#utilities) 🛠
+5. [Utilities](#utilities) 🛠
     - [Debugging Tools](#debugging-tools) 🐞🔍 
-5. [Team Photos](#team-photos) 📸
-6. [Demonstration Videos](#demonstration-videos) 🎥
-7. [Contributors](#contributors) 👥
-8. [sources](#sources) ℹ
+6. [Team Photos](#team-photos) 📸
+7. [Demonstration Videos](#demonstration-videos) 🎥
+8. [Contributors](#contributors) 👥
+9. [sources](#sources) ℹ
 <a name="overview"></a>
 ## Overview 🌟
 
@@ -44,7 +45,7 @@ Now our car consists of an arduino which controls the sensors and the motors and
 
 
 
-### Mobility management 
+### Mobility Management 
 
 ### Power and Sense Management
 
