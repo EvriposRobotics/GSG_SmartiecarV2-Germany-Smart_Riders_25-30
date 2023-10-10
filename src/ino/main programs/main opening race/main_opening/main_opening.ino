@@ -60,9 +60,9 @@ int StartSpeed = 120;
 
 // LCD connection
 int Button = 4;
-int colorR = 255;
-int colorG = 0;
-int colorB = 0;
+int colorRed = 255;
+int colorGreen = 0;
+int colorBlue = 0;
 // LCD screen itself
 rgb_lcd lcd;
 
@@ -72,18 +72,18 @@ int laps = 0;
 int quadrant = 0;
 
 // Distances own funcs (calculate values)
-int Distance_F;
-int Distance_L;
-int Distance_R;
+int Distance_Front;
+int Distance_Left;
+int Distance_Right;
 
 float angle;
 float danger;
-float correction_L = 30.0;
-float correction_R = 30.0;
+float correction_Left = 30.0;
+float correction_Right = 30.0;
 float StraightAngle = 0.0;
 
-// DrivingDirection is 'U' for uknown
-char DD = 'U';
+// DrivingDirection is 'Uknown' for uknown
+char DrivingDirection = 'Uknown';
 
 // last curve measured
 unsigned long LastCurveTime = 0;
@@ -113,12 +113,12 @@ int Walldistance = 30;
 // Stop programm
 void ProgramStop()
 {
-  unsigned long DT; // driving time
-  unsigned long tmpTime;
+  unsigned long DrivingTime; // driving time
+  unsigned long temporaryTime;
 
   runMotor(SlowSpeed); // slow down
   // slight countersteering to compensate for overshooting
-  if (DD == 'R')
+  if (DrivingDirection == 'R')
   {
     left(10);
   }
@@ -133,28 +133,28 @@ void ProgramStop()
 
   // Go straight for at least 400 msec
   Gyro_steer_straight();
-  tmpTime = millis();
-  while (millis() < tmpTime + 1000)
+  temporaryTime = milliseconds();
+  while (milliseconds() < temporaryTime + 1000)
   {
     Gyro_steer_straight();
   }
 
   // drive straight to finish and stop
-  Distance_F = SpaceUS_F();
-  while (Distance_F > 140)
+  Distance_Front = SpaceUS_F();
+  while (Distance_Front > 140)
   {
     Gyro_steer_straight();
-    Distance_F = SpaceUS_F();
+    Distance_Front = SpaceUS_F();
   }
 
   stopMotor();
   // save current time in milliseconds
-  DT = millis() - start_time;
+  DrivingTime = milliseconds() - start_time;
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("time: ");
-  lcd.print(DT);
-  lcd.print(Distance_F);
+  lcd.print(DrivingTime);
+  lcd.print(Distance_Front);
   delay(9999999); // wait forever
 }
 
@@ -162,7 +162,7 @@ void ProgramStop()
 void StartNarrow_L()
 {
   float angle;
-  float TD = 360.0;
+  float TargetDirection = 360.0;
   int Speed = SlowSpeed;
   right(30);
   delay(500);
@@ -172,7 +172,7 @@ void StartNarrow_L()
   lcd.setCursor(0, 0);
   lcd.print(angle);
   left(30);
-  while (angle > TD + correction_L)
+  while (angle > TargetDirection + correction_Left)
   {
 
     angle = IMU_getAngle();
@@ -192,7 +192,7 @@ void StartNarrow_L()
 void StartNarrow_R()
 {
   float angle;
-  float TD = 0.0;
+  float TargetDirection = 0.0;
   int Speed;
   left(30);
   delay(500);
@@ -202,7 +202,7 @@ void StartNarrow_R()
   lcd.setCursor(0, 0);
   lcd.print(angle);
   right(30);
-  while (angle < TD - correction_R)
+  while (angle < TargetDirection - correction_Right)
   {
 
     angle = IMU_getAngle();
@@ -226,7 +226,7 @@ void StartNarrow_R()
 void alignCenter()
 {
   int Steering;
-  Steering = (Distance_L - Distance_R) * 0.3;
+  Steering = (Distance_Left - Distance_Right) * 0.3;
   if (Steering > 30.0)
   {
     Steering = 30;
@@ -250,12 +250,16 @@ void alignCenter()
   delay(20);
 }
 
-// funct to align to the left wall
+/////////////////////////////////////////////////////////////////////
+// alignLeft()
+//aligns to the left wall
+/////////////////////////////////////////////////////////////////////
+
 void alignLeft()
 {
   int Steering;
-  Distance_L = SpaceUS_L();
-  Steering = (Distance_L - Walldistance) * 0.9;
+  Distance_Left = SpaceUS_L();
+  Steering = (Distance_Left - Walldistance) * 0.9;
   if (Steering > 30.0)
   {
     Steering = 30;
@@ -279,14 +283,19 @@ void alignLeft()
   delay(20);
 }
 
-// alignRight
+
+/////////////////////////////////////////////////////////////////////
+// alignRight()
+//aligns to the right wall
+/////////////////////////////////////////////////////////////////////
+
 void alignRight()
 {
   int Steering;
 
-  Distance_R = SpaceUS_R();
+  Distance_Right = SpaceUS_R();
 
-  Steering = (Walldistance - Distance_R) * 0.9;
+  Steering = (Walldistance - Distance_Right) * 0.9;
   if (Steering > 30.0)
   {
     Steering = 30;
@@ -310,7 +319,11 @@ void alignRight()
   delay(20);
 }
 
-// Gyro_steer_straight
+/////////////////////////////////////////////////////////////////////
+// Gyro_steer_straight()
+// uses the gyro to orient itself straight to the track
+////////////////////////////////////////////////////////////////////
+
 void Gyro_steer_straight()
 {
   float angle;
@@ -318,7 +331,6 @@ void Gyro_steer_straight()
   int Steering;
   angle = IMU_getAngle();
 
-  // Steering = (Distance_L - Walldistance)*0.9;
   Steering = (angle - StraightAngle) * 0.8; // 0.8 = wiggle factor
   if (Steering > 15.0)
   {
@@ -343,19 +355,23 @@ void Gyro_steer_straight()
   // delay(20);
 }
 
-// Curve_L
+/////////////////////////////////////////////////////////////////////
+// Curve_L()
+// calls a left curve and counts it
+/////////////////////////////////////////////////////////////////////
+
 void Curve_L()
 {
   int Speed;
-  float TD;
+  float TargetDirection;
   Speed = CurveSpeed;
   left(40);
   lcd.setRGB(0, 0, 255);
-  TD = StraightAngle - 90.0;
+  TargetDirection = StraightAngle - 90.0;
   angle = IMU_getAngle();
-  StraightAngle = TD;
+  StraightAngle = TargetDirection;
   runMotor(SlowSpeed);
-  while (angle > TD + correction_L)
+  while (angle > TargetDirection + correction_Left)
   {
     angle = IMU_getAngle();
     Speed = Speed + 5;
@@ -368,33 +384,39 @@ void Curve_L()
   }
 
   corners = corners + 1;
-  StraightAngle = TD;
+  StraightAngle = TargetDirection;
   center();
   runMotor(NormalSpeed);
-  Distance_L = SpaceUS_L;
+  Distance_Left = SpaceUS_L;
 
   // try to find the inside wall again
-  while (Distance_L > 60)
+  while (Distance_Left > 60)
   {
-    Distance_L = SpaceUS_L();
+    Distance_Left = SpaceUS_L();
     Gyro_steer_straight();
   }
   lcd.setRGB(0, 255, 0);
-  LastCurveTime = millis();
+  LastCurveTime = milliseconds();
 }
+
+/////////////////////////////////////////////////////////////////////
+// Curve_R()
+// calls a right curve and counts it
+/////////////////////////////////////////////////////////////////////
 
 void Curve_R()
 {
   int Speed;
-  float TD;
+  float TargetDirection;
   Speed = CurveSpeed;
   right(40);
   lcd.setRGB(0, 0, 255);
-  TD = StraightAngle + 90.0;
+  TargetDirection = StraightAngle + 90.0;
   angle = IMU_getAngle();
-  StraightAngle = TD;
+  StraightAngle = TargetDirection;
   runMotor(SlowSpeed);
-  while (angle < TD - correction_R)
+  //checks if the car has a greater angle than the target direction in order to correct it
+  while (angle < TargetDirection - correction_Right) 
   {
     angle = IMU_getAngle();
     Speed = Speed + 5;
@@ -407,21 +429,146 @@ void Curve_R()
   }
 
   corners = corners + 1;
-  StraightAngle = TD;
+  StraightAngle = TargetDirection;
   center();
   runMotor(NormalSpeed);
-  Distance_R = SpaceUS_R;
+  Distance_Right = SpaceUS_R;
 
   // try to find the inside wall again
-  while (Distance_R > 60)
+  while (Distance_Right > 60)
   {
-    Distance_R = SpaceUS_R();
+    Distance_Right = SpaceUS_R();
     Gyro_steer_straight();
   }
   lcd.setRGB(0, 255, 0);
-  LastCurveTime = millis();
+  LastCurveTime = milliseconds();
 }
 
+/////////////////////////////////////////////////////////////////////
+//measureAllDistances()
+//measures all distances and saves them in global variables
+/////////////////////////////////////////////////////////////////////
+
+void measureAllDistances()
+{
+  Distance_Front = SpaceUS_F();
+  Distance_Left = SpaceUS_L();
+  Distance_Right = SpaceUS_R();
+}
+
+/////////////////////////////////////////////////////////////////////
+//printAllDistancesToLCD()
+//prints all distances to the LCD aswell as DrivingDirection
+/////////////////////////////////////////////////////////////////////
+
+void printAllDistancesToLCD()
+{
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print(Distance_Left);
+  lcd.print("  ");
+  lcd.print(Distance_Front);
+  lcd.print("  ");
+  lcd.print(Distance_Right);
+  lcd.setCursor(0, 1);
+  lcd.print(StraightAngle);
+  lcd.print("  ");
+  lcd.print(DrivingDirection);
+
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//waitOnButtonPress()
+//waits until the button is pressed
+/////////////////////////////////////////////////////////////////////
+
+void waitOnButtonPress()
+{
+  while (digitalRead(Button) == LOW)
+  {
+    delay(50);
+  }
+
+}
+
+
+/////////////////////////////////////////////////////////////////////
+//slowspeedToFindCorrectDirection()
+//finds the driving direction slowly while measuring the distances
+/////////////////////////////////////////////////////////////////////
+
+void slowspeedToFindCorrectDirection()
+{
+  if (DrivingDirection == 'Uknown')
+  {
+    runMotor(SlowSpeed);
+    while ((Distance_Left < 80.0) && (Distance_Right < 80.0))
+    {
+      Distance_Left = SpaceUS_L();
+      Distance_Right = SpaceUS_R();
+      Gyro_steer_straight();
+    }
+    if (Distance_Left >= 80.0)
+    {
+      DrivingDirection = 'L';
+      Curve_L();
+    }
+    else if (Distance_Right >= 80.0)
+    {
+      DrivingDirection = 'R';
+      Curve_R();
+    }
+  }
+
+  else if (DrivingDirection == 'R')
+  {
+    runMotor(SlowSpeed);
+    delay(100);
+    StartNarrow_R();
+    Distance_Right = SpaceUS_R();
+    while (Distance_Right < 80.0)
+    {
+      Distance_Right = SpaceUS_R();
+      Gyro_steer_straight();
+    }
+    Curve_R();
+  }
+
+  else if (DrivingDirection == 'L')
+  {
+    runMotor(SlowSpeed);
+    delay(100);
+    StartNarrow_L();
+    Distance_Left = SpaceUS_L();
+    while (Distance_Left < 80.0)
+    {
+      Distance_Left = SpaceUS_L();
+      Gyro_steer_straight();
+    }
+    Curve_L();
+  }
+
+}
+
+void saveCurrentTime()
+{
+  start_time = milliseconds();
+  LastCurveTime = milliseconds() - NextCurveDelay;
+}
+
+void wallDirectionCheck()
+{
+    if (Distance_Left < 10)
+  {
+    DrivingDirection = 'L';
+  }
+
+  if (Distance_Right < 10)
+  {
+    DrivingDirection = 'R';
+  }
+}
 ///////////////////////////////////////////
 /*
 ███████╗███████╗████████╗██╗   ██╗██████╗
@@ -450,7 +597,6 @@ void setup()
   */
   //////////////////////////////////////////////////////
 
-  // Serial.begin(9600);
   Wire.begin();
 
   // LCD SETUP
@@ -472,43 +618,21 @@ void setup()
   // initalises motor pinmodes from DCmotor.h
   motorsetup();
 
-  // distance to curve show current reading values
-  Distance_F = SpaceUS_F();
-  Distance_L = SpaceUS_L();
-  Distance_R = SpaceUS_R();
+ //measures all the current reading values
+  measureAllDistances();
 
-  if (Distance_L < 10)
-  {
-    DD = 'L';
-  }
+  wallDirectionCheck();
 
-  if (Distance_R < 10)
-  {
-    DD = 'R';
-  }
-
-  // count corners
+  
+  // set the straightangle to the current IMU angle
   StraightAngle = IMU_getAngle();
 
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print(Distance_L);
-  lcd.print("  ");
-  lcd.print(Distance_F);
-  lcd.print("  ");
-  lcd.print(Distance_R);
-  lcd.setCursor(0, 1);
-  lcd.print(StraightAngle);
-  lcd.print("  ");
-  lcd.print(DD);
+  printAllDistancesToLCD();
 
   // setup done - show green light
   lcd.setRGB(255, 130, 0);
 
-  while (digitalRead(Button) == LOW)
-  { // wait until button is pressed
-    delay(50);
-  }
+  waitOnButtonPress();
 
   //////////////////////////////////////////////////////
   /*
@@ -532,62 +656,12 @@ void setup()
   // lcd green
   lcd.setRGB(0, 255, 0);
 
-  // save current time
-  start_time = millis();
-  LastCurveTime = millis() - NextCurveDelay;
-
-  // Steering center
+  saveCurrentTime();
+  
+  // Steering to center
   center();
 
-  // find drivingdirection slowly
-  if (DD == 'U')
-  {
-    runMotor(SlowSpeed);
-    while ((Distance_L < 80.0) && (Distance_R < 80.0))
-    {
-      Distance_L = SpaceUS_L();
-      Distance_R = SpaceUS_R();
-      Gyro_steer_straight();
-    }
-    if (Distance_L >= 80.0)
-    {
-      DD = 'L';
-      Curve_L();
-    }
-    else if (Distance_R >= 80.0)
-    {
-      DD = 'R';
-      Curve_R();
-    }
-  }
-
-  else if (DD == 'R')
-  {
-    runMotor(SlowSpeed);
-    delay(100);
-    StartNarrow_R();
-    Distance_R = SpaceUS_R();
-    while (Distance_R < 80.0)
-    {
-      Distance_R = SpaceUS_R();
-      Gyro_steer_straight();
-    }
-    Curve_R();
-  }
-
-  else if (DD == 'L')
-  {
-    runMotor(SlowSpeed);
-    delay(100);
-    StartNarrow_L();
-    Distance_L = SpaceUS_L();
-    while (Distance_L < 80.0)
-    {
-      Distance_L = SpaceUS_L();
-      Gyro_steer_straight();
-    }
-    Curve_L();
-  }
+  slowspeedToFindCorrectDirection();
 }
 
 //////////////////////////////////
@@ -621,15 +695,15 @@ void loop()
   /////////////////////////////////////////////////////
 
   // Distance to Corner show current reading values
-  if (DD == 'R')
+  if (DrivingDirection == 'R')
   {
     while (corners < 12)
     {
       // clockwise running for right
-      Distance_R = SpaceUS_R();
+      Distance_Right = SpaceUS_R();
 
       // check for Right Turn
-      if ((Distance_R > 80) && (millis() - LastCurveTime >= NextCurveDelay))
+      if ((Distance_Right > 80) && (milliseconds() - LastCurveTime >= NextCurveDelay))
       {
         Curve_R();
       }
@@ -646,9 +720,9 @@ void loop()
     {
 
       // counterclockwise running for left
-      Distance_L = SpaceUS_L();
+      Distance_Left = SpaceUS_L();
       // check for Left Turn
-      if ((Distance_L > 80) && (millis() - LastCurveTime >= NextCurveDelay))
+      if ((Distance_Left > 80) && (milliseconds() - LastCurveTime >= NextCurveDelay))
       {
         Curve_L();
       }

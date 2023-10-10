@@ -52,9 +52,9 @@ unsigned long start_time;
 
 // LCD connections
 int Button = 4;
-int colorR = 255;
-int colorG = 0;
-int colorB = 0;
+int colorRed = 255;
+int colorGreen = 0;
+int colorBlue = 0;
 // LCD screen itself
 rgb_lcd lcd;
 
@@ -63,27 +63,27 @@ int corners;
 
 // own variables for distances
 int Distance;
-int Distance_L;
-int Distance_R;
+int Distance_Left;
+int Distance_Right;
 
 float angle;
 float danger;
-float correction_L = -5.0;
-float correction_R = 15.0;
+float correction_Left = -5.0;
+float correction_Right = 15.0;
 
-// Driving direction 'U' for uknown
-char TD = 'U';
+// Driving direction 'Uknown' for uknown
+char TargetDirection = 'Uknown';
 
 // Speeds
 int NormG = 145;
 int LongG = 145;
 int CurveSpeed = 195;
 
-// obstacle block 'U' for unknown
-char Block = 'U';
+// obstacle block 'Uknown' for unknown
+char Block = 'Uknown';
 
 // Block
-char P_color = 'U'; // uknown
+char P_color = 'Uknown'; // uknown
 int P_x = 0;
 int P_y = 0;
 int P_height = 0;
@@ -123,7 +123,7 @@ void PRGstop()
   unsigned long FZ;
   stopMotor();
   // save time
-  FZ = millis() - start_time;
+  FZ = milliseconds() - start_time;
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("time: ");
@@ -137,7 +137,7 @@ float calcTD()
   float angle;
   float calcA = 0.0;
   angle = IMU_getAngle();
-  if (TD == 'R')
+  if (TargetDirection == 'R')
   {
 
     if ((angle > 315) || (angle <= 45))
@@ -185,7 +185,7 @@ float calcTD()
 // turn left
 void turn_L()
 {
-  float TD;
+  float TargetDirection;
   int Speed;
   lcd.setRGB(125, 0, 125);
   Speed = LongG;
@@ -194,9 +194,9 @@ void turn_L()
   runMotor_R(LongG);
   angle = IMU_getAngle();
   // replaces complicated quadrantSYS
-  TD = calcTD();
+  TargetDirection = calcTD();
   // turn until 90 degrees or block in sight
-  while ((angle > TD - correction_L))
+  while ((angle > TargetDirection - correction_Left))
   {
 
     angle = IMU_getAngle();
@@ -212,16 +212,16 @@ void turn_L()
   stopMotor();
   corners = corners + 1;
   center();
-  Distance_L = SpaceUS_L();
-  Distance_R = SpaceUS_R();
+  Distance_Left = SpaceUS_L();
+  Distance_Right = SpaceUS_R();
   lcd.setRGB(255, 255, 255);
-  LastCurveTime = millis();
+  LastCurveTime = milliseconds();
   runMotor(LongG);
 }
 
 void turn_R()
 {
-  float TD;
+  float TargetDirection;
   int Speed;
   lcd.setRGB(125, 0, 125);
   Speed = LongG;
@@ -230,9 +230,9 @@ void turn_R()
   runMotor_R(LongG);
   angle = IMU_getAngle();
   // replaces complicated quadrantSYS
-  TD = calcTD();
+  TargetDirection = calcTD();
   // turn until 90 degrees or block in sight
-  while (angle < TD - correction_R)
+  while (angle < TargetDirection - correction_Right)
   {
     // turn until 90 degrees or block in sight
     angle = IMU_getAngle();
@@ -248,10 +248,10 @@ void turn_R()
   stopMotor();
   corners = corners + 1;
   center();
-  Distance_L = SpaceUS_L();
-  Distance_R = SpaceUS_R();
+  Distance_Left = SpaceUS_L();
+  Distance_Right = SpaceUS_R();
   lcd.setRGB(255, 255, 255);
-  LastCurveTime = millis();
+  LastCurveTime = milliseconds();
   runMotor(LongG);
 }
 
@@ -259,7 +259,7 @@ void turn_R()
 void align()
 {
   int Steering;
-  Steering = (Distance_L - Distance_R) * 0.3;
+  Steering = (Distance_Left - Distance_Right) * 0.3;
 
   if (Steering > 30.0)
   {
@@ -286,7 +286,7 @@ void align()
 void align_L()
 {
   int Steering;
-  Steering = (Distance_L - walldistance) * 0.8;
+  Steering = (Distance_Left - walldistance) * 0.8;
   if (Steering > 20.0)
   {
     Steering = 20;
@@ -312,7 +312,7 @@ void align_L()
 void align_R()
 {
   int Steering;
-  Steering = (walldistance - Distance_R) * 0.8;
+  Steering = (walldistance - Distance_Right) * 0.8;
   if (Steering > 20.0)
   {
     Steering = 20;
@@ -338,17 +338,17 @@ void align_R()
 void corners_L_MO()
 {
   int Speed;
-  float TD;
+  float TargetDirection;
   Speed = LongG;
   lcd.setRGB(0, 0, 255);
   left(40);
   angle = IMU_getAngle();
   // replaces quadrantenSYS
-  TD = calcTD();
+  TargetDirection = calcTD();
   runMotor(LongG);
   //
   // turn until 90 degrees or block in sight
-  while (angle > TD - correction_L)
+  while (angle > TargetDirection - correction_Left)
   {
 
     angle = IMU_getAngle();
@@ -368,24 +368,24 @@ void corners_L_MO()
   delay(250);
   stopMotor();
   runMotor(LongG);
-  Distance_L = SpaceUS_L();
-  Distance_R = SpaceUS_R();
+  Distance_Left = SpaceUS_L();
+  Distance_Right = SpaceUS_R();
   lcd.setRGB(255, 255, 255);
-  LastCurveTime = millis();
+  LastCurveTime = milliseconds();
 }
 
 // corners right main obstacle
 void corners_R_MO()
 {
   int Speed;
-  float TD;
+  float TargetDirection;
   Speed = LongG;
   lcd.setRGB(0, 0, 255);
   right(40);
   angle = IMU_getAngle();
   // replaces complicated quadrantSYS
-  TD = calcTD();
-  while (angle < TD - correction_R)
+  TargetDirection = calcTD();
+  while (angle < TargetDirection - correction_Right)
   {
     angle = IMU_getAngle();
     Speed = Speed + 5;
@@ -404,10 +404,10 @@ void corners_R_MO()
   delay(250);
   stopMotor();
   runMotor(LongG);
-  Distance_L = SpaceUS_L();
-  Distance_R = SpaceUS_R();
+  Distance_Left = SpaceUS_L();
+  Distance_Right = SpaceUS_R();
   lcd.setRGB(255, 255, 255);
-  LastCurveTime = millis();
+  LastCurveTime = milliseconds();
 }
 
 void to_Red()
@@ -473,11 +473,11 @@ void to_Green()
 void Evade_L()
 {
   float angle;
-  float TD;
+  float TargetDirection;
   int Speed;
 
   // save orientation and quadrant
-  TD = IMU_getAngle();
+  TargetDirection = IMU_getAngle();
   left(25);
   runMotor(CurveSpeed);
   // turn until block not in sight
@@ -493,9 +493,9 @@ void Evade_L()
   right(25);
   runMotor(CurveSpeed);
   // steer until orientation reached
-  // TD = IMU_TD_gerade();
+  // TargetDirection = IMU_TD_gerade();
   angle = IMU_getAngle();
-  while (angle < TD)
+  while (angle < TargetDirection)
   {
     angle = IMU_getAngle();
     delay(20);
@@ -510,11 +510,11 @@ void Evade_L()
 void Evade_R()
 {
   float angle;
-  float TD;
+  float TargetDirection;
   int Speed;
 
   // save orientation and quadrant
-  TD = IMU_getAngle();
+  TargetDirection = IMU_getAngle();
   right(25);
   runMotor(CurveSpeed);
   // drive until block not in sight
@@ -529,9 +529,9 @@ void Evade_R()
   delay(50); // straight after delay
   left(25);
   runMotor(CurveSpeed);
-  // TD = IMU_TD_gerade();
+  // TargetDirection = IMU_TD_gerade();
   angle = IMU_getAngle();
-  while (angle > TD /*- correction_L*/)
+  while (angle > TargetDirection /*- correction_Left*/)
   {
     angle = IMU_getAngle();
     delay(20);
@@ -584,8 +584,8 @@ void setup()
 
   // distance to wall
   Distance = SpaceUS_F();
-  Distance_L = SpaceUS_L();
-  Distance_R = SpaceUS_R();
+  Distance_Left = SpaceUS_L();
+  Distance_Right = SpaceUS_R();
 
   // get block
   findNextPillar();
@@ -595,15 +595,15 @@ void setup()
   angle = IMU_getAngle();
 
   lcd.setCursor(0, 0);
-  lcd.print(Distance_L);
+  lcd.print(Distance_Left);
   lcd.print("  ");
   lcd.print(Distance);
   lcd.print("  ");
-  lcd.print(Distance_R);
+  lcd.print(Distance_Right);
   lcd.setCursor(0, 1);
   lcd.print(angle);
   lcd.print("  ");
-  lcd.print(TD);
+  lcd.print(TargetDirection);
   lcd.print("  ");
   lcd.print(P_color);
 
@@ -622,8 +622,8 @@ void setup()
   lcd.setRGB(255, 255, 255);
 
   // saves current time
-  start_time = millis();
-  LastCurveTime = millis() - NextCurveDelay;
+  start_time = milliseconds();
+  LastCurveTime = milliseconds() - NextCurveDelay;
 
   // Steering middle
   center();
@@ -699,18 +699,18 @@ void loop()
   {
 
     Distance = SpaceUS_F();
-    Distance_L = SpaceUS_L();
-    Distance_R = SpaceUS_R();
+    Distance_Left = SpaceUS_L();
+    Distance_Right = SpaceUS_R();
 
-    if (TD == 'K')
+    if (TargetDirection == 'K')
     {
-      if (Distance_L > 80)
+      if (Distance_Left > 80)
       {
-        TD = 'L';
+        TargetDirection = 'L';
       }
-      else if (Distance_R > 80)
+      else if (Distance_Right > 80)
       {
-        TD = 'R';
+        TargetDirection = 'R';
       }
     }
 
@@ -720,44 +720,44 @@ void loop()
 
       stopMotor();
 
-      if (millis() - LastCurveTime > NextCurveDelay) // corners detected
+      if (milliseconds() - LastCurveTime > NextCurveDelay) // corners detected
       {
-        if (TD == 'K')
+        if (TargetDirection == 'K')
         {
-          Distance_L = SpaceUS_L();
-          Distance_R = SpaceUS_R();
-          if (Distance_L > 60)
+          Distance_Left = SpaceUS_L();
+          Distance_Right = SpaceUS_R();
+          if (Distance_Left > 60)
           {
-            TD = 'L';
+            TargetDirection = 'L';
           }
-          else if (Distance_R > 60)
+          else if (Distance_Right > 60)
           {
-            TD = 'R';
+            TargetDirection = 'R';
           }
           else
           {
 
-            // if TD still unclear, select at random
+            // if TargetDirection still unclear, select at random
             coincidence = random(2);
             if (coincidence == 0)
             {
-              TD = 'R';
+              TargetDirection = 'R';
             }
             else
             {
-              TD = 'L';
+              TargetDirection = 'L';
             }
           }
         }
 
         lcd.setCursor(0, 0);
-        lcd.print(TD);
+        lcd.print(TargetDirection);
         delay(500);
         // check: turning or curve
-        if (TD == 'R')
+        if (TargetDirection == 'R')
         {
-          Distance_L = SpaceUS_L();
-          if (Distance_L > 35)
+          Distance_Left = SpaceUS_L();
+          if (Distance_Left > 35)
           {
             turn_R();
           }
@@ -774,11 +774,11 @@ void loop()
             corners_R_MO();
           }
         }
-        else // TD == L
+        else // TargetDirection == L
         {
 
-          Distance_R = SpaceUS_R();
-          if (Distance_R > 35)
+          Distance_Right = SpaceUS_R();
+          if (Distance_Right > 35)
           {
             turn_L();
           }
@@ -816,13 +816,13 @@ void loop()
     else
     {
       // orientate towards the outer wall
-      Distance_L = SpaceUS_L();
-      Distance_R = SpaceUS_R();
-      if (TD == 'R')
+      Distance_Left = SpaceUS_L();
+      Distance_Right = SpaceUS_R();
+      if (TargetDirection == 'R')
       {
         align_L();
       }
-      else if (TD == 'L')
+      else if (TargetDirection == 'L')
       {
         align_R();
       }

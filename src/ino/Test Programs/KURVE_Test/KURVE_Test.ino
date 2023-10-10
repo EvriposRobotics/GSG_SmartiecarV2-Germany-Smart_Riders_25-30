@@ -9,9 +9,9 @@ int links = 25;
 
 // Configure the motor driver.
 CytronMD motor(PWM_DIR, 5, 6);  // PWM = Pin 3, DIR = Pin 4.
-int colorR = 255;
- int colorG = 0;
- int colorB = 0;
+int colorRed = 255;
+ int colorGreen = 0;
+ int colorBlue = 0;
  //LCD screen selbst
  rgb_lcd lcd;
 

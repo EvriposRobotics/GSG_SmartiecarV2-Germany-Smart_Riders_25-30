@@ -2,9 +2,9 @@
 #include "rgb_lcd.h"
 // Erstelle ein Servo-Objekt
 Servo servo;
-int colorR = 255;
- int colorG = 0;
- int colorB = 0;
+int colorRed = 255;
+ int colorGreen = 0;
+ int colorBlue = 0;
   rgb_lcd lcd;
 unsigned long start_time;
 

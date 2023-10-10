@@ -20,16 +20,16 @@ void setup()
 void loop()
 {
     //distance definitions
-    int Distance_L = SpaceUS_L();
+    int Distance_Left = SpaceUS_L();
     int Distance = SpaceUS_F();
-    int Distance_R = SpaceUS_R();
+    int Distance_Right = SpaceUS_R();
 
     //print all distances
     lcd.setCursor(0,0);
-    lcd.print(Distance_L);
+    lcd.print(Distance_Left);
     lcd.print("  ");
     lcd.print(Distance);
     lcd.print("  ");
-    lcd.print(Distance_R);
+    lcd.print(Distance_Right);
     lcd.print("  ");
 }

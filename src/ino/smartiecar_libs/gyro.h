@@ -54,7 +54,7 @@ float IMU_getAngle()
   quadrant = corners % 4;
   orientation = event.orientation.x;
 
-  if(DD == 'R')
+  if(DrivingDirection == 'R')
   {    
     if((quadrant == 0) && (orientation > 270.0))
     {
@@ -91,26 +91,26 @@ float IMU_getAngle()
 float IMU_straight_angle_TD()
 {
   // calculate straight angle in the current quadrant
-  float TD = 0.0;
+  float TargetDirection = 0.0;
   quadrant = corners % 4;
   
   if(quadrant == 0)
   {
-    TD = 360.0;
+    TargetDirection = 360.0;
   }
   else if(quadrant == 1)
   {
-    TD = 90.0;
+    TargetDirection = 90.0;
   }
   else if(quadrant == 2)
   {
-    TD = 180.0;
+    TargetDirection = 180.0;
   }
   else if(quadrant == 3)
   {
-    TD = 270.0;
+    TargetDirection = 270.0;
   }    
-  return TD; 
+  return TargetDirection; 
 }
 
 void startGyroscope()
