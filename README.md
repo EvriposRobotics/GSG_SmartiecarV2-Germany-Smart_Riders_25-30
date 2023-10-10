@@ -8,7 +8,7 @@
 
 1. [Overview](#overview) 🌟
 2. [Hardware](#hardware) 🔧
-    - [Mobility Management](#Mobility Management)
+    - [Mobility Management](#Mobility-Management)
     - [Assembly Instructions](#assembly-instructions) 🛠
     - [Schematics](#schematics) 📐👀
     - [Components List](#components-list) 🔍
