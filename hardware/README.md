@@ -1,4 +1,3 @@
-construct
 
 Firstly we dicided that we wouldn´t be using our car which we used in the national championship.
 The old car had a some flaws which we wanted to get rid of.
