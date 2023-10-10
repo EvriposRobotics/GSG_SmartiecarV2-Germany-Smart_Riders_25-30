@@ -38,10 +38,11 @@ int SpaceUS_F()
                 dist = dist_F;
         }
 
-        else if (dist > 2)
+        else
         {
                 dist_F = dist;
         }
+        delay(20);
         // gives back as an integer in cm
         return int(dist);
 }
@@ -68,10 +69,11 @@ int SpaceUS_L()
                 dist = dist_L;
         }
 
-        else if (dist > 2)
+        else
         {
                 dist_L = dist;
         }
+        delay(20);
         // gives back as an integer in cm
         return int(dist);
 }
@@ -98,10 +100,11 @@ int SpaceUS_R()
                 dist = dist_R;
         }
 
-        else if (dist > 2)
+        else
         {
                 dist_R = dist;
         }
+        delay(20);
         // gives back as an integer in cm
         return int(dist);
 }

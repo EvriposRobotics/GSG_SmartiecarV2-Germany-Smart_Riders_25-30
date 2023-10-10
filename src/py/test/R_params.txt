@@ -1,6 +1,0 @@
-R_h_min = 0
-R_h_max = 179
-R_s_min = 0
-R_s_max = 255
-R_v_min = 0
-R_v_max = 255

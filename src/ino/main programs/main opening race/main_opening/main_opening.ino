@@ -78,8 +78,8 @@ int Distance_R;
 
 float angle;
 float danger;
-float correction_L = 25.0;
-float correction_R = 25.0;
+float correction_L = 30.0;
+float correction_R = 30.0;
 float StraightAngle = 0.0;
 
 // DrivingDirection is 'U' for uknown
@@ -89,8 +89,8 @@ char DD = 'U';
 unsigned long LastCurveTime = 0;
 unsigned long NextCurveDelay = 2000;
 
-// both StraightAngles (L/R)
-int Walldistance = 20;
+// used for both Driving Directions (left and right)
+int Walldistance = 30;
 
 // include own modules from local library
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\DCmotor.h"
@@ -111,41 +111,51 @@ int Walldistance = 20;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Stop programm
-void PRGstop()
+void ProgramStop()
 {
   unsigned long DT; // driving time
-  // slight countersteering to avoid crash with inside wall
+  unsigned long tmpTime;
+
+  runMotor(SlowSpeed); // slow down
+  // slight countersteering to compensate for overshooting
   if (DD == 'R')
   {
     left(10);
-    delay(400);
-    center();
-    delay(400);
   }
 
   else
   {
     right(10);
-    delay(400);
-    center();
-    delay(400);
+  }
+
+  delay(400);
+  center();
+
+  // Go straight for at least 400 msec
+  Gyro_steer_straight();
+  tmpTime = millis();
+  while (millis() < tmpTime + 1000)
+  {
+    Gyro_steer_straight();
   }
 
   // drive straight to finish and stop
   Distance_F = SpaceUS_F();
   while (Distance_F > 140)
   {
+    Gyro_steer_straight();
     Distance_F = SpaceUS_F();
   }
 
   stopMotor();
-  // save current time
+  // save current time in milliseconds
   DT = millis() - start_time;
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("time: ");
   lcd.print(DT);
-  delay(9999999);
+  lcd.print(Distance_F);
+  delay(9999999); // wait forever
 }
 
 // startnarrow Left (start close to left inside wall)
@@ -208,8 +218,12 @@ void StartNarrow_R()
   runMotor(SlowSpeed);
 }
 
-// align
-void align()
+/////////////////////////////////////////////////////////////////////
+// alignCenter()
+// aligns to the center of the track
+/////////////////////////////////////////////////////////////////////
+
+void alignCenter()
 {
   int Steering;
   Steering = (Distance_L - Distance_R) * 0.3;
@@ -236,12 +250,12 @@ void align()
   delay(20);
 }
 
-// align_L
-void align_L()
+// funct to align to the left wall
+void alignLeft()
 {
   int Steering;
   Distance_L = SpaceUS_L();
-  Steering = (Distance_L - Walldistance) * 1.5;
+  Steering = (Distance_L - Walldistance) * 0.9;
   if (Steering > 30.0)
   {
     Steering = 30;
@@ -255,28 +269,24 @@ void align_L()
   {
     Steering = Steering * (-1);
     right(Steering);
-    lcd.setCursor(0, 1);
-    lcd.print("R ");
-    lcd.print(Steering);
   }
 
   else
   {
     left(Steering);
-    lcd.setCursor(0, 1);
-    lcd.print("L ");
-    lcd.print(Steering);
   }
 
   delay(20);
 }
 
-// align_R
-void align_R()
+// alignRight
+void alignRight()
 {
   int Steering;
+
   Distance_R = SpaceUS_R();
-  Steering = (Walldistance - Distance_R) * 1.5;
+
+  Steering = (Walldistance - Distance_R) * 0.9;
   if (Steering > 30.0)
   {
     Steering = 30;
@@ -290,17 +300,11 @@ void align_R()
   {
     Steering = Steering * (-1);
     right(Steering);
-    lcd.setCursor(0, 1);
-    lcd.print("R ");
-    lcd.print(Steering);
   }
 
   else
   {
     left(Steering);
-    lcd.setCursor(0, 1);
-    lcd.print("L ");
-    lcd.print(Steering);
   }
 
   delay(20);
@@ -329,20 +333,14 @@ void Gyro_steer_straight()
   {
     Steering = Steering * (-1);
     right(Steering);
-    lcd.setCursor(0, 1);
-    lcd.print("R ");
-    lcd.print(Steering);
   }
 
   else
   {
     left(Steering);
-    lcd.setCursor(0, 1);
-    lcd.print("L ");
-    lcd.print(Steering);
   }
 
-  delay(50);
+  // delay(20);
 }
 
 // Curve_L
@@ -379,8 +377,7 @@ void Curve_L()
   while (Distance_L > 60)
   {
     Distance_L = SpaceUS_L();
-    angle = IMU_getAngle();
-    delay(10);
+    Gyro_steer_straight();
   }
   lcd.setRGB(0, 255, 0);
   LastCurveTime = millis();
@@ -419,8 +416,7 @@ void Curve_R()
   while (Distance_R > 60)
   {
     Distance_R = SpaceUS_R();
-    angle = IMU_getAngle();
-    delay(10);
+    Gyro_steer_straight();
   }
   lcd.setRGB(0, 255, 0);
   LastCurveTime = millis();
@@ -454,6 +450,7 @@ void setup()
   */
   //////////////////////////////////////////////////////
 
+  // Serial.begin(9600);
   Wire.begin();
 
   // LCD SETUP
@@ -462,6 +459,7 @@ void setup()
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
   lcd.setRGB(255, 0, 0);
+  lcd.print("Opening race");
 
   // setup servo
   servosetup();
@@ -473,9 +471,6 @@ void setup()
 
   // initalises motor pinmodes from DCmotor.h
   motorsetup();
-
-  // handshake with raspberry pi
-  // raspi_handshake();
 
   // distance to curve show current reading values
   Distance_F = SpaceUS_F();
@@ -495,6 +490,7 @@ void setup()
   // count corners
   StraightAngle = IMU_getAngle();
 
+  lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print(Distance_L);
   lcd.print("  ");
@@ -627,69 +623,45 @@ void loop()
   // Distance to Corner show current reading values
   if (DD == 'R')
   {
-    // run is clockwise for R
-    Distance_R = SpaceUS_R();
-    /*lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print(Distance_R);
-    lcd.print("  ");*/
-    // check if R turn
-    // if ((Distance_R > 80) && (millis() - LastCurveTime >= NextCurveDelay))
-    if (Distance_R > 80)
+    while (corners < 12)
     {
-      Curve_R();
-    }
-    // Distance_R = SpaceUS_R();
-    align_R();
-    delay(40);
+      // clockwise running for right
+      Distance_R = SpaceUS_R();
 
-    // all corners check
-    if (corners == 12)
-    {
-
-      ////////////////////////////////////////////////////
-      /*
-                 _         _
-                | |       | |
-   ___ _ __   __| |  _ __ | |__   __ _ ___  ___
-  / _ \ '_ \ / _` | | '_ \| '_ \ / _` / __|/ _ \
- |  __/ | | | (_| | | |_) | | | | (_| \__ \  __/
-  \___|_| |_|\__,_| | .__/|_| |_|\__,_|___/\___|
-                    | |
-                    |_|
-  end phase:
-  stops car and shows counted time in milliseconds
-  */
-      ////////////////////////////////////////////////////
-
-      PRGstop();
+      // check for Right Turn
+      if ((Distance_R > 80) && (millis() - LastCurveTime >= NextCurveDelay))
+      {
+        Curve_R();
+      }
+      else
+      {
+        alignRight();
+      }
     }
   }
 
-  else if (DD == 'L')
+  else
   {
-    // run is counterclockwise for L
-    Distance_L = SpaceUS_L();
-    /*lcd.setCursor(0, 0);
-    lcd.print(Distance_L);
-    lcd.print("  ");
-    */
-    // check if L turn
-    // if ((Distance_L > 80) && (millis() - LastCurveTime >= NextCurveDelay))
-    if (Distance_L > 80)
+    while (corners < 12)
     {
-      Curve_L();
+
+      // counterclockwise running for left
+      Distance_L = SpaceUS_L();
+      // check for Left Turn
+      if ((Distance_L > 80) && (millis() - LastCurveTime >= NextCurveDelay))
+      {
+        Curve_L();
+      }
+      else
+      {
+
+        alignLeft();
+      }
     }
-    // Distance_L = SpaceUS_L();
-    align_L();
-    delay(40);
+  }
 
-    // all corners check
-    if (corners == 12)
-    {
-
-      ////////////////////////////////////////////////////
-      /*
+  ////////////////////////////////////////////////////
+  /*
                  _         _
                 | |       | |
    ___ _ __   __| |  _ __ | |__   __ _ ___  ___
@@ -698,14 +670,10 @@ void loop()
   \___|_| |_|\__,_| | .__/|_| |_|\__,_|___/\___|
                     | |
                     |_|
-  end phase:
-  stops car and shows counted time in milliseconds
-  */
-      ////////////////////////////////////////////////////
+end phase:
+stops car and shows counted time in milliseconds
+*/
+  ////////////////////////////////////////////////////
 
-      PRGstop();
-    }
-  }
-
-  delay(20);
+  ProgramStop();
 }
