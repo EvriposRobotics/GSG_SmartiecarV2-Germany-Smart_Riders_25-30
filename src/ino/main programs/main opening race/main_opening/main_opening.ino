@@ -110,8 +110,11 @@ int Walldistance = 30;
 */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Stop programm
-void ProgramStop()
+/////////////////////////////////////////////////////////////////////
+// ProgramStopUsingGyro()
+// stops the car using the gyrovalues saved from beginning
+/////////////////////////////////////////////////////////////////////
+void ProgramStopUsingGyro()
 {
   unsigned long DrivingTime; // driving time
   unsigned long temporaryTime;
@@ -158,7 +161,10 @@ void ProgramStop()
   delay(9999999); // wait forever
 }
 
+/////////////////////////////////////////////////////////////////////
+// StartNarrow_L()
 // startnarrow Left (start close to left inside wall)
+/////////////////////////////////////////////////////////////////////
 void StartNarrow_L()
 {
   float angle;
@@ -187,8 +193,10 @@ void StartNarrow_L()
   center();
   runMotor(SlowSpeed);
 }
-
+/////////////////////////////////////////////////////////////////////
+// StartNarrow_R()
 // startnarrow Right (start close to right inside wall)
+/////////////////////////////////////////////////////////////////////
 void StartNarrow_R()
 {
   float angle;
@@ -222,7 +230,6 @@ void StartNarrow_R()
 // alignCenter()
 // aligns to the center of the track
 /////////////////////////////////////////////////////////////////////
-
 void alignCenter()
 {
   int Steering;
@@ -254,7 +261,6 @@ void alignCenter()
 // alignLeft()
 //aligns to the left wall
 /////////////////////////////////////////////////////////////////////
-
 void alignLeft()
 {
   int Steering;
@@ -288,7 +294,6 @@ void alignLeft()
 // alignRight()
 //aligns to the right wall
 /////////////////////////////////////////////////////////////////////
-
 void alignRight()
 {
   int Steering;
@@ -323,7 +328,6 @@ void alignRight()
 // Gyro_steer_straight()
 // uses the gyro to orient itself straight to the track
 ////////////////////////////////////////////////////////////////////
-
 void Gyro_steer_straight()
 {
   float angle;
@@ -359,7 +363,6 @@ void Gyro_steer_straight()
 // Curve_L()
 // calls a left curve and counts it
 /////////////////////////////////////////////////////////////////////
-
 void Curve_L()
 {
   int Speed;
@@ -403,7 +406,6 @@ void Curve_L()
 // Curve_R()
 // calls a right curve and counts it
 /////////////////////////////////////////////////////////////////////
-
 void Curve_R()
 {
   int Speed;
@@ -448,8 +450,7 @@ void Curve_R()
 //measureAllDistances()
 //measures all distances and saves them in global variables
 /////////////////////////////////////////////////////////////////////
-
-void measureAllDistances()
+void measureAllCurrentDistances()
 {
   Distance_Front = SpaceUS_F();
   Distance_Left = SpaceUS_L();
@@ -460,7 +461,6 @@ void measureAllDistances()
 //printAllDistancesToLCD()
 //prints all distances to the LCD aswell as DrivingDirection
 /////////////////////////////////////////////////////////////////////
-
 void printAllDistancesToLCD()
 {
   lcd.clear();
@@ -482,7 +482,6 @@ void printAllDistancesToLCD()
 //waitOnButtonPress()
 //waits until the button is pressed
 /////////////////////////////////////////////////////////////////////
-
 void waitOnButtonPress()
 {
   while (digitalRead(Button) == LOW)
@@ -497,7 +496,6 @@ void waitOnButtonPress()
 //slowspeedToFindCorrectDirection()
 //finds the driving direction slowly while measuring the distances
 /////////////////////////////////////////////////////////////////////
-
 void slowspeedToFindCorrectDirection()
 {
   if (DrivingDirection == 'Uknown')
@@ -551,12 +549,22 @@ void slowspeedToFindCorrectDirection()
 
 }
 
+/////////////////////////////////////////////////////////////////////
+//saveCurrentTime()
+//saves the current time in milliseconds subtracting NextCurveDelay
+/////////////////////////////////////////////////////////////////////
+
 void saveCurrentTime()
 {
   start_time = milliseconds();
   LastCurveTime = milliseconds() - NextCurveDelay;
 }
 
+
+/////////////////////////////////////////////////////////////////////
+//wallDirectionCheck()
+//checks if the car is closer to the left or right wall
+/////////////////////////////////////////////////////////////////////
 void wallDirectionCheck()
 {
     if (Distance_Left < 10)
@@ -569,6 +577,7 @@ void wallDirectionCheck()
     DrivingDirection = 'R';
   }
 }
+
 ///////////////////////////////////////////
 /*
 ███████╗███████╗████████╗██╗   ██╗██████╗
@@ -612,26 +621,28 @@ void setup()
 
   delay(5000); // 5 second stop in order for the gyro to calibrate
 
-  // setup gyroscope IMU
+  // setup gyroscope
   startGyroscope();
 
   // initalises motor pinmodes from DCmotor.h
   motorsetup();
 
  //measures all the current reading values
-  measureAllDistances();
+  measureAllCurrentDistances();
 
+ //checks which wall the car is starting from
   wallDirectionCheck();
 
-  
   // set the straightangle to the current IMU angle
   StraightAngle = IMU_getAngle();
 
+  //gets all distances and prints them
   printAllDistancesToLCD();
 
   // setup done - show green light
   lcd.setRGB(255, 130, 0);
 
+  // wait for button press
   waitOnButtonPress();
 
   //////////////////////////////////////////////////////
@@ -661,6 +672,7 @@ void setup()
   // Steering to center
   center();
 
+  //drive slow to find the correct DrivingDirection
   slowspeedToFindCorrectDirection();
 }
 
@@ -694,7 +706,7 @@ void loop()
   */
   /////////////////////////////////////////////////////
 
-  // Distance to Corner show current reading values
+  // 
   if (DrivingDirection == 'R')
   {
     while (corners < 12)
@@ -728,7 +740,6 @@ void loop()
       }
       else
       {
-
         alignLeft();
       }
     }
@@ -749,5 +760,5 @@ stops car and shows counted time in milliseconds
 */
   ////////////////////////////////////////////////////
 
-  ProgramStop();
+  ProgramStopUsingGyro();
 }
