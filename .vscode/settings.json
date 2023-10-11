@@ -2,5 +2,5 @@
     "editor.formatOnSave": true,
     "C_Cpp.errorSquiggles": "disabled",
     "clang-format.executable": "/absolute/path/to/clang-format",
-    "python.formatting.provider": "black"
+    "editor.defaultFormatter": "xaver.clang-format"
 }
