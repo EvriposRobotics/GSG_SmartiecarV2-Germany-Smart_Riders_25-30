@@ -123,7 +123,7 @@ void PRGstop()
   unsigned long FZ;
   stopMotor();
   // save time
-  FZ = milliseconds() - start_time;
+  FZ = millis() - start_time;
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("time: ");
@@ -215,7 +215,7 @@ void turn_L()
   Distance_Left = SpaceUS_L();
   Distance_Right = SpaceUS_R();
   lcd.setRGB(255, 255, 255);
-  LastCurveTime = milliseconds();
+  LastCurveTime = millis();
   runMotor(LongG);
 }
 
@@ -251,7 +251,7 @@ void turn_R()
   Distance_Left = SpaceUS_L();
   Distance_Right = SpaceUS_R();
   lcd.setRGB(255, 255, 255);
-  LastCurveTime = milliseconds();
+  LastCurveTime = millis();
   runMotor(LongG);
 }
 
@@ -371,7 +371,7 @@ void corners_L_MO()
   Distance_Left = SpaceUS_L();
   Distance_Right = SpaceUS_R();
   lcd.setRGB(255, 255, 255);
-  LastCurveTime = milliseconds();
+  LastCurveTime = millis();
 }
 
 // corners right main obstacle
@@ -407,7 +407,7 @@ void corners_R_MO()
   Distance_Left = SpaceUS_L();
   Distance_Right = SpaceUS_R();
   lcd.setRGB(255, 255, 255);
-  LastCurveTime = milliseconds();
+  LastCurveTime = millis();
 }
 
 void to_Red()
@@ -622,8 +622,8 @@ void setup()
   lcd.setRGB(255, 255, 255);
 
   // saves current time
-  start_time = milliseconds();
-  LastCurveTime = milliseconds() - NextCurveDelay;
+  start_time = millis();
+  LastCurveTime = millis() - NextCurveDelay;
 
   // Steering middle
   center();
@@ -720,7 +720,7 @@ void loop()
 
       stopMotor();
 
-      if (milliseconds() - LastCurveTime > NextCurveDelay) // corners detected
+      if (millis() - LastCurveTime > NextCurveDelay) // corners detected
       {
         if (TargetDirection == 'K')
         {

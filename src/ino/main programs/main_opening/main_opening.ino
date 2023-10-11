@@ -93,11 +93,11 @@ unsigned long NextCurveDelay = 2000;
 int Walldistance = 30;
 
 // include own modules from local library
-#include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\DCmotor.h"
-#include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\gyro2.h"
-#include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\steering.h"
-#include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\ultrasonic_urm09.h"
-#include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\raspi.h"
+#include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\DCmotor.h"
+#include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\gyro2.h"
+#include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\steering.h"
+#include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\ultrasonic_urm09.h"
+#include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\raspi.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -136,8 +136,8 @@ void ProgramStopUsingGyro()
 
   // Go straight for at least 400 msec
   Gyro_steer_straight();
-  temporaryTime = milliseconds();
-  while (milliseconds() < temporaryTime + 1000)
+  temporaryTime = millis();
+  while (millis() < temporaryTime + 1000)
   {
     Gyro_steer_straight();
   }
@@ -152,7 +152,7 @@ void ProgramStopUsingGyro()
 
   stopMotor();
   // save current time in milliseconds
-  DrivingTime = milliseconds() - start_time;
+  DrivingTime = millis() - start_time;
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("time: ");
@@ -399,7 +399,7 @@ void Curve_L()
     Gyro_steer_straight();
   }
   lcd.setRGB(0, 255, 0);
-  LastCurveTime = milliseconds();
+  LastCurveTime = millis();
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -443,7 +443,7 @@ void Curve_R()
     Gyro_steer_straight();
   }
   lcd.setRGB(0, 255, 0);
-  LastCurveTime = milliseconds();
+  LastCurveTime = millis();
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -556,8 +556,8 @@ void slowspeedToFindCorrectDirection()
 
 void saveCurrentTime()
 {
-  start_time = milliseconds();
-  LastCurveTime = milliseconds() - NextCurveDelay;
+  start_time = millis();
+  LastCurveTime = millis() - NextCurveDelay;
 }
 
 
@@ -583,41 +583,43 @@ void wallDirectionCheck()
 //operateNavigationThroughTurns()
 //uses the gyro to navigate through the turns while counting corners
 /////////////////////////////////////////////////////////////////////
-
-  if (DrivingDirection == 'R')
-  {
-    while (corners < 12)
+ void operateNavigationThroughTurns()
+ {
+    if (DrivingDirection == 'R')
     {
-      // clockwise running for right
-      Distance_Right = SpaceUS_R();
+      while (corners < 12)
+      {
+        // clockwise running for right
+        Distance_Right = SpaceUS_R();
 
-      // check for Right Turn
-      if ((Distance_Right > 80) && (milliseconds() - LastCurveTime >= NextCurveDelay))
-      {
-        Curve_R();
-      }
-      else
-      {
-        alignRight();
+        // check for Right Turn
+        if ((Distance_Right > 80) && (millis() - LastCurveTime >= NextCurveDelay))
+        {
+          Curve_R();
+        }
+        else
+        {
+          alignRight();
+        }
       }
     }
-  }
 
-  else
-  {
-    while (corners < 12)
+    else
     {
+      while (corners < 12)
+      {
 
-      // counterclockwise running for left
-      Distance_Left = SpaceUS_L();
-      // check for Left Turn
-      if ((Distance_Left > 80) && (milliseconds() - LastCurveTime >= NextCurveDelay))
-      {
-        Curve_L();
-      }
-      else
-      {
-        alignLeft();
+        // counterclockwise running for left
+        Distance_Left = SpaceUS_L();
+        // check for Left Turn
+        if ((Distance_Left > 80) && (millis() - LastCurveTime >= NextCurveDelay))
+        {
+          Curve_L();
+        }
+        else
+        {
+          alignLeft();
+        }
       }
     }
   }
@@ -751,7 +753,8 @@ void loop()
   */
   /////////////////////////////////////////////////////
 
-  // 
+  
+  operateNavigationThroughTurns();
 
   ////////////////////////////////////////////////////
   /*

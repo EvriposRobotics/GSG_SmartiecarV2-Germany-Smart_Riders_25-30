@@ -16,6 +16,17 @@ void splitString(String input, char delimiter, String output[], int &count)
     }
 }
 
+// 2nd tokenizing function 
+void tokenize(char *str, char *delim, char **tokens) {
+     int i = 0;
+     char *token = strtok(str, delim);
+     while (token != NULL) {
+         tokens[i] = token;
+         i++;
+         token = strtok(NULL, delim);
+     }
+}
+
 void findNextPillar()
 {
     String substrings[10]; // Create an array to store the substrings
@@ -29,7 +40,16 @@ void findNextPillar()
     P_Bottom_edge = 0;
     P_Distance = 0;
 
-    String data = raspi_get_data();
+    char str[] = "43 163 42 42 42";
+    char *tokens[10];
+    tokenize(str, " ", tokens);
+
+    printf("first part: %s", tokens[1]);
+
+    return 0;
+
+
+    /*String data = raspi_get_data();
     int count = 0;
     splitString(data, ' ', substrings, count); // Split the data into substrings using a space delimiter
     P_color = substrings[0].charAt(0);
@@ -38,5 +58,5 @@ void findNextPillar()
     P_height = substrings[3].toInt();
     P_width = substrings[4].toInt();
     P_Distance = substrings[5].toInt();
-    return;
+    return;*/
 }
