@@ -16,15 +16,17 @@ void splitString(String input, char delimiter, String output[], int &count)
     }
 }
 
-// 2nd tokenizing function 
-void tokenize(char *str, char *delim, char **tokens) {
-     int i = 0;
-     char *token = strtok(str, delim);
-     while (token != NULL) {
-         tokens[i] = token;
-         i++;
-         token = strtok(NULL, delim);
-     }
+// 2nd tokenizing function
+void tokenize(char *str, char *delim, char **tokens)
+{
+    int i = 0;
+    char *token = strtok(str, delim);
+    while (token != NULL)
+    {
+        tokens[i] = token;
+        i++;
+        token = strtok(NULL, delim);
+    }
 }
 
 void findNextPillar()
@@ -47,7 +49,6 @@ void findNextPillar()
     printf("first part: %s", tokens[1]);
 
     return 0;
-
 
     String data = raspi_get_data();
     int count = 0;
