@@ -1,4 +1,6 @@
 {
     "editor.formatOnSave": true,
-    "C_Cpp.errorSquiggles": "disabled"
+    "C_Cpp.errorSquiggles": "disabled",
+    "clang-format.executable": "/absolute/path/to/clang-format",
+    "python.formatting.provider": "black"
 }

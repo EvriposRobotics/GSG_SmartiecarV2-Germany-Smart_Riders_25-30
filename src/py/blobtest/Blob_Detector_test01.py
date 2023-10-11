@@ -4,7 +4,7 @@ import numpy as np
 # Load image
 img = cv2.imread("blobs_c02.jpg")
 
-imgB,imgG,imgR = cv2.split(img)
+imgB, imgG, imgR = cv2.split(img)
 
 cv2.imshow("Original", img)
 cv2.imshow("Kanal B", imgB)
@@ -50,7 +50,7 @@ detector = cv2.SimpleBlobDetector_create()
 keypoints = detector.detect(img)
 
 # Draw detected blobs as red circles
-#img_with_keypoints = cv2.drawKeypoints(img, keypoints, np.array([]), (0, 0, 255),
+# img_with_keypoints = cv2.drawKeypoints(img, keypoints, np.array([]), (0, 0, 255),
 #                                       cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
 # Show the image with detected blobs
@@ -65,16 +65,16 @@ for i in range(len(keypoints)):
     print(x)
     print(y)
     print(size)
-    center = (x,y)
+    center = (x, y)
     radius = size
-    color = (255,0,0)
+    color = (255, 0, 0)
     thickness = 2
     img_blobs = cv2.circle(img_blobs, center, radius, color, thickness)
-    cv2.imshow("Blobs", img_blobs)   
-    
+    cv2.imshow("Blobs", img_blobs)
+
     cv2.waitKey(0)
 # crop small rectangle
-   
+
 # calculate color
 
 cv2.waitKey(0)
