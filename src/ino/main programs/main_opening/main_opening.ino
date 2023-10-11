@@ -259,7 +259,7 @@ void alignCenter()
 
 /////////////////////////////////////////////////////////////////////
 // alignLeft()
-//aligns to the left wall
+// aligns to the left wall
 /////////////////////////////////////////////////////////////////////
 void alignLeft()
 {
@@ -289,10 +289,9 @@ void alignLeft()
   delay(20);
 }
 
-
 /////////////////////////////////////////////////////////////////////
 // alignRight()
-//aligns to the right wall
+// aligns to the right wall
 /////////////////////////////////////////////////////////////////////
 void alignRight()
 {
@@ -417,8 +416,8 @@ void Curve_R()
   angle = IMU_getAngle();
   StraightAngle = TargetDirection;
   runMotor(SlowSpeed);
-  //checks if the car has a greater angle than the target direction in order to correct it
-  while (angle < TargetDirection - correction_Right) 
+  // checks if the car has a greater angle than the target direction in order to correct it
+  while (angle < TargetDirection - correction_Right)
   {
     angle = IMU_getAngle();
     Speed = Speed + 5;
@@ -447,8 +446,8 @@ void Curve_R()
 }
 
 /////////////////////////////////////////////////////////////////////
-//measureAllDistances()
-//measures all distances and saves them in global variables
+// measureAllDistances()
+// measures all distances and saves them in global variables
 /////////////////////////////////////////////////////////////////////
 void measureAllCurrentDistances()
 {
@@ -458,8 +457,8 @@ void measureAllCurrentDistances()
 }
 
 /////////////////////////////////////////////////////////////////////
-//printAllDistancesToLCD()
-//prints all distances to the LCD aswell as DrivingDirection
+// printAllDistancesToLCD()
+// prints all distances to the LCD aswell as DrivingDirection
 /////////////////////////////////////////////////////////////////////
 void printAllDistancesToLCD()
 {
@@ -474,13 +473,11 @@ void printAllDistancesToLCD()
   lcd.print(StraightAngle);
   lcd.print("  ");
   lcd.print(DrivingDirection);
-
 }
 
-
 /////////////////////////////////////////////////////////////////////
-//waitOnButtonPress()
-//waits until the button is pressed
+// waitOnButtonPress()
+// waits until the button is pressed
 /////////////////////////////////////////////////////////////////////
 void waitOnButtonPress()
 {
@@ -488,13 +485,11 @@ void waitOnButtonPress()
   {
     delay(50);
   }
-
 }
 
-
 /////////////////////////////////////////////////////////////////////
-//slowspeedToFindCorrectDirection()
-//finds the driving direction slowly while measuring the distances
+// slowspeedToFindCorrectDirection()
+// finds the driving direction slowly while measuring the distances
 /////////////////////////////////////////////////////////////////////
 void slowspeedToFindCorrectDirection()
 {
@@ -546,12 +541,11 @@ void slowspeedToFindCorrectDirection()
     }
     Curve_L();
   }
-
 }
 
 /////////////////////////////////////////////////////////////////////
-//saveCurrentTime()
-//saves the current time in milliseconds subtracting NextCurveDelay
+// saveCurrentTime()
+// saves the current time in milliseconds subtracting NextCurveDelay
 /////////////////////////////////////////////////////////////////////
 
 void saveCurrentTime()
@@ -560,14 +554,13 @@ void saveCurrentTime()
   LastCurveTime = millis() - NextCurveDelay;
 }
 
-
 /////////////////////////////////////////////////////////////////////
-//wallDirectionCheck()
-//checks if the car is closer to the left or right wall
+// wallDirectionCheck()
+// checks if the car is closer to the left or right wall
 /////////////////////////////////////////////////////////////////////
 void wallDirectionCheck()
 {
-    if (Distance_Left < 10)
+  if (Distance_Left < 10)
   {
     DrivingDirection = 'L';
   }
@@ -578,52 +571,50 @@ void wallDirectionCheck()
   }
 }
 
-
 /////////////////////////////////////////////////////////////////////
-//operateNavigationThroughTurns()
-//uses the gyro to navigate through the turns while counting corners
+// operateNavigationThroughTurns()
+// uses the gyro to navigate through the turns while counting corners
 /////////////////////////////////////////////////////////////////////
- void operateNavigationThroughTurns()
- {
-    if (DrivingDirection == 'R')
+void operateNavigationThroughTurns()
+{
+  if (DrivingDirection == 'R')
+  {
+    while (corners < 12)
     {
-      while (corners < 12)
-      {
-        // clockwise running for right
-        Distance_Right = SpaceUS_R();
+      // clockwise running for right
+      Distance_Right = SpaceUS_R();
 
-        // check for Right Turn
-        if ((Distance_Right > 80) && (millis() - LastCurveTime >= NextCurveDelay))
-        {
-          Curve_R();
-        }
-        else
-        {
-          alignRight();
-        }
+      // check for Right Turn
+      if ((Distance_Right > 80) && (millis() - LastCurveTime >= NextCurveDelay))
+      {
+        Curve_R();
       }
-    }
-
-    else
-    {
-      while (corners < 12)
+      else
       {
-
-        // counterclockwise running for left
-        Distance_Left = SpaceUS_L();
-        // check for Left Turn
-        if ((Distance_Left > 80) && (millis() - LastCurveTime >= NextCurveDelay))
-        {
-          Curve_L();
-        }
-        else
-        {
-          alignLeft();
-        }
+        alignRight();
       }
     }
   }
 
+  else
+  {
+    while (corners < 12)
+    {
+
+      // counterclockwise running for left
+      Distance_Left = SpaceUS_L();
+      // check for Left Turn
+      if ((Distance_Left > 80) && (millis() - LastCurveTime >= NextCurveDelay))
+      {
+        Curve_L();
+      }
+      else
+      {
+        alignLeft();
+      }
+    }
+  }
+}
 
 ///////////////////////////////////////////
 /*
@@ -674,16 +665,16 @@ void setup()
   // initalises motor pinmodes from DCmotor.h
   motorsetup();
 
- //measures all the current reading values
+  // measures all the current reading values
   measureAllCurrentDistances();
 
- //checks which wall the car is starting from
+  // checks which wall the car is starting from
   wallDirectionCheck();
 
   // set the straightangle to the current IMU angle
   StraightAngle = IMU_getAngle();
 
-  //gets all distances and prints them
+  // gets all distances and prints them
   printAllDistancesToLCD();
 
   // setup done - show green light
@@ -715,11 +706,11 @@ void setup()
   lcd.setRGB(0, 255, 0);
 
   saveCurrentTime();
-  
+
   // Steering to center
   center();
 
-  //drive slow to find the correct DrivingDirection
+  // drive slow to find the correct DrivingDirection
   slowspeedToFindCorrectDirection();
 }
 
@@ -753,7 +744,6 @@ void loop()
   */
   /////////////////////////////////////////////////////
 
-  
   operateNavigationThroughTurns();
 
   ////////////////////////////////////////////////////
