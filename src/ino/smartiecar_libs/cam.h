@@ -49,7 +49,7 @@ void findNextPillar()
     return 0;
 
 
-    /*String data = raspi_get_data();
+    String data = raspi_get_data();
     int count = 0;
     splitString(data, ' ', substrings, count); // Split the data into substrings using a space delimiter
     P_color = substrings[0].charAt(0);
@@ -58,5 +58,5 @@ void findNextPillar()
     P_height = substrings[3].toInt();
     P_width = substrings[4].toInt();
     P_Distance = substrings[5].toInt();
-    return;*/
+    return;
 }
