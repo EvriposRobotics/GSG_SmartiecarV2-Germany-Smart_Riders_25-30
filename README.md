@@ -71,6 +71,7 @@ inprove:
 - breaking distance to long
 
   For the WRO Final car, we designed 3 modular layers to seperate funktions from each other and make it much easier to repair.
+  We adress the detailed solutions we found to the identified issues in detail in the following chapters.
 
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/40d8d0fe-efb5-4642-bb60-c71df9333944" width="75%">
 
@@ -118,11 +119,19 @@ Circuit schematics and hardware layouts are available in the [Schematics folder]
 
 ### Driving Motor and Gearing
 
+We tested two different motors. One which operates on 6V and another which does on 12V. In our last version of our car we used a 12V motor. We wanted to use the 6V motor so that we do not have so many different voltages in our car. In our testing the 6V motor broke quite often. The 12V motor was more reliable. That is why we decided to use the 12V motor instead of the 6V.
+
 
 <a name="Steering-Mechanism"></a>
 
 
 ### Steering Mechanism
+Because of the layers in our car, the servo motor for the steering had to be mounted on the first (lowest) layer. Because of that it was difficult to connect the servo with the steering mechanism. The plastic beams from the layer around the servo limited its range of motion. That is why we had to extend the steering rod to succesfully connect the servo to the steering mechanism.
+
+(Picture steering rod)
+
+Steering Trapeze:
+
 
 
 <a name="Power-supply"></a>
