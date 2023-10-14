@@ -7,7 +7,7 @@
 ## Table of Contents 📚👇
 
 1. [Overview](#overview) 🌟
-2. [Hardware](#hardware) 🔧
+2. [Design Process](#Design-Process)🔧
     - [Mobility Management](#Mobility-Management)
     - [Chassis](#Chassis)
     - [Power and Sense Management](#Power-and-Sense-Management)  
@@ -19,17 +19,21 @@
     - [Controllers](#Controllers)
     - [Sensors](#Sensors)
     - [Components List](#components-list) 🔍
-4. [Software](#software) 💻👨‍💻
+3. [Software Design](#software) 💻👨‍💻
     - [Setup Instructions](#setup-instructions) 🚀
     - [Programming Languages](#programming-languages) 👩‍💻
     - [Dependencies](#dependencies) 
-5. [Utilities](#utilities) 🛠
+4. [Utilities](#utilities) 🛠
     - [Debugging Tools](#debugging-tools) 🐞🔍 
-6. [Team Photos](#team-photos) 📸
-7. [Demonstration Videos](#demonstration-videos) 🎥
-8. [Contributors](#contributors) 👥
-9. [sources](#sources) ℹ
+5. [Team Photos](#team-photos) 📸
+6. [Demonstration Videos](#demonstration-videos) 🎥
+7. [Contributors](#contributors) 👥
+8. [sources](#sources) ℹ
+
+   
 <a name="overview"></a>
+
+
 ## Overview 🌟
 
 ![Foto 01 10 23, 13 22 02](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/60bbc2ea-8552-432e-a204-dabbc420be3d)
@@ -41,13 +45,32 @@ Welcome to the official GitHub repository for Team Smart Riders from Germany, pa
 For the wold final we decided to redesign our future engineers car.
 Now our car consists of an arduino which controls the sensors and the motors and a raspbarry pi which does all the image prossesing in the obstacle race.
 
-<a name="hardware"></a>
+
+>a name="Design-Process"></a>
 
 
-## Hardware 🔩
+### Design Process
 
-Our previous car version was build as one whole car.
-For the WRO Final version, we designed 3 modular layers to seperate funktions from each other and make it much easier to repair.
+For the World Final, we ran a throurogh analysis of our German Final car version to identify, what worked well and what did not works so well.
+From that, we compiled a list what to keep and what we want to improve..
+
+Results of analysis:
+ok:
+- arduino work with ultrasonic and gyro
+- rgb lcd display for feedback
+- gyro sensor precision
+
+inprove:
+- image processing unstable
+- curve detection in obsticle race
+- precision
+- stopping in the start area
+- hardware repairs too time consuming due to complex chassis
+- car track width to large (17cm)
+- driving low speed
+- breaking distance to long
+
+  For the WRO Final car, we designed 3 modular layers to seperate funktions from each other and make it much easier to repair.
 
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/40d8d0fe-efb5-4642-bb60-c71df9333944" width="75%">
 
@@ -61,6 +84,16 @@ For the WRO Final version, we designed 3 modular layers to seperate funktions fr
 We used the Totemmaker construction system to design and build our own car chassis. This set consits of plastic beams and plates as structural
 elements and aluminium connectors. For specific parts as the front of the wheel barrel and the motor bracket, totemmaker.net offers a free STL-Libary of 3D-printable parts.
 To get a small but strong structure, we used rectangular grids as the basic element of each layer.
+
+
+
+Tires:
+
+In our building process we tested different tires from different manufacturers. We tested the tires that were included in the Totemmaker contruction
+system, standard racing tires we bought from Funduino and onother set of tires with no tread pattern.
+During the initial test drives, we noticed that the tires we took from the Totem Maker construction system were too large and were rubbing against the frame. The second set of tires from Funduino were smaller and harder, but they often caused oversteering when the car was turning sharply. Now, for the final setup, we are using softer tires without any tread pattern, which maximizes ground contact. 
+
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/5ae149b4-5e5d-40b0-987d-e4460998b52e" width="75%">
 
 ### Power and Sense Management
 
