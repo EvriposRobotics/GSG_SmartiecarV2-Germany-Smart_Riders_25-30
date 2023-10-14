@@ -132,7 +132,7 @@ Because of the layers in our car, the servo motor for the steering had to be mou
 
 Steering Trapeze:
 
-<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/0348c67c-ff02-438a-8701-6f1718773c30" height="50%">
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/0348c67c-ff02-438a-8701-6f1718773c30" height="20%">
 
 
 <a name="Power-supply"></a>
