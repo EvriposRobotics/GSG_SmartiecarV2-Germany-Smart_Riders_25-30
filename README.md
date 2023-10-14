@@ -15,7 +15,6 @@
     - [Schematics](#schematics) 📐👀
     - [Driving Motor and Gearing](#Driving-Motor-and-Gearing)
     - [Steering Mechanism](#Steering-Mechanism)
-    - [Power and Sense Management](#Power-and-Sense-Management)
     - [Power supply](#Power-supply)
     - [Controllers](#Controllers)
     - [Sensors](#Sensors)
@@ -74,22 +73,10 @@ Detailed assembly instructions can be found in the [Assembly Guide](./hardware/R
 Circuit schematics and hardware layouts are available in the [Schematics folder](./hardware/schemes).
 
 
-<a name="Controllers"></a>
+<a name="Driving-Motor-and-Gearing"></a>
 
 
-### Controllers
-
-
-<a name="Power-supply"></a>
-
-
-### Power supply
-
-
-<a name="Power-and-Sense-Management"></a>
-
-
-### Power and Sense Management
+### Driving Motor and Gearing
 
 
 <a name="Steering-Mechanism"></a>
@@ -98,10 +85,22 @@ Circuit schematics and hardware layouts are available in the [Schematics folder]
 ### Steering Mechanism
 
 
-<a name="Driving-Motor-and-Gearing"></a>
+<a name="Power-supply"></a>
 
 
-### Driving Motor and Gearing
+### Power supply
+
+
+<a name="Controllers"></a>
+
+
+### Controllers
+
+
+<a name="Sensors"></a>
+
+
+### Sensors
 
 
 <a name="components-list"></a>
