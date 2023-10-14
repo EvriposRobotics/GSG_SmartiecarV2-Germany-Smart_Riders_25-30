@@ -13,7 +13,11 @@
     - [Assembly Instructions](#assembly-instructions) 🛠
     - [Schematics](#schematics) 📐👀
     - [Components List](#components-list) 🔍
-
+    - [Driving Motor and Gearing](#Driving-Motor-and-Gearing)
+    - [Power and Sense Management](#Power-and-Sense-Management)
+    - [Power supply](#Power-supply)
+    - [Controllers](#Controllers)
+    - [Sensors](#Sensors)
 4. [Software](#software) 💻👨‍💻
     - [Setup Instructions](#setup-instructions) 🚀
     - [Programming Languages](#programming-languages) 👩‍💻
