@@ -9,15 +9,17 @@
 1. [Overview](#overview) 🌟
 2. [Hardware](#hardware) 🔧
     - [Mobility Management](#Mobility-Management)
+    - [Chassis](#Chassis)
     - [Power and Sense Management](#Power-and-Sense-Management)  
     - [Assembly Instructions](#assembly-instructions) 🛠
     - [Schematics](#schematics) 📐👀
-    - [Components List](#components-list) 🔍
     - [Driving Motor and Gearing](#Driving-Motor-and-Gearing)
+    - [Steering Mechanism](#Steering-Mechanism)
     - [Power and Sense Management](#Power-and-Sense-Management)
     - [Power supply](#Power-supply)
     - [Controllers](#Controllers)
     - [Sensors](#Sensors)
+    - [Components List](#components-list) 🔍
 4. [Software](#software) 💻👨‍💻
     - [Setup Instructions](#setup-instructions) 🚀
     - [Programming Languages](#programming-languages) 👩‍💻
@@ -52,6 +54,8 @@ Now our car consists of an arduino which controls the sensors and the motors and
 
 ### Mobility Management 
 
+### Chassis
+
 ### Power and Sense Management
 
 <a name="assemly-instructions"></a>
@@ -70,6 +74,36 @@ Detailed assembly instructions can be found in the [Assembly Guide](./hardware/R
 Circuit schematics and hardware layouts are available in the [Schematics folder](./hardware/schemes).
 
 
+<a name="Controllers"></a>
+
+
+### Controllers
+
+
+<a name="Power-supply"></a>
+
+
+### Power supply
+
+
+<a name="Power-and-Sense-Management"></a>
+
+
+### Power and Sense Management
+
+
+<a name="Steering-Mechanism"></a>
+
+
+### Steering Mechanism
+
+
+<a name="Driving-Motor-and-Gearing"></a>
+
+
+### Driving Motor and Gearing
+
+
 <a name="components-list"></a>
 
 
@@ -84,7 +118,7 @@ A list of all hardware components used in the project can be found [here](./hard
 ## Software 💻
 
 
-<a name="swtup-inatructiona"></a>
+<a name="setup-instructions"></a>
 
 
 ### Setup Instructions 🚀
