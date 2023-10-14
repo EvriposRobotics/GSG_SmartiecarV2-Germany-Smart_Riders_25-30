@@ -34,7 +34,7 @@ void findNextPillar()
     String substrings[10]; // Create an array to store the substrings
 
     // Block
-    P_color = 'Uknown';
+    P_color = 'U';
     P_x = 0;
     P_y = 0;
     P_height = 0;

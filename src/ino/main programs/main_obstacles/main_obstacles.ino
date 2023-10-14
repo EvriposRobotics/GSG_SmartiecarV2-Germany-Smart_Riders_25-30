@@ -71,19 +71,19 @@ float danger;
 float correction_Left = -5.0;
 float correction_Right = 15.0;
 
-// Driving direction 'Uknown' for uknown
-char TargetDirection = 'Uknown';
+// Driving direction 'U' for Unknown
+char TargetDirection = 'U';
 
 // Speeds
 int NormG = 145;
 int LongG = 145;
 int CurveSpeed = 195;
 
-// obstacle block 'Uknown' for unknown
-char Block = 'Uknown';
+// obstacle block 'U' for unknown
+char Block = 'U';
 
 // Block
-char P_color = 'Uknown'; // uknown
+char P_color = 'U'; // Unknown
 int P_x = 0;
 int P_y = 0;
 int P_height = 0;

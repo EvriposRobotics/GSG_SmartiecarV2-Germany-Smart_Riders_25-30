@@ -82,8 +82,8 @@ float correction_Left = 30.0;
 float correction_Right = 30.0;
 float StraightAngle = 0.0;
 
-// DrivingDirection is 'Uknown' for uknown
-char DrivingDirection = 'Uknown';
+// DrivingDirection is 'U' for Unknown
+char DrivingDirection = 'U';
 
 // last curve measured
 unsigned long LastCurveTime = 0;
@@ -93,11 +93,11 @@ unsigned long NextCurveDelay = 2000;
 int Walldistance = 30;
 
 // include own modules from local library
-#include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\DCmotor.h"
-#include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\gyro2.h"
-#include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\steering.h"
-#include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\ultrasonic_urm09.h"
-#include "C:\Users\nezar\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\raspi.h"
+#include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\DCmotor.h"
+#include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\gyro2.h"
+#include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\steering.h"
+#include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\ultrasonic_urm09.h"
+#include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\raspi.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -137,7 +137,7 @@ void ProgramStopUsingGyro()
   // Go straight for at least 400 msec
   Gyro_steer_straight();
   temporaryTime = millis();
-  while (millis() < temporaryTime + 1000)
+  while (millis() < temporaryTime + 3000)
   {
     Gyro_steer_straight();
   }
@@ -493,7 +493,7 @@ void waitOnButtonPress()
 /////////////////////////////////////////////////////////////////////
 void slowspeedToFindCorrectDirection()
 {
-  if (DrivingDirection == 'Uknown')
+  if (DrivingDirection == 'U')
   {
     runMotor(SlowSpeed);
     while ((Distance_Left < 80.0) && (Distance_Right < 80.0))
@@ -664,6 +664,9 @@ void setup()
 
   // initalises motor pinmodes from DCmotor.h
   motorsetup();
+
+  // enable raspi handshake
+  raspi_handshake();
 
   // measures all the current reading values
   measureAllCurrentDistances();
