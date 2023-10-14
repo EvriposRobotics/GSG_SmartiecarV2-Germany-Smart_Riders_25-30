@@ -9,11 +9,16 @@
 1. [Overview](#overview) 🌟
 2. [Hardware](#hardware) 🔧
     - [Mobility Management](#Mobility-Management)
+    - [Chassis](#Chassis)
     - [Power and Sense Management](#Power-and-Sense-Management)  
     - [Assembly Instructions](#assembly-instructions) 🛠
     - [Schematics](#schematics) 📐👀
+    - [Driving Motor and Gearing](#Driving-Motor-and-Gearing)
+    - [Steering Mechanism](#Steering-Mechanism)
+    - [Power supply](#Power-supply)
+    - [Controllers](#Controllers)
+    - [Sensors](#Sensors)
     - [Components List](#components-list) 🔍
-
 4. [Software](#software) 💻👨‍💻
     - [Setup Instructions](#setup-instructions) 🚀
     - [Programming Languages](#programming-languages) 👩‍💻
@@ -29,9 +34,9 @@
 
 ![Foto 01 10 23, 13 22 02](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/60bbc2ea-8552-432e-a204-dabbc420be3d)
 
-Welcome to the official GitHub repository for Team Smart Riders from Germany, participating in the WRO World Finals 2023. This repository contains all the code, documentation, and resources for our project, SmartiecarV2.
+Welcome to the official GitHub repository for Team Smart Riders from Germany, participating in the WRO World Finals 2023. This repository contains all the code, documentation, and resources for our project, SmartiecarV2. We have used scoring criteria from the ruleblock as headings in our documentation to make it easy to navigate our repository.
 
-![blockdiagram_overview](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/7b0c5513-870f-475c-9993-cfca6aa5659f)
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/7b0c5513-870f-475c-9993-cfca6aa5659f" width="75%">
 
 For the wold final we decided to redesign our future engineers car.
 Now our car consists of an arduino which controls the sensors and the motors and a raspbarry pi which does all the image prossesing in the obstacle race.
@@ -41,12 +46,21 @@ Now our car consists of an arduino which controls the sensors and the motors and
 
 ## Hardware 🔩
 
-![Hardweare](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/40d8d0fe-efb5-4642-bb60-c71df9333944)
+Our previous car version was build as one whole car.
+For the WRO Final version, we designed 3 modular layers to seperate funktions from each other and make it much easier to repair.
+
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/40d8d0fe-efb5-4642-bb60-c71df9333944" width="75%">
 
 
 
 
 ### Mobility Management 
+
+### Chassis
+
+We used the Totemmaker construction system to design and build our own car chassis. This set consits of plastic beams and plates as structural
+elements and aluminium connectors. For specific parts as the front of the wheel barrel and the motor bracket, totemmaker.net offers a free STL-Libary of 3D-printable parts.
+To get a small but strong structure, we used rectangular grids as the basic element of each layer.
 
 ### Power and Sense Management
 
@@ -66,6 +80,36 @@ Detailed assembly instructions can be found in the [Assembly Guide](./hardware/R
 Circuit schematics and hardware layouts are available in the [Schematics folder](./hardware/schemes).
 
 
+<a name="Driving-Motor-and-Gearing"></a>
+
+
+### Driving Motor and Gearing
+
+
+<a name="Steering-Mechanism"></a>
+
+
+### Steering Mechanism
+
+
+<a name="Power-supply"></a>
+
+
+### Power supply
+
+
+<a name="Controllers"></a>
+
+
+### Controllers
+
+
+<a name="Sensors"></a>
+
+
+### Sensors
+
+
 <a name="components-list"></a>
 
 
@@ -80,7 +124,7 @@ A list of all hardware components used in the project can be found [here](./hard
 ## Software 💻
 
 
-<a name="swtup-inatructiona"></a>
+<a name="setup-instructions"></a>
 
 
 ### Setup Instructions 🚀
