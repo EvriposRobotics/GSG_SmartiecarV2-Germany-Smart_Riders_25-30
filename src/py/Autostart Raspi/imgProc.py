@@ -27,9 +27,22 @@ R_v_max = 0
 
 def startCam():
     global cam
-    cam = cv2.VideoCapture(0)
-    cam.set(cv2.CAP_PROP_FRAME_WIDTH, frameWidth)
-    cam.set(cv2.CAP_PROP_FRAME_HEIGHT, frameHeight)
+
+    try:
+        cam = cv2.VideoCapture(0)
+        cam.set(cv2.CAP_PROP_FRAME_WIDTH, frameWidth)
+        cam.set(cv2.CAP_PROP_FRAME_HEIGHT, frameHeight)
+        ret, frame = cam.read()  # read test frame
+        return True
+
+    except:
+        print("cam err")
+        return False
+
+
+def stopCam():
+    global cam
+    cam.release()
 
 
 def getImg():
@@ -44,8 +57,9 @@ def getImg():
     return img2
 
 
-def procImg():
-    return
+def procImg(img):
+    data = "U 0 0"
+    return data
 
 
 def load_params_from_file(filename, trackbar_name, window_name, index, default_value):

@@ -31,6 +31,9 @@ String raspi_get_data()
     String data = "";
 
     Serial.print("req"); // request data from raspi
+    // lcd.setCursor(0, 0);
+    Serial.print("Requested");
+    delay(1000);
 
     // while no data is available
     while (Serial.available() == 0)
@@ -41,5 +44,7 @@ String raspi_get_data()
 
     // read answer
     data = Serial.readStringUntil('\n');
+    lcd.setCursor(0, 0);
+    lcd.print(data);
     return data; // blocked reading functions
 }

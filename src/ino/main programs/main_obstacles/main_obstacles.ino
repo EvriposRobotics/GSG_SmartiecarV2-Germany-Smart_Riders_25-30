@@ -75,9 +75,10 @@ float correction_Right = 15.0;
 char TargetDirection = 'U';
 
 // Speeds
-int NormG = 145;
-int LongG = 145;
-int CurveSpeed = 195;
+int NormalSpeed = 120;
+int SlowSpeed = 90;
+int CurveSpeed = 120;
+int StartSpeed = 120;
 
 // obstacle block 'U' for unknown
 char Block = 'U';
@@ -188,10 +189,10 @@ void turn_L()
   float TargetDirection;
   int Speed;
   lcd.setRGB(125, 0, 125);
-  Speed = LongG;
+  Speed = SlowSpeed;
   // backwards turn
   right(35);
-  runMotor_R(LongG);
+  runMotor_R(SlowSpeed);
   angle = IMU_getAngle();
   // replaces complicated quadrantSYS
   TargetDirection = calcTD();
@@ -216,7 +217,7 @@ void turn_L()
   Distance_Right = SpaceUS_R();
   lcd.setRGB(255, 255, 255);
   LastCurveTime = millis();
-  runMotor(LongG);
+  runMotor(SlowSpeed);
 }
 
 void turn_R()
@@ -224,10 +225,10 @@ void turn_R()
   float TargetDirection;
   int Speed;
   lcd.setRGB(125, 0, 125);
-  Speed = LongG;
+  Speed = SlowSpeed;
   // back turn
   left(35);
-  runMotor_R(LongG);
+  runMotor_R(SlowSpeed);
   angle = IMU_getAngle();
   // replaces complicated quadrantSYS
   TargetDirection = calcTD();
@@ -252,7 +253,7 @@ void turn_R()
   Distance_Right = SpaceUS_R();
   lcd.setRGB(255, 255, 255);
   LastCurveTime = millis();
-  runMotor(LongG);
+  runMotor(SlowSpeed);
 }
 
 // align
@@ -339,13 +340,13 @@ void corners_L_MO()
 {
   int Speed;
   float TargetDirection;
-  Speed = LongG;
+  Speed = SlowSpeed;
   lcd.setRGB(0, 0, 255);
   left(40);
   angle = IMU_getAngle();
   // replaces quadrantenSYS
   TargetDirection = calcTD();
-  runMotor(LongG);
+  runMotor(SlowSpeed);
   //
   // turn until 90 degrees or block in sight
   while (angle > TargetDirection - correction_Left)
@@ -364,10 +365,10 @@ void corners_L_MO()
   corners = corners + 1;
   stopMotor();
   delay(20);
-  runMotor_R(LongG);
+  runMotor_R(SlowSpeed);
   delay(250);
   stopMotor();
-  runMotor(LongG);
+  runMotor(SlowSpeed);
   Distance_Left = SpaceUS_L();
   Distance_Right = SpaceUS_R();
   lcd.setRGB(255, 255, 255);
@@ -379,7 +380,7 @@ void corners_R_MO()
 {
   int Speed;
   float TargetDirection;
-  Speed = LongG;
+  Speed = SlowSpeed;
   lcd.setRGB(0, 0, 255);
   right(40);
   angle = IMU_getAngle();
@@ -400,10 +401,10 @@ void corners_R_MO()
   corners = corners + 1;
   stopMotor();
   delay(20);
-  runMotor_R(LongG);
+  runMotor_R(SlowSpeed);
   delay(250);
   stopMotor();
-  runMotor(LongG);
+  runMotor(SlowSpeed);
   Distance_Left = SpaceUS_L();
   Distance_Right = SpaceUS_R();
   lcd.setRGB(255, 255, 255);
@@ -486,7 +487,7 @@ void Evade_L()
     delay(20);
     findNextPillar();
   }
-  runMotor(LongG);
+  runMotor(SlowSpeed);
   center();
 
   delay(40); // straight after delay
@@ -501,7 +502,7 @@ void Evade_L()
     delay(20);
   }
   center();
-  runMotor(LongG);
+  runMotor(SlowSpeed);
   // drive past
   delay(200);
   lcd.setRGB(255, 255, 255);
@@ -523,7 +524,7 @@ void Evade_R()
     delay(20);
     findNextPillar();
   }
-  runMotor(LongG);
+  runMotor(SlowSpeed);
   center();
 
   delay(50); // straight after delay
@@ -537,7 +538,7 @@ void Evade_R()
     delay(20);
   }
   center();
-  runMotor(LongG);
+  runMotor(SlowSpeed);
   // drive past
   delay(200);
   lcd.setRGB(255, 255, 255);
@@ -563,7 +564,7 @@ void setup()
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
   lcd.setRGB(255, 0, 0);
-
+  lcd.print("obstacle race");
   //------------------------------------------------
   // from Steering.h
   servosetup();
@@ -588,7 +589,9 @@ void setup()
   Distance_Right = SpaceUS_R();
 
   // get block
+  lcd.clear();
   findNextPillar();
+  delay(2000);
   lcd.clear();
 
   // corners count
@@ -629,7 +632,7 @@ void setup()
   center();
 
   // slow start
-  runMotor(LongG);
+  runMotor(SlowSpeed);
 }
 // Done
 
@@ -676,7 +679,7 @@ void loop()
       runMotor_R(180);
       delay(500);
       stopMotor();
-      runMotor(LongG);
+      runMotor(SlowSpeed);
     }
     // red: evade right
     Evade_R();
@@ -690,7 +693,7 @@ void loop()
       runMotor_R(180);
       delay(500);
       stopMotor();
-      runMotor(LongG);
+      runMotor(SlowSpeed);
     }
     // green: evade left
     Evade_L();
@@ -797,7 +800,7 @@ void loop()
           stopMotor();
           lcd.setRGB(255, 255, 255); // End of curve, turning
           delay(100);
-          runMotor(LongG);
+          runMotor(SlowSpeed);
         }
       } // end of curve detected
 
@@ -808,7 +811,7 @@ void loop()
         delay(2000);
         stopMotor();
         delay(500);
-        runMotor(NormG);
+        runMotor(NormalSpeed);
       }
 
     } // end of distance < 25

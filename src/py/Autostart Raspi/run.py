@@ -6,6 +6,28 @@ import lcd
 import arduino
 import imgProc
 
+
+def endProgram(status, msg):
+    if status == 0:
+        mytext = "Done"
+        lcd.setText(mytext)
+        # white
+        lcd.setColor_white()
+        imgProc.stopCam()
+        exit(0)
+    else:
+        mytext = msg
+        lcd.setColor_red()
+        lcd.setText(mytext)
+        imgProc.stopCam()
+        exit(status)
+
+
+############################################################################################################################################
+# MAIN PROGRAM
+############################################################################################################################################
+
+
 currentDateAndTime = datetime.now()
 mytext = "Main program"
 lcd.setText(mytext)
@@ -15,10 +37,16 @@ lcd.setColor_red()
 print("Run started at ", currentDateAndTime)
 
 # start camera from img processor module
-imgProc.startCam()
+ret = imgProc.startCam()
+
+if ret == False:
+    endProgram(1, "cam ERR")
 
 # arduino handshake function
-arduino.handshake()
+ret = arduino.handshake()
+
+if ret == False:
+    endProgram(2, "ino ERR")
 
 # yellow for ready
 lcd.setColor_yellow()
@@ -26,27 +54,18 @@ lcd.setColor_yellow()
 # set the text
 lcd.print("ready\n")
 
-# start the while loop
-while imgcount < 10:
-    contrast1 = 3.5
-    brightness1 = 0.0
-    # increase contrast and brightness with addWeighted
-    # img_contrast1 = cv2.convertScaleAbs(img2, alpha=contrast1, beta=brightness1)
-    img_contrast1 = cv2.addWeighted(img2, contrast1, img2, 0, brightness1)
-    testimg = img_contrast1  # save for debuging
-    # cv2.imshow('test', testimg)
-    # cv2.waitKey(1)
-    filename = "/home/pi/Desktop/Autostart/TestPhotos/img_" + str(imgcount) + ".jpg"
-    if not cv2.imwrite(filename, testimg):
-        raise Exception("Img write error")
-    print(filename)
-    imgcount = imgcount + 1
-    time.sleep(1)
+print("start loop")
 
+while True:
+    # get image from img processor module
+    img = imgProc.getImg()
+
+    # process image from img processor module
+    data = imgProc.procImg(img)
+
+    # check if arduino requested data
+    arduino.answer2req(data)
 ########################################################
 #    Program end
 ########################################################
-mytext = "Done"
-lcd.setText(mytext)
-# white
-lcd.setColor_white()
+endProgram(0, "OK")
