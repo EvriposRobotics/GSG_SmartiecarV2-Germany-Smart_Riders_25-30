@@ -4,8 +4,8 @@ import numpy as np
 import os
 
 # set the video resolution (height, width)
-frameWidth = 720
-frameHeight = 480
+frameWidth = 320
+frameHeight = 240
 
 
 # own functions

@@ -45,3 +45,4 @@ def answer2req(data):
         lcd.setText(line)
         msg = data + "\n"
         ser.write(msg.encode("utf-8"))
+        lcd.setText(msg)

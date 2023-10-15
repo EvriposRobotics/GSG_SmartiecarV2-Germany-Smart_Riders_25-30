@@ -62,7 +62,7 @@ rgb_lcd lcd;
 int corners;
 
 // own variables for distances
-int Distance;
+// int Distance;
 int Distance_Front;
 int Distance_Left;
 int Distance_Right;
@@ -474,11 +474,11 @@ void Red_Block_In_Sight()
     }
   }
   center();
-  Distance = SpaceUS_F();
-  while (Distance > 30)
+  Distance_Front = SpaceUS_F();
+  while (Distance_Front > 30)
   {
     delay(50);
-    Distance = SpaceUS_F();
+    Distance_Front = SpaceUS_F();
   }
 }
 
@@ -508,11 +508,11 @@ void Green_Block_In_Sight()
     }
   }
   center();
-  Distance = SpaceUS_F();
-  while (Distance > 30)
+  Distance_Front = SpaceUS_F();
+  while (Distance_Front > 30)
   {
     delay(50);
-    Distance = SpaceUS_F();
+    Distance_Front = SpaceUS_F();
   }
 }
 
@@ -612,7 +612,7 @@ void printAllCurrentDistancesToLCD()
   lcd.setCursor(0, 0);
   lcd.print(Distance_Left);
   lcd.print("  ");
-  lcd.print(Distance);
+  lcd.print(Distance_Front);
   lcd.print("  ");
   lcd.print(Distance_Right);
   lcd.setCursor(0, 1);
@@ -629,6 +629,8 @@ void printAllCurrentDistancesToLCD()
 /////////////////////////////////////////////////////////////////////
 void waitOnButtonPress()
 {
+  // switch lcd to yellow and wait on button press
+  lcd.setRGB(255, 130, 0);
   while (digitalRead(Button) == LOW)
   {
     delay(50);
@@ -742,7 +744,7 @@ void loop()
   // check for block
 
   findNextPillar();
-  Distance = SpaceUS_F();
+  Distance_Front = SpaceUS_F();
 
   // show block on LCD
   if (P_color == 1)
@@ -789,7 +791,7 @@ void loop()
   else // no block in sight to evade
   {
 
-    Distance = SpaceUS_F();
+    Distance_Front = SpaceUS_F();
     Distance_Left = SpaceUS_L();
     Distance_Right = SpaceUS_R();
 
@@ -806,7 +808,7 @@ void loop()
     }
 
     // infront wall
-    if (Distance < 25) // close to wall
+    if (Distance_Front < 25) // close to wall
     {
 
       stopMotor();
@@ -856,10 +858,10 @@ void loop()
           {
             // back and curve
             runMotor_R(180);
-            while (Distance < 70)
+            while (Distance_Front < 70)
             {
               delay(20);
-              Distance = SpaceUS_F();
+              Distance_Front = SpaceUS_F();
             }
             stopMotor();
             Corners_Right_Until_Block_In_Sight();
@@ -877,10 +879,10 @@ void loop()
           {
             // back and curve
             runMotor_R(180);
-            while (Distance < 60)
+            while (Distance_Front < 60)
             {
               delay(20);
-              Distance = SpaceUS_F();
+              Distance_Front = SpaceUS_F();
             }
             stopMotor();
             Corners_Left_Until_Block_In_Sight();
