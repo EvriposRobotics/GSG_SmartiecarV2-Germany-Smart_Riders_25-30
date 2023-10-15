@@ -42,14 +42,6 @@ void findNextPillar()
     P_Bottom_edge = 0;
     P_Distance = 0;
 
-    char str[] = "43 163 42 42 42";
-    char *tokens[10];
-    tokenize(str, " ", tokens);
-
-    printf("first part: %s", tokens[1]);
-
-    return 0;
-
     String data = raspi_get_data();
     int count = 0;
     splitString(data, ' ', substrings, count); // Split the data into substrings using a space delimiter

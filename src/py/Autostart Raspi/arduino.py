@@ -43,4 +43,5 @@ def answer2req(data):
         line = ser.readline().decode("utf-8").rstrip()
         lcd.clear()
         lcd.setText(line)
-        ser.write(data.encoding("utf-8"))
+        msg = data + "\n"
+        ser.write(msg.encode("utf-8"))
