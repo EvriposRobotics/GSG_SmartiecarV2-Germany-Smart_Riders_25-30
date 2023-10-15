@@ -10,11 +10,11 @@
 2. [Design Process](#Design-Process)🔧
     - [Mobility Management](#Mobility-Management)
     - [Chassis](#Chassis)
-    - [Power and Sense Management](#Power-and-Sense-Management)  
     - [Assembly Instructions](#assembly-instructions) 🛠
     - [Schematics](#schematics) 📐👀
     - [Driving Motor and Gearing](#Driving-Motor-and-Gearing)
     - [Steering Mechanism](#Steering-Mechanism)
+    - [Power and Sense Management](#Power-and-Sense-Management)  
     - [Power supply](#Power-supply)
     - [Controllers](#Controllers)
     - [Sensors](#Sensors)
@@ -46,7 +46,7 @@ For the wold final we decided to redesign our future engineers car.
 Now our car consists of an arduino which controls the sensors and the motors and a raspbarry pi which does all the image prossesing in the obstacle race.
 
 
->a name="Design-Process"></a>
+<a name="Design-Process"></a>
 
 
 ### Design Process
@@ -76,9 +76,14 @@ inprove:
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/40d8d0fe-efb5-4642-bb60-c71df9333944" width="75%">
 
 
+<a name="Mobility-Management"></a>
 
 
 ### Mobility Management 
+
+
+<a name="Chassis"></a>
+
 
 ### Chassis
 
@@ -96,9 +101,8 @@ During the initial test drives, we noticed that the tires we took from the Totem
 
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/5ae149b4-5e5d-40b0-987d-e4460998b52e" width="75%">
 
-### Power and Sense Management
 
-<a name="assemly-instructions"></a>
+<a name="assembly-instructions"></a>
 
 
 ### Assembly Instructions 🛠
@@ -133,6 +137,12 @@ Because of the layers in our car, the servo motor for the steering had to be mou
 Steering Trapeze:
 
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/0348c67c-ff02-438a-8701-6f1718773c30" width="50%">
+
+
+<a name="Power-and-Sense-Management"></a>
+
+
+### Power and Sense Management
 
 
 <a name="Power-supply"></a>
