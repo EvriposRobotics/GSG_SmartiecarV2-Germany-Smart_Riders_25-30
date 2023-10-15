@@ -89,8 +89,17 @@ inprove:
 
 We used the Totemmaker construction system to design and build our own car chassis. This set consits of plastic beams and plates as structural
 elements and aluminium connectors. For specific parts as the front of the wheel barrel and the motor bracket, totemmaker.net offers a free STL-Libary of 3D-printable parts.
-To get a small but strong structure, we used rectangular grids as the basic element of each layer.
+To get a small but strong structure, we used rectangular grids as the basic element of each layer. The first layer had to be as thin as possible but still had to contain the motor, the axles and the servo. We did not have much room to work with. Thats why we did not use a baseplate. A baseplate would have been to large for our car. We just build a stable rectangular frame out of the plastic beams and mounted the front and back axle to it, similar to our last version of the car.
+Because the last car was difficult to repair we wanted to contruct the next version of our car with that in mind. We now have a modular system with three individual layers. The top two have the same base of contruction. For both layers we started with a stable rectangular frame of four plastic beams. These beams make the layers stable and strong but not to heavy at the same time. We wanted the layers to be easily connected to each other with screws. The third layer just has two extra beams for the ultrasonic sensors.
 
+Layer 2:
+
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/ba4adc89-2f2b-4595-a860-c548b5dc5555" width="50%">
+
+
+Layer 3:
+
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/86b0d644-9015-47d7-bda9-f8d0e95e0f0b" width="50%">
 
 
 Tires:
@@ -130,13 +139,19 @@ We tested two different motors. One which operates on 6V and another which does 
 
 
 ### Steering Mechanism
-Because of the layers in our car, the servo motor for the steering had to be mounted on the first (lowest) layer. Because of that it was difficult to connect the servo with the steering mechanism. The plastic beams from the layer around the servo limited its range of motion. That is why we had to extend the steering rod to succesfully connect the servo to the steering mechanism.
 
-(Picture steering rod)
+We used the ackermann steering geometry for our steering mechanism. We use a metal gear servo because our car is very heavy. The axis of the servo is in the middle of the front axle. It is directly connected to the steering rod, because the power of the servo transfers better to the steering rod with a direct connection. Another reason for us to build a direct connection is that the first layer of our car is very thin and there is not much space to build any other connetion from the servo to the steering rod. 
+
+We used a steering trapeze to calculate where to put the back axle of our car and the length of our steering rod. We drew it on a piece of paper and later transfered it to the computer.
 
 Steering Trapeze:
 
-<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/0348c67c-ff02-438a-8701-6f1718773c30" width="50%">
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/d627f769-6dab-4882-8252-478ff478e4c7" width="50%">
+
+Because of the layers in our car, the servo motor for the steering had to be mounted on the first (lowest) layer. Because of that it was difficult to connect the servo with the steering mechanism. The plastic beams from the layer around the servo limited its range of motion. That is why we had to extend the steering rod to succesfully connect the servo to the steering mechanism. The servo is now directly connected to the steering mechanism via the steering shaft.
+
+(Picture steering rod)
+
 
 
 <a name="Power-and-Sense-Management"></a>
