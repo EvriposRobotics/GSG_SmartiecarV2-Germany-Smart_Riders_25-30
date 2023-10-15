@@ -1,4 +1,4 @@
-
+![image](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/9cde7a80-f8b4-4fdc-a0b5-ce5bd035e7b2)
 # WRO World Finals 2023 by Team Smart Riders 
 
 ![logo](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/ee130cae-55c6-4d7b-ba02-26129456f831)
@@ -28,7 +28,7 @@
 5. [Team Photos](#team-photos) 📸
 6. [Demonstration Videos](#demonstration-videos) 🎥
 7. [Contributors](#contributors) 👥
-8. [sources](#sources) ℹ
+8. [Resources](#sources) ℹ
 
    
 <a name="overview"></a>
@@ -89,8 +89,8 @@ inprove:
 
 We used the Totemmaker construction system to design and build our own car chassis. This set consits of plastic beams and plates as structural
 elements and aluminium connectors. For specific parts as the front of the wheel barrel and the motor bracket, totemmaker.net offers a free STL-Libary of 3D-printable parts.
-To get a small but strong structure, we used rectangular grids as the basic element of each layer. The first layer had to be as thin as possible but still had to contain the motor, the axles and the servo. We did not have much room to work with. Thats why we did not use a baseplate. A baseplate would have been to large for our car. We just build a stable rectangular frame out of the plastic beams and mounted the front and back axle to it, similar to our last version of the car.
-Because the last car was difficult to repair we wanted to contruct the next version of our car with that in mind. We now have a modular system with three individual layers. The top two have the same base of contruction. For both layers we started with a stable rectangular frame of four plastic beams. These beams make the layers stable and strong but not to heavy at the same time. We wanted the layers to be easily connected to each other with screws. The third layer just has two extra beams for the ultrasonic sensors.
+To get a small but strong structure, we used rectangular grids as the basic element of each layer. The first layer had to be as thin as possible but still had to contain the motor, the axles and the servo. We did not have much room to work with. Thats why we did not use a baseplate. A baseplate would have been to large for our car. We just build a stable rectangular frame, two beams wide, and mounted the front and back axle to it. After that we rounded up the edges of the layer because it does not have much space between it and the game field and our field was a bit wavy.
+Because the last car was difficult to repair we wanted to construct the next version of our car with that in mind. We now have a modular system with three individual layers. The top two have the same base of contruction. For both layers we started with a stable rectangular frame of four plastic beams. These beams make the layers stable and strong but not to heavy at the same time. We wanted the layers to be easily connected to each other with screws. The third layer just has two extra beams for the ultrasonic sensors. Because the third layer is the "sensors and control" layer, we wanted to mount the ultrasonic sensors to it. But it was to high. That is why we used the beams to lower them closer to the ground.
 
 Layer 2:
 
@@ -100,6 +100,8 @@ Layer 2:
 Layer 3:
 
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/86b0d644-9015-47d7-bda9-f8d0e95e0f0b" width="50%">
+
+
 
 
 Tires:
@@ -132,8 +134,9 @@ Circuit schematics and hardware layouts are available in the [Schematics folder]
 
 ### Driving Motor and Gearing
 
-We tested two different motors. One which operates on 6V and another which does on 12V. In our last version of our car we used a 12V motor. We wanted to use the 6V motor so that we do not have so many different voltages in our car. In our testing the 6V motor broke quite often. The 12V motor was more reliable. That is why we decided to use the 12V motor instead of the 6V.
+We tested two different motors. One which operates on 6V and another which does on 12V. In our last version of our car we used a 12V motor. We wanted to use the 6V motor so that we do not have so many different voltages in our car. In our testing the 6V motor broke quite often. The 12V motor was more reliable. That is why we decided to use the 12V motor instead of the 6V. After we had decided what motor to use we had to decide how to screw it to the frame. In our first version of our car the axis of the motor was parallel to the back axle. Because of the limited space we had we had to turn the motor so taht its axis pointed to the back axle. We connected the motor and the back axle with bevel gears for a 1:1 ratio.
 
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/f8b99575-93f0-4b29-bc44-e6aac457f7e1" width="50%">
 
 <a name="Steering-Mechanism"></a>
 
@@ -164,19 +167,21 @@ Because of the layers in our car, the servo motor for the steering had to be mou
 
 
 ### Power supply
-
+-Lipo
 
 <a name="Controllers"></a>
 
 
 ### Controllers
-
+- PI
+- Arduino
 
 <a name="Sensors"></a>
 
 
 ### Sensors
-
+-Gyro
+- ultrasonic
 
 <a name="components-list"></a>
 
@@ -274,7 +279,7 @@ For safety measures, especially when dealing with electrical components, please 
 <a name="sources"></a>
 
 
-## Sources
+##Resources
 - Help with code Errors [Stackoverflow](https://stackoverflow.com/)
 - 
 -
