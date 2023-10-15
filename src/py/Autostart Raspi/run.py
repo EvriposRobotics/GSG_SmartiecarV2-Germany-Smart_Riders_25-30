@@ -26,46 +26,48 @@ def endProgram(status, msg):
 ############################################################################################################################################
 # MAIN PROGRAM
 ############################################################################################################################################
+try:
+    currentDateAndTime = datetime.now()
+    mytext = "Main program"
+    lcd.setText(mytext)
 
+    # red
+    lcd.setColor_red()
+    print("Run started at ", currentDateAndTime)
 
-currentDateAndTime = datetime.now()
-mytext = "Main program"
-lcd.setText(mytext)
+    # start camera from img processor module
+    ret = imgProc.startCam()
 
-# red
-lcd.setColor_red()
-print("Run started at ", currentDateAndTime)
+    if ret == False:
+        endProgram(1, "cam ERR")
 
-# start camera from img processor module
-ret = imgProc.startCam()
+    # arduino handshake function
+    ret = arduino.handshake()
 
-if ret == False:
-    endProgram(1, "cam ERR")
+    if ret == False:
+        endProgram(2, "ino ERR")
 
-# arduino handshake function
-ret = arduino.handshake()
+    # yellow for ready
+    lcd.setColor_yellow()
 
-if ret == False:
-    endProgram(2, "ino ERR")
+    # set the text
+    lcd.print("ready\n")
 
-# yellow for ready
-lcd.setColor_yellow()
+    print("start loop")
 
-# set the text
-lcd.print("ready\n")
+    while True:
+        # get image from img processor module
+        img = imgProc.getImg()
 
-print("start loop")
+        # process image from img processor module
+        data = imgProc.procImg(img)
 
-while True:
-    # get image from img processor module
-    img = imgProc.getImg()
+        # check if arduino requested data
+        arduino.answer2req(data)
+    ########################################################
+    #    Program end
+    ########################################################
+    endProgram(0, "OK")
 
-    # process image from img processor module
-    data = imgProc.procImg(img)
-
-    # check if arduino requested data
-    arduino.answer2req(data)
-########################################################
-#    Program end
-########################################################
-endProgram(0, "OK")
+except:
+    endProgram(3, "CRASH")
