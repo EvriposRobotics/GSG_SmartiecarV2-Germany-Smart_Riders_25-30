@@ -63,6 +63,7 @@ int corners;
 
 // own variables for distances
 int Distance;
+int Distance_Front;
 int Distance_Left;
 int Distance_Right;
 
@@ -307,7 +308,7 @@ void alignLeft()
 {
   int Steering;
   Distance_Left = SpaceUS_L();
-  Steering = (Distance_Left - Walldistance) * 0.9;
+  Steering = (Distance_Left - walldistance) * 0.9;
   if (Steering > 30.0)
   {
     Steering = 30;
@@ -341,7 +342,7 @@ void alignRight()
 
   Distance_Right = SpaceUS_R();
 
-  Steering = (Walldistance - Distance_Right) * 0.9;
+  Steering = (walldistance - Distance_Right) * 0.9;
   if (Steering > 30.0)
   {
     Steering = 30;
@@ -910,11 +911,11 @@ void loop()
       Distance_Right = SpaceUS_R();
       if (TargetDirection == 'R')
       {
-        align_L();
+        alignLeft();
       }
       else if (TargetDirection == 'L')
       {
-        align_R();
+        alignRight();
       }
 
       delay(20);
