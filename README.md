@@ -1,4 +1,3 @@
-![image](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/9cde7a80-f8b4-4fdc-a0b5-ce5bd035e7b2)
 # WRO World Finals 2023 by Team Smart Riders 
 
 ![logo](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/ee130cae-55c6-4d7b-ba02-26129456f831)
