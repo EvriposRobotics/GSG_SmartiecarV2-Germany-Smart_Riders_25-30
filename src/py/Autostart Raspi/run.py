@@ -30,6 +30,7 @@ try:
     currentDateAndTime = datetime.now()
     mytext = "Main program"
     lcd.setText(mytext)
+    imgProc.init()
 
     # red
     lcd.setColor_red()
@@ -64,10 +65,10 @@ try:
 
         # check if arduino requested data
         arduino.answer2req(data)
-    ########################################################
-    #    Program end
-    ########################################################
-    endProgram(0, "OK")
+        ########################################################
+        #    Program end
+        ########################################################
+        endProgram(0, "OK")
 
 except:
     endProgram(3, "CRASH")
