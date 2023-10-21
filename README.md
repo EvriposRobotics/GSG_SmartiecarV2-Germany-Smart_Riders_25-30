@@ -235,7 +235,7 @@ Softwarepackages:
 <a name="failsafe"></a>
 
 
-## Failsafe
+## Failsafe Mechanisms
 We inculded different failsafe mechanisms to avoid mistakes.
 
 Hardware failsafe
