@@ -19,7 +19,6 @@
     - [Sensors](#Sensors)
     - [Components List](#components-list) 🔍
 3. [Software Design](#software) 💻👨‍💻
-    - [Setup Instructions](#setup-instructions) 🚀
     - [Programming Languages](#programming-languages) 👩‍💻
     - [Dependencies](#dependencies) 
 4. [Utilities](#utilities) 🛠
@@ -202,14 +201,6 @@ A list of all hardware components used in the project can be found [here](./hard
 
 
 ## Software 💻
-
-
-<a name="setup-instructions"></a>
-
-
-### Setup Instructions 🚀
-
-Follow the [Software Setup Guide](./software/README.md) to set up the development environment.
 
 
 <a name="programming-languages"></a>
