@@ -166,7 +166,14 @@ Because of the layers in our car, the servo motor for the steering had to be mou
 
 
 ### Power supply
--Lipo
+We use 7.4 V-Lithium-polymer battery as our central power supply it is locatet in the space between layers one and two.
+In our previous car version, we used a 11.1 V Lipo. AS this one is very heavy, we decided to exchange it for a less heavy 7.4 V Lipo 
+of the same capacity.
+
+
+
+
+
 
 <a name="Controllers"></a>
 
