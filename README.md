@@ -117,7 +117,15 @@ During the initial test drives, we noticed that the tires we took from the Totem
 
 ### Assembly Instructions 🛠
 
-Detailed assembly instructions can be found in the [Assembly Guide](./hardware/README.md).
+In order to build our car you have to build the different layers seperately and connect the later. 
+First start with the first layer. Cut the beams and connectors to size and connect them like shown here:
+
+![Layer 1 SIde](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/01643d91-ad0c-45a6-9f48-54e8f5fc4d56)
+
+Link Totemmaker Build Instructions
+After you built the frame you can build and attach the front axle. You will need the 3D printed parts from Totemmake.net. For the back axle we used parts from the Make-Block construction set, which we cut to size as well. Additionally you have to use another 3D printed part from Totemmaker.net to screw the motor in place. Because the frame is very thinn you will have to connect the motor with the back axle via a set of bevel gears. Next you build the second layer like shown in the schematics. You will have to cut you parts again:
+
+![Layer 2 ](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/74bc6621-d1cb-463a-be06-c65dcb2172c3)
 
 
 <a name="schematics"></a>
@@ -206,6 +214,7 @@ Hardware components:
 Chassis:
 - Totemmaker construction set
 - Totemmaker 3D Print elements
+- For back axle Parts from Make-Block construction set
 
 Driving and Steering components:
 - Tower Pro MG995 Servo
