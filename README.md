@@ -22,11 +22,12 @@
     - [Programming Languages](#programming-languages) 👩‍💻
     - [Dependencies](#dependencies) 
 4. [Utilities](#utilities) 🛠
-    - [Debugging Tools](#debugging-tools) 🐞🔍 
-5. [Team Photos](#team-photos) 📸
-6. [Demonstration Videos](#demonstration-videos) 🎥
-7. [Contributors](#contributors) 👥
-8. [Resources](#sources) ℹ
+    - [Failsafe Mechanisms](#failsafe)
+    - [Debugging Tools](#debugging-tools) 🐞🔍
+6. [Team Photos](#team-photos) 📸
+7. [Demonstration Videos](#demonstration-videos) 🎥
+8. [Contributors](#contributors) 👥
+9. [Resources](#sources) ℹ
 
    
 <a name="overview"></a>
@@ -194,7 +195,9 @@ The on/off switch is connectetet directly to the output of the Lipo
 
 ### Components List 📦
 
-A list of all hardware components used in the project can be found [here](./hardware/README.md).
+Hardware components:
+
+Softwarepackages:
 
 
 <a name="software"></a>
@@ -229,6 +232,18 @@ A list of all hardware components used in the project can be found [here](./hard
 ## Utilities 🛠
 
 
+<a name="failsafe"></a>
+
+
+## Failsafe
+We inculded different failsafe mechanisms to avoid mistakes.
+
+Hardware failsafe
+
+
+Software failsafe:
+
+
 <a name="debugging-tools"></a>
 
 
@@ -261,7 +276,10 @@ Meet the team behind this project in the [Team Photos section](./Teamphotos).
 
 ## Safety Guidelines ⚠️
 
-For safety measures, especially when dealing with electrical components, please read our [Safety Guidelines](./SafetyGuidelines.md).
+Hardware-Guidelines:
+
+
+Software-Guidelines:
 
 
 <a name="contributors"></a>
