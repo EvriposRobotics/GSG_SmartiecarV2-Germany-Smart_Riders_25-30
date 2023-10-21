@@ -173,10 +173,11 @@ of the same capacity.
  we use a 3000 mAh lipo,as the Raspberry Pi is very Power-hungry when doeing image processing. 
 The on/off switch is connectetet directly to the output of the Lipo Behind the switch,we disstribute the power to 2 step-down and one step-up converters .
 
-The step-up converter produces 12V for our motor driver. The two step-downs both produce 5V,one is used for the controllers ( Raspberry  Pi and Arduino ), the other for the steering servo and lights.
+The step-up converter produces 12V for our motor driver. 
+The two step-downs both produce 5V,one is used for the controllers ( Raspberry  Pi and Arduino ), the other for the steering servo and lights.
  See circuit diagram for details on connections.
  
- we use a 3000 mAh lipo,as the Raspberry Pi is very Power-hungry when doeing linage proussuns. 
+  
 
 
 
