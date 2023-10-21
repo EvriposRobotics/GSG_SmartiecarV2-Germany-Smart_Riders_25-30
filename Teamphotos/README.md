@@ -24,17 +24,14 @@ We are all in 11th grade and this is our first time participating in the WRO. Ou
 
 
 
-![Foto 07 10 23, 15 22 23 (1)](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/14b6adcb-3616-49a8-8370-191d0f013766)
 
 
 
 
 
-![Foto 07 10 23, 15 24 26 (1)](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/f9061950-64be-4c8e-bae2-6e4a36180812)
 
 
-
-![Team-Photo2](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/0866457f-c75f-4366-969a-1efd9e7da9e3)
+![Foto 21 10 23, 13 42 10](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/8cdb8d4a-dd23-4842-a4ff-9f4cf2061802)
 
 
 
