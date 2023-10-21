@@ -6,27 +6,6 @@ We are all in 11th grade and this is our first time participating in the WRO. Ou
 
 # Teamphoto collection
 
-# First Car Version
-
-![Arduino first version](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131178788/6dd0a7be-6d12-4a21-8942-087e7516830d)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -34,6 +13,8 @@ We are all in 11th grade and this is our first time participating in the WRO. Ou
 ![Foto 21 10 23, 13 42 10](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/8cdb8d4a-dd23-4842-a4ff-9f4cf2061802)
 
 
+
+![Arduino first version](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131178788/6dd0a7be-6d12-4a21-8942-087e7516830d)
 
 
 

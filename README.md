@@ -1,3 +1,5 @@
+<a name="top"></a>
+
 # WRO World Finals 2023 by Team Smart Riders 
 
 ![logo](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/ee130cae-55c6-4d7b-ba02-26129456f831)
@@ -19,15 +21,15 @@
     - [Sensors](#Sensors)
     - [Components List](#components-list) 🔍
 3. [Software Design](#software) 💻👨‍💻
-    - [Setup Instructions](#setup-instructions) 🚀
     - [Programming Languages](#programming-languages) 👩‍💻
     - [Dependencies](#dependencies) 
 4. [Utilities](#utilities) 🛠
-    - [Debugging Tools](#debugging-tools) 🐞🔍 
-5. [Team Photos](#team-photos) 📸
-6. [Demonstration Videos](#demonstration-videos) 🎥
-7. [Contributors](#contributors) 👥
-8. [Resources](#sources) ℹ
+    - [Failsafe Mechanisms](#failsafe)
+    - [Debugging Tools](#debugging-tools) 🐞🔍
+6. [Team Photos](#team-photos) 📸
+7. [Demonstration Videos](#demonstration-videos) 🎥
+8. [Contributors](#contributors) 👥
+9. [Resources](#sources) ℹ
 
    
 <a name="overview"></a>
@@ -117,7 +119,19 @@ During the initial test drives, we noticed that the tires we took from the Totem
 
 ### Assembly Instructions 🛠
 
-Detailed assembly instructions can be found in the [Assembly Guide](./hardware/README.md).
+In order to build our car you have to build the different layers seperately and connect the later. 
+First start with the first layer. Cut the beams and connectors to size and connect them like shown here:
+
+![Layer 1 SIde](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/01643d91-ad0c-45a6-9f48-54e8f5fc4d56)
+
+Link Totemmaker Build Instructions
+After you built the frame you can build and attach the front axle. You will need the 3D printed parts from Totemmake.net. For the back axle we used parts from the Make-Block construction set, which we cut to size as well. Additionally you have to use another 3D printed part from Totemmaker.net to screw the motor in place. Because the frame is very thinn you will have to connect the motor with the back axle via a set of bevel gears. Next you build the second layer like shown in the schematics. You will have to cut you parts again:
+
+![Layer 2 ](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/74bc6621-d1cb-463a-be06-c65dcb2172c3)
+
+Next you have to again cut the beams and assemble them according to the schematics to build the third layer:
+
+![Layer 3](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/d80702c1-a0fb-4a31-8272-6fe0d7570646)
 
 
 <a name="schematics"></a>
@@ -125,7 +139,7 @@ Detailed assembly instructions can be found in the [Assembly Guide](./hardware/R
 
 ### Schematics 📐
 
-Circuit schematics and hardware layouts are available in the [Schematics folder](./hardware/schemes).
+Circuit schematics and hardware layouts are available in the [Schematics folder](schematics).
 
 
 <a name="Driving-Motor-and-Gearing"></a>
@@ -142,7 +156,8 @@ We tested two different motors. One which operates on 6V and another which does 
 
 ### Steering Mechanism
 
-We used the ackermann steering geometry for our steering mechanism. We use a metal gear servo because our car is very heavy. The axis of the servo is in the middle of the front axle. It is directly connected to the steering rod, because the power of the servo transfers better to the steering rod with a direct connection. Another reason for us to build a direct connection is that the first layer of our car is very thin and there is not much space to build any other connetion from the servo to the steering rod. 
+We used the ackermann steering geometry for our steering mechanism. The idea behind the ackerman steering is that the inner wheel turs a bigger angle than the one on the
+outside. In order for it to turn around the middle axis of the axle. We use a metal gear servo (Tower Pro MG995) because our car is very heavy. The axis of the servo is in the middle of the front axle. It is directly connected to the steering rod, because the power of the servo transfers better to the steering rod with a direct connection. Another reason for us to build a direct connection is that the first layer of our car is very thin and there is not much space to build any other connetion from the servo to the steering rod. 
 
 We used a steering trapeze to calculate where to put the back axle of our car and the length of our steering rod. We drew it on a piece of paper and later transfered it to the computer.
 
@@ -162,14 +177,36 @@ Because of the layers in our car, the servo motor for the steering had to be mou
 ### Power and Sense Management
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/35a215e8-1b19-4504-bd92-aa972cfa088c" width="75%">
 
+
+Our car has a special level called "Power and Sense Management" level.
+On this level, there are important parts that affect the car´s performance and control.
+At the center of Power and Sense Management is a step-up converter that is specifically responsible for the motor.
+On the right side of this level we find the on/off switch.
+There are two step-down converters on both the left and right sides of the vehicle. In addition to these components
+and the motor driver is also housed on this level. 
+
+
 <a name="Power-supply"></a>
 
 
 ### Power supply
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/7235a714-503e-4248-bcb2-d01d52edebd4" width="75%">
+
+
+
+
+
 We use 7.4 V-Lithium-polymer battery as our central power supply it is locatet in the space between layers one and two.
 In our previous car version, we used a 11.1 V Lipo. AS this one is very heavy, we decided to exchange it for a less heavy 7.4 V Lipo 
 of the same capacity.
-The on/off switch is connectetet directly to the output of the Lipo 
+ we use a 3000 mAh lipo,as the Raspberry Pi is very Power-hungry when doeing image processing. 
+The on/off switch is connectetet directly to the output of the Lipo Behind the switch,we disstribute the power to 2 step-down and one step-up converters .
+
+The step-up converter produces 12V for our motor driver. 
+The two step-downs both produce 5V,one is used for the controllers ( Raspberry  Pi and Arduino ), the other for the steering servo and lights.
+ See circuit diagram for details on connections.
+ 
+  
 
 
 
@@ -194,21 +231,36 @@ The on/off switch is connectetet directly to the output of the Lipo
 
 ### Components List 📦
 
-A list of all hardware components used in the project can be found [here](./hardware/README.md).
+Hardware components:
+Chassis:
+- Totemmaker construction set
+- Totemmaker 3D Print elements
+- For back axle Parts from Make-Block construction set
+
+Driving and Steering components:
+- Tower Pro MG995 Servo
+- Motor Controller Cytron MD13S
+
+
+Sensors and Controllers:
+- Arduino Nano
+- Rasperry PI 4
+- DFROBOT Ultrasonic sensors
+- Gyro -> BNO-055
+- Rasperry PI Camera
+  
+Powersupply and management:
+- Lipo 7.4V
+- Step Down Converter
+- Step Up converter
+
+Softwarepackages:
 
 
 <a name="software"></a>
 
 
 ## Software 💻
-
-
-<a name="setup-instructions"></a>
-
-
-### Setup Instructions 🚀
-
-Follow the [Software Setup Guide](./software/README.md) to set up the development environment.
 
 
 <a name="programming-languages"></a>
@@ -237,6 +289,18 @@ Follow the [Software Setup Guide](./software/README.md) to set up the developmen
 ## Utilities 🛠
 
 
+<a name="failsafe"></a>
+
+
+### Failsafe Mechanisms
+We inculded different failsafe mechanisms to avoid mistakes.
+
+Hardware failsafe
+
+
+Software failsafe:
+
+
 <a name="debugging-tools"></a>
 
 
@@ -260,8 +324,8 @@ Meet the team behind this project in the [Team Photos section](./Teamphotos).
 
 ## Demonstration Videos 🎥
 
-- [opening race](./videos/demo1.mp4)
-- [obstacle race](./videos/demo2.mp4)
+- [Video folder-Races](videos/video.md)
+
 
 
 <a name="safety-guidelines"></a>
@@ -269,7 +333,10 @@ Meet the team behind this project in the [Team Photos section](./Teamphotos).
 
 ## Safety Guidelines ⚠️
 
-For safety measures, especially when dealing with electrical components, please read our [Safety Guidelines](./SafetyGuidelines.md).
+Hardware-Guidelines:
+
+
+Software-Guidelines:
 
 
 <a name="contributors"></a>
@@ -281,11 +348,14 @@ For safety measures, especially when dealing with electrical components, please 
 - [NoahPX44](https://github.com/NoahPX44)
 - [LuciusFisch](https://github.com/LuciusFisch)
 
+[Team Photos and Portais](Teamphotos)
 
 <a name="sources"></a>
 
 
-##Resources
+## Resources
 - Help with code Errors [Stackoverflow](https://stackoverflow.com/)
 - 
 -
+
+[Back to top](#top)
