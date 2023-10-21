@@ -170,7 +170,13 @@ Because of the layers in our car, the servo motor for the steering had to be mou
 We use 7.4 V-Lithium-polymer battery as our central power supply it is locatet in the space between layers one and two.
 In our previous car version, we used a 11.1 V Lipo. AS this one is very heavy, we decided to exchange it for a less heavy 7.4 V Lipo 
 of the same capacity.
-The on/off switch is connectetet directly to the output of the Lipo 
+ we use a 3000 mAh lipo,as the Raspberry Pi is very Power-hungry when doeing image processing. 
+The on/off switch is connectetet directly to the output of the Lipo Behind the switch,we disstribute the power to 2 step-down and one step-up converters .
+
+The step-up converter produces 12V for our motor driver. The two step-downs both produce 5V,one is used for the controllers ( Raspberry  Pi and Arduino ), the other for the steering servo and lights.
+ See circuit diagram for details on connections.
+ 
+ we use a 3000 mAh lipo,as the Raspberry Pi is very Power-hungry when doeing linage proussuns. 
 
 
 
