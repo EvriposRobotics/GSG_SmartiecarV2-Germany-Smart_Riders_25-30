@@ -142,7 +142,8 @@ We tested two different motors. One which operates on 6V and another which does 
 
 ### Steering Mechanism
 
-We used the ackermann steering geometry for our steering mechanism. We use a metal gear servo because our car is very heavy. The axis of the servo is in the middle of the front axle. It is directly connected to the steering rod, because the power of the servo transfers better to the steering rod with a direct connection. Another reason for us to build a direct connection is that the first layer of our car is very thin and there is not much space to build any other connetion from the servo to the steering rod. 
+We used the ackermann steering geometry for our steering mechanism. The idea behind the ackerman steering is that the inner wheel turs a bigger angle than the one on the
+outside. In order for it to turn around the middle axis of the axle. We use a metal gear servo because our car is very heavy. The axis of the servo is in the middle of the front axle. It is directly connected to the steering rod, because the power of the servo transfers better to the steering rod with a direct connection. Another reason for us to build a direct connection is that the first layer of our car is very thin and there is not much space to build any other connetion from the servo to the steering rod. 
 
 We used a steering trapeze to calculate where to put the back axle of our car and the length of our steering rod. We drew it on a piece of paper and later transfered it to the computer.
 
