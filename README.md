@@ -160,7 +160,7 @@ Because of the layers in our car, the servo motor for the steering had to be mou
 
 
 ### Power and Sense Management
-<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/35a215e8-1b19-4504-bd92-aa972cfa088c" width="50%">
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/35a215e8-1b19-4504-bd92-aa972cfa088c" width="75%">
 
 <a name="Power-supply"></a>
 
