@@ -8,7 +8,6 @@ void raspi_handshake()
     lcd.setCursor(0, 0);
     lcd.print("Wait for Raspi");
     Serial.print("ready");
-    delay(1000);
 
     // while no data is available
     while (Serial.available() == 0)

@@ -76,10 +76,10 @@ float correction_Right = 15.0;
 char TargetDirection = 'U';
 
 // Speeds
-int NormalSpeed = 120;
+int NormalSpeed = 100;
 int SlowSpeed = 90;
-int CurveSpeed = 120;
-int StartSpeed = 120;
+int CurveSpeed = 100;
+int StartSpeed = 100;
 
 // obstacle block 'U' for unknown
 char Block = 'U';
@@ -98,7 +98,7 @@ unsigned long LastCurveTime;
 unsigned long NextCurveDelay = 5000;
 
 // both allignments (L/R)
-int walldistance = 20;
+int walldistance = 40;
 
 // own Module
 #include "C:\Users\WRO_FE2\Desktop\GSG_SmartiecarV2\src\ino\smartiecar_libs\DCmotor.h"
@@ -137,54 +137,32 @@ void ProgramStop()
 }
 
 /////////////////////////////////////////////////////////////////////
-// calcTargedDirection()
+// CalculateTargetDirection()
 // calculates the target direction for the next curve
 /////////////////////////////////////////////////////////////////////
 float CalculateTargetDirection()
 {
   float angle;
   float CalculateAngle = 0.0;
+  float StraightAngle = 0.0;
+  int factor = 0;
   angle = IMU_getAngle();
   if (TargetDirection == 'R')
   {
-
-    if ((angle > 315) || (angle <= 45))
-    {
-      CalculateAngle = 90.0;
-    }
-    else if ((angle > 45) && (angle <= 135))
-    {
-      CalculateAngle = 180.0;
-    }
-    else if ((angle > 135) && (angle <= 225))
-    {
-      CalculateAngle = 270.0;
-    }
-    else if ((angle > 225) && (angle <= 315))
-    {
-      CalculateAngle = 360.0;
-    }
+    // calculate straight direction
+    factor = int((angle + 45.0) / 90.0); // int cuts off fractions
+    StraightAngle = factor * 90.0;
+    // calculate turn direction
+    CalculateAngle = StraightAngle + 90.0;
   }
 
-  else
+  else if (TargetDirection == 'L')
   {
-    if ((angle > 315) || (angle <= 45))
-    {
-      CalculateAngle = 270.0;
-    }
-    else if ((angle > 225) && (angle <= 315))
-    {
-      CalculateAngle = 180.0;
-    }
-    else if ((angle > 135) && (angle <= 225))
-    {
-      CalculateAngle = 90.0;
-    }
-
-    else if ((angle > 45) && (angle <= 135))
-    {
-      CalculateAngle = 0.0;
-    }
+    // calculate straight direction
+    factor = int((angle - 45.0) / 90.0); // int cuts off fractions
+    StraightAngle = factor * 90.0;
+    // calculate turn direction
+    CalculateAngle = StraightAngle - 90.0;
   }
 
   return CalculateAngle;
@@ -192,7 +170,7 @@ float CalculateTargetDirection()
 
 /////////////////////////////////////////////////////////////////////
 // TurnLeft()
-//  turns left until 90 degrees
+// turns left until 90 degrees
 /////////////////////////////////////////////////////////////////////
 void TurnLeft()
 {
@@ -200,7 +178,7 @@ void TurnLeft()
   int Speed;
   lcd.setRGB(125, 0, 125);
   Speed = SlowSpeed;
-  right(35);
+  right(40);
   runMotor_R(SlowSpeed); // backwards turn
   angle = IMU_getAngle();
   // replaces complicated quadrantSYS
@@ -240,7 +218,7 @@ void TurnRight()
   lcd.setRGB(125, 0, 125);
   Speed = SlowSpeed;
   // back turn
-  left(35);
+  left(40);
   runMotor_R(SlowSpeed);
   angle = IMU_getAngle();
   // replaces complicated quadrantsystem
@@ -367,10 +345,10 @@ void alignRight()
 }
 
 /////////////////////////////////////////////////////////////////////
-// Corners_Left_Until_Block_In_Sight()
+// CurveLeftUntilBlock()
 // makes left turn until 90 degrees or block in sight to adjust speed
 /////////////////////////////////////////////////////////////////////
-void Corners_Left_Until_Block_In_Sight()
+void CurveLeftUntilBlock()
 {
   int Speed;
   float TargetDirection;
@@ -381,11 +359,9 @@ void Corners_Left_Until_Block_In_Sight()
   // replaces quadrantenSYS
   TargetDirection = CalculateTargetDirection();
   runMotor(SlowSpeed);
-  //
   // turn until 90 degrees or block in sight
   while (angle > TargetDirection - correction_Left)
   {
-
     angle = IMU_getAngle();
     Speed = Speed + 5;
     if (Speed > CurveSpeed)
@@ -410,10 +386,10 @@ void Corners_Left_Until_Block_In_Sight()
 }
 
 /////////////////////////////////////////////////////////////////////
-// Corners_Right_Until_Block_In_Sight()
+// CurveRightUntilBlock()
 // makes right turn until 90 degrees or block in sight to adjust speed
 /////////////////////////////////////////////////////////////////////
-void Corners_Right_Until_Block_In_Sight()
+void CurveRightUntilBlock()
 {
   int Speed;
   float TargetDirection;
@@ -530,7 +506,7 @@ void Evade_Left()
   left(25);
   runMotor(CurveSpeed);
   // turn until block not in sight
-  while (P_color == 2)
+  while (P_color == 'L')
   {
     delay(20);
     findNextPillar();
@@ -567,7 +543,7 @@ void Evade_Right()
   right(25);
   runMotor(CurveSpeed);
   // drive until block not in sight
-  while (P_color == 1)
+  while (P_color == 'R')
   {
     delay(20);
     findNextPillar();
@@ -671,7 +647,6 @@ void Get_Current_Block()
 void setup()
 {
   Wire.begin();
-  Serial.begin(115200);
   // LCD SETUP
   pinMode(Button, INPUT); // button
   // set up the LCD's number of columns and rows:
@@ -747,11 +722,11 @@ void loop()
   Distance_Front = SpaceUS_F();
 
   // show block on LCD
-  if (P_color == 1)
+  if (P_color == 'R')
   {
     lcd.setRGB(255, 0, 0);
   }
-  else if (P_color == 2)
+  else if (P_color == 'L')
   {
     lcd.setRGB(0, 255, 0);
   }
@@ -761,7 +736,7 @@ void loop()
   }
 
   // red: check if block in sight
-  if ((P_color == 1) && (P_x > 80) && (P_Bottom_edge > 150))
+  if ((P_color == 'R') && (P_x > 80) && (P_Bottom_edge > 150))
   {
     // if too close = slight reverse
     if (P_Bottom_edge > 200)
@@ -775,7 +750,7 @@ void loop()
     Evade_Right();
   }
 
-  else if ((P_color == 2) && (P_x < 240) && (P_Bottom_edge > 150))
+  else if ((P_color == 'L') && (P_x < 240) && (P_Bottom_edge > 150))
   {
     // if too close = slight reverse
     if (P_Bottom_edge > 200)
@@ -795,7 +770,7 @@ void loop()
     Distance_Left = SpaceUS_L();
     Distance_Right = SpaceUS_R();
 
-    if (TargetDirection == 'K')
+    if (TargetDirection == 'U')
     {
       if (Distance_Left > 80)
       {
@@ -808,14 +783,14 @@ void loop()
     }
 
     // infront wall
-    if (Distance_Front < 25) // close to wall
+    if (Distance_Front < 30) // close to wall
     {
 
       stopMotor();
 
       if (millis() - LastCurveTime > NextCurveDelay) // corners detected
       {
-        if (TargetDirection == 'K')
+        if (TargetDirection == 'U')
         {
           Distance_Left = SpaceUS_L();
           Distance_Right = SpaceUS_R();
@@ -864,7 +839,7 @@ void loop()
               Distance_Front = SpaceUS_F();
             }
             stopMotor();
-            Corners_Right_Until_Block_In_Sight();
+            CurveRightUntilBlock();
           }
         }
         else // TargetDirection == L
@@ -885,7 +860,7 @@ void loop()
               Distance_Front = SpaceUS_F();
             }
             stopMotor();
-            Corners_Left_Until_Block_In_Sight();
+            CurveLeftUntilBlock();
           }
           stopMotor();
           lcd.setRGB(255, 255, 255); // End of curve, turning
