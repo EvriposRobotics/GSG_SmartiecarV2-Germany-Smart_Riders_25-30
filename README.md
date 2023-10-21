@@ -129,6 +129,10 @@ After you built the frame you can build and attach the front axle. You will need
 
 ![Layer 2 ](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/74bc6621-d1cb-463a-be06-c65dcb2172c3)
 
+Next you have to again cut the beams and assemble them according to the schematics to build the third layer:
+
+![Layer 3](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/d80702c1-a0fb-4a31-8272-6fe0d7570646)
+
 
 <a name="schematics"></a>
 
