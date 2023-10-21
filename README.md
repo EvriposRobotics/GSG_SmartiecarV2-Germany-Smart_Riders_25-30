@@ -184,6 +184,12 @@ and the motor driver is also housed on this level.
 
 
 ### Power supply
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/7235a714-503e-4248-bcb2-d01d52edebd4" width="75%">
+
+
+
+
+
 We use 7.4 V-Lithium-polymer battery as our central power supply it is locatet in the space between layers one and two.
 In our previous car version, we used a 11.1 V Lipo. AS this one is very heavy, we decided to exchange it for a less heavy 7.4 V Lipo 
 of the same capacity.
