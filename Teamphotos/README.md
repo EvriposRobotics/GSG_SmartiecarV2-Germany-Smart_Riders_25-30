@@ -34,6 +34,24 @@ We are all in 11th grade and this is our first time participating in the WRO. Ou
 
 
 
+![Team-Photo2](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/0866457f-c75f-4366-969a-1efd9e7da9e3)
+
+
+
 
 
 ### Team Members 
+
+Noah Chun
+
+![Noah](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/ecd17aab-c33a-4dee-b5a0-b53c97471a76)
+
+
+Lucius Penger
+
+![Lucius](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/cce8432b-53e6-4538-ac3e-9ce5f98c23fc)
+
+
+Nezar Aljarad
+
+![Nezar](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/ce8f6c18-1ca7-4d61-b73c-b7d965e4d08b)
