@@ -125,7 +125,7 @@ Detailed assembly instructions can be found in the [Assembly Guide](./hardware/R
 
 ### Schematics 📐
 
-Circuit schematics and hardware layouts are available in the [Schematics folder](./hardware/schemes).
+Circuit schematics and hardware layouts are available in the [Schematics folder](schematics).
 
 
 <a name="Driving-Motor-and-Gearing"></a>
