@@ -261,8 +261,8 @@ Meet the team behind this project in the [Team Photos section](./Teamphotos).
 
 ## Demonstration Videos 🎥
 
-- [opening race](./videos/demo1.mp4)
-- [obstacle race](./videos/demo2.mp4)
+- [Video folder-Races](videos/video.md)
+
 
 
 <a name="safety-guidelines"></a>
