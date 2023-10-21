@@ -171,6 +171,15 @@ Because of the layers in our car, the servo motor for the steering had to be mou
 ### Power and Sense Management
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/35a215e8-1b19-4504-bd92-aa972cfa088c" width="75%">
 
+
+Our car has a special level called "Power and Sense Management" level.
+On this level, there are important parts that affect the car´s performance and control.
+At the center of Power and Sense Management is a step-up converter that is specifically responsible for the motor.
+On the right side of this level we find the on/off switch.
+There are two step-down converters on both the left and right sides of the vehicle. In addition to these components
+and the motor driver is also housed on this level. 
+
+
 <a name="Power-supply"></a>
 
 
