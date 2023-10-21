@@ -210,7 +210,8 @@ Sensors and Controllers:
 - Rasperry PI 4
 - DFROBOT Ultrasonic sensors
 - Gyro -> BNO-055
-
+- Rasperry PI Camera
+  
 Powersupply and management:
 - Lipo 7.4V
 - Step Down Converter 
