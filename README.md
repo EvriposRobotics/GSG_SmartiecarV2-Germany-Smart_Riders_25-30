@@ -251,7 +251,8 @@ Sensors and Controllers:
   
 Powersupply and management:
 - Lipo 7.4V
-- Step Down Converter 
+- Step Down Converter
+- Step Up converter
 
 Softwarepackages:
 
@@ -352,7 +353,7 @@ Software-Guidelines:
 <a name="sources"></a>
 
 
-##Resources
+## Resources
 - Help with code Errors [Stackoverflow](https://stackoverflow.com/)
 - 
 -
