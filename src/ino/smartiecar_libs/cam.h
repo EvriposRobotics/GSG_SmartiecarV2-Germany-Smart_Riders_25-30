@@ -36,20 +36,18 @@ void findNextPillar()
     // Block
     P_color = 'U';
     P_x = 0;
-    P_y = 0;
     P_height = 0;
-    P_width = 0;
-    P_Bottom_edge = 0;
-    P_Distance = 0;
+    P_wall_L = 'N';
+    P_wall_R = 'N';
 
     String data = raspi_get_data();
     int count = 0;
     splitString(data, ' ', substrings, count); // Split the data into substrings using a space delimiter
     P_color = substrings[0].charAt(0);
     P_x = substrings[1].toInt();
-    P_y = substrings[2].toInt();
-    P_height = substrings[3].toInt();
-    P_width = substrings[4].toInt();
-    P_Distance = substrings[5].toInt();
+    P_height = substrings[2].toInt();
+    P_wall_L = substrings[3].charAt(0);
+    P_wall_R = substrings[4].charAt(0);
+
     return;
 }

@@ -76,6 +76,7 @@ int Distance_Front;
 int Distance_Left;
 int Distance_Right;
 
+// floats for gyro
 float angle;
 float danger;
 float correction_Left = 30.0;
@@ -143,11 +144,11 @@ void ProgramStopUsingGyro()
   }
 
   // drive straight to finish and stop
-  Distance_Front = SpaceUS_F();
+  Distance_Front = SpaceUltraSonicFront();
   while (Distance_Front > 140)
   {
     Gyro_steer_straight();
-    Distance_Front = SpaceUS_F();
+    Distance_Front = SpaceUltraSonicFront();
   }
 
   stopMotor();
@@ -264,7 +265,7 @@ void alignCenter()
 void alignLeft()
 {
   int Steering;
-  Distance_Left = SpaceUS_L();
+  Distance_Left = SpaceUltraSonicLeft();
   Steering = (Distance_Left - Walldistance) * 0.9;
   if (Steering > 30.0)
   {
@@ -297,7 +298,7 @@ void alignRight()
 {
   int Steering;
 
-  Distance_Right = SpaceUS_R();
+  Distance_Right = SpaceUltraSonicRight();
 
   Steering = (Walldistance - Distance_Right) * 0.9;
   if (Steering > 30.0)
@@ -389,12 +390,12 @@ void Curve_L()
   StraightAngle = TargetDirection;
   center();
   runMotor(NormalSpeed);
-  Distance_Left = SpaceUS_L;
+  Distance_Left = SpaceUltraSonicLeft;
 
   // try to find the inside wall again
   while (Distance_Left > 60)
   {
-    Distance_Left = SpaceUS_L();
+    Distance_Left = SpaceUltraSonicLeft();
     Gyro_steer_straight();
   }
   lcd.setRGB(0, 255, 0);
@@ -433,12 +434,12 @@ void Curve_R()
   StraightAngle = TargetDirection;
   center();
   runMotor(NormalSpeed);
-  Distance_Right = SpaceUS_R;
+  Distance_Right = SpaceUltraSonicRight;
 
   // try to find the inside wall again
   while (Distance_Right > 60)
   {
-    Distance_Right = SpaceUS_R();
+    Distance_Right = SpaceUltraSonicRight();
     Gyro_steer_straight();
   }
   lcd.setRGB(0, 255, 0);
@@ -451,9 +452,9 @@ void Curve_R()
 /////////////////////////////////////////////////////////////////////
 void measureAllCurrentDistances()
 {
-  Distance_Front = SpaceUS_F();
-  Distance_Left = SpaceUS_L();
-  Distance_Right = SpaceUS_R();
+  Distance_Front = SpaceUltraSonicFront();
+  Distance_Left = SpaceUltraSonicLeft();
+  Distance_Right = SpaceUltraSonicRight();
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -498,8 +499,8 @@ void slowspeedToFindCorrectDirection()
     runMotor(SlowSpeed);
     while ((Distance_Left < 80.0) && (Distance_Right < 80.0))
     {
-      Distance_Left = SpaceUS_L();
-      Distance_Right = SpaceUS_R();
+      Distance_Left = SpaceUltraSonicLeft();
+      Distance_Right = SpaceUltraSonicRight();
       Gyro_steer_straight();
     }
     if (Distance_Left >= 80.0)
@@ -519,10 +520,10 @@ void slowspeedToFindCorrectDirection()
     runMotor(SlowSpeed);
     delay(100);
     StartNarrow_R();
-    Distance_Right = SpaceUS_R();
+    Distance_Right = SpaceUltraSonicRight();
     while (Distance_Right < 80.0)
     {
-      Distance_Right = SpaceUS_R();
+      Distance_Right = SpaceUltraSonicRight();
       Gyro_steer_straight();
     }
     Curve_R();
@@ -533,10 +534,10 @@ void slowspeedToFindCorrectDirection()
     runMotor(SlowSpeed);
     delay(100);
     StartNarrow_L();
-    Distance_Left = SpaceUS_L();
+    Distance_Left = SpaceUltraSonicLeft();
     while (Distance_Left < 80.0)
     {
-      Distance_Left = SpaceUS_L();
+      Distance_Left = SpaceUltraSonicLeft();
       Gyro_steer_straight();
     }
     Curve_L();
@@ -582,7 +583,7 @@ void operateNavigationThroughTurns()
     while (corners < 12)
     {
       // clockwise running for right
-      Distance_Right = SpaceUS_R();
+      Distance_Right = SpaceUltraSonicRight();
 
       // check for Right Turn
       if ((Distance_Right > 80) && (millis() - LastCurveTime >= NextCurveDelay))
@@ -602,7 +603,7 @@ void operateNavigationThroughTurns()
     {
 
       // counterclockwise running for left
-      Distance_Left = SpaceUS_L();
+      Distance_Left = SpaceUltraSonicLeft();
       // check for Left Turn
       if ((Distance_Left > 80) && (millis() - LastCurveTime >= NextCurveDelay))
       {

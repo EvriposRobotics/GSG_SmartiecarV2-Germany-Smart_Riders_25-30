@@ -344,9 +344,9 @@ Software-Guidelines:
 
 ## Contributors 👥
 
-- [Nezar187](https://github.com/Nezar187)
-- [NoahPX44](https://github.com/NoahPX44)
-- [LuciusFisch](https://github.com/LuciusFisch)
+- [Nezar187](https://github.com/Nezar187) [Photo](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/ce8f6c18-1ca7-4d61-b73c-b7d965e4d08b)
+- [NoahPX44](https://github.com/NoahPX44) [Photo](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/ecd17aab-c33a-4dee-b5a0-b53c97471a76)
+- [LuciusFisch](https://github.com/LuciusFisch) [Photo](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/cce8432b-53e6-4538-ac3e-9ce5f98c23fc)
 
 [Team Photos and Portais](Teamphotos)
 

@@ -16,7 +16,7 @@ int16_t dist_Left = 0;
 int16_t dist_Right = 0;
 int16_t dist_Front = 0;
 
-int SpaceUS_F()
+int SpaceUltraSonicFront()
 {
         // Sending the trigger pulse
         int16_t dist, temp;
@@ -47,7 +47,7 @@ int SpaceUS_F()
         return int(dist);
 }
 
-int SpaceUS_L()
+int SpaceUltraSonicLeft()
 {
         // Sending the trigger pulse
         int16_t dist, temp;
@@ -78,7 +78,7 @@ int SpaceUS_L()
         return int(dist);
 }
 
-int SpaceUS_R()
+int SpaceUltraSonicRight()
 {
         // Sending the trigger pulse
         int16_t dist, temp;

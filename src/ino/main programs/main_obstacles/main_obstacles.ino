@@ -71,9 +71,10 @@ float angle;
 float danger;
 float correction_Left = -5.0;
 float correction_Right = 15.0;
+float StraightAngle = 0.0;
 
 // Driving direction 'U' for Unknown
-char TargetDirection = 'U';
+char DrivingDirection = 'U';
 
 // Speeds
 int NormalSpeed = 100;
@@ -84,14 +85,12 @@ int StartSpeed = 100;
 // obstacle block 'U' for unknown
 char Block = 'U';
 
-// Block
+// Block variables
 char P_color = 'U'; // Unknown
+char P_wall_L = 'N';
+char P_wall_R = 'N';
 int P_x = 0;
-int P_y = 0;
 int P_height = 0;
-int P_width = 0;
-int P_Bottom_edge = 0;
-int P_Distance = 0;
 
 // last counted corners
 unsigned long LastCurveTime;
@@ -137,6 +136,41 @@ void ProgramStop()
 }
 
 /////////////////////////////////////////////////////////////////////
+// Gyro_steer_straight()
+// uses the gyro to orient itself straight to the track
+////////////////////////////////////////////////////////////////////
+void Gyro_steer_straight()
+{
+  float angle;
+  int Speed;
+  int Steering;
+  angle = IMU_getAngle();
+
+  Steering = (angle - StraightAngle) * 0.8; // 0.8 = wiggle factor
+  if (Steering > 15.0)
+  {
+    Steering = 15;
+  }
+  else if (Steering < -15.0)
+  {
+    Steering = -15;
+  }
+
+  if (Steering < 0)
+  {
+    Steering = Steering * (-1);
+    right(Steering);
+  }
+
+  else
+  {
+    left(Steering);
+  }
+
+  // delay(20);
+}
+
+/////////////////////////////////////////////////////////////////////
 // CalculateTargetDirection()
 // calculates the target direction for the next curve
 /////////////////////////////////////////////////////////////////////
@@ -144,28 +178,45 @@ float CalculateTargetDirection()
 {
   float angle;
   float CalculateAngle = 0.0;
+  angle = CalculateStraightAngle();
+  if (DrivingDirection == 'R')
+  {
+    CalculateAngle = angle + 90.0;
+  }
+
+  else if (DrivingDirection == 'L')
+  {
+    CalculateAngle = angle - 90.0;
+  }
+
+  return CalculateAngle;
+}
+
+/////////////////////////////////////////////////////
+// CalculateStraightAngle()
+// calculates the target angle for the next curve
+/////////////////////////////////////////////////////
+float CalculateStraightAngle()
+{
   float StraightAngle = 0.0;
+  float angle;
   int factor = 0;
   angle = IMU_getAngle();
-  if (TargetDirection == 'R')
+  if (DrivingDirection == 'R')
   {
     // calculate straight direction
     factor = int((angle + 45.0) / 90.0); // int cuts off fractions
     StraightAngle = factor * 90.0;
-    // calculate turn direction
-    CalculateAngle = StraightAngle + 90.0;
   }
 
-  else if (TargetDirection == 'L')
+  else if (DrivingDirection == 'L')
   {
     // calculate straight direction
     factor = int((angle - 45.0) / 90.0); // int cuts off fractions
     StraightAngle = factor * 90.0;
-    // calculate turn direction
-    CalculateAngle = StraightAngle - 90.0;
   }
 
-  return CalculateAngle;
+  return StraightAngle;
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -200,8 +251,8 @@ void TurnLeft()
   stopMotor();
   corners = corners + 1;
   center();
-  Distance_Left = SpaceUS_L();
-  Distance_Right = SpaceUS_R();
+  Distance_Left = SpaceUltraSonicLeft();
+  Distance_Right = SpaceUltraSonicRight();
   lcd.setRGB(255, 255, 255);
   LastCurveTime = millis();
   runMotor(SlowSpeed);
@@ -240,8 +291,8 @@ void TurnRight()
   stopMotor();
   corners = corners + 1;
   center();
-  Distance_Left = SpaceUS_L();
-  Distance_Right = SpaceUS_R();
+  Distance_Left = SpaceUltraSonicLeft();
+  Distance_Right = SpaceUltraSonicRight();
   lcd.setRGB(255, 255, 255);
   LastCurveTime = millis();
   runMotor(SlowSpeed);
@@ -285,7 +336,7 @@ void alignCenter()
 void alignLeft()
 {
   int Steering;
-  Distance_Left = SpaceUS_L();
+  Distance_Left = SpaceUltraSonicLeft();
   Steering = (Distance_Left - walldistance) * 0.9;
   if (Steering > 30.0)
   {
@@ -318,7 +369,7 @@ void alignRight()
 {
   int Steering;
 
-  Distance_Right = SpaceUS_R();
+  Distance_Right = SpaceUltraSonicRight();
 
   Steering = (walldistance - Distance_Right) * 0.9;
   if (Steering > 30.0)
@@ -379,8 +430,8 @@ void CurveLeftUntilBlock()
   delay(250);
   stopMotor();
   runMotor(SlowSpeed);
-  Distance_Left = SpaceUS_L();
-  Distance_Right = SpaceUS_R();
+  Distance_Left = SpaceUltraSonicLeft();
+  Distance_Right = SpaceUltraSonicRight();
   lcd.setRGB(255, 255, 255);
   LastCurveTime = millis();
 }
@@ -418,17 +469,17 @@ void CurveRightUntilBlock()
   delay(250);
   stopMotor();
   runMotor(SlowSpeed);
-  Distance_Left = SpaceUS_L();
-  Distance_Right = SpaceUS_R();
+  Distance_Left = SpaceUltraSonicLeft();
+  Distance_Right = SpaceUltraSonicRight();
   lcd.setRGB(255, 255, 255);
   LastCurveTime = millis();
 }
 
 /////////////////////////////////////////////////////////////////////
-// Red_Block_In_Sight()
+// DriveUntilRedBlockInSight()
 // drives towards red block and tries to drive right
 /////////////////////////////////////////////////////////////////////
-void Red_Block_In_Sight()
+void DriveUntilRedBlockInSight()
 {
   findNextPillar();
   if (P_x > Picturemiddle_x - 10)
@@ -450,19 +501,19 @@ void Red_Block_In_Sight()
     }
   }
   center();
-  Distance_Front = SpaceUS_F();
+  Distance_Front = SpaceUltraSonicFront();
   while (Distance_Front > 30)
   {
     delay(50);
-    Distance_Front = SpaceUS_F();
+    Distance_Front = SpaceUltraSonicFront();
   }
 }
 
 /////////////////////////////////////////////////////////////////////
-// Green_Block_In_Sight()
+// DriveUntilGreenBlockInSight()
 // drives towards green block and tries to drive left
 /////////////////////////////////////////////////////////////////////
-void Green_Block_In_Sight()
+void DriveUntilGreenBlockInSight()
 {
   findNextPillar();
   if (P_x > Picturemiddle_x - 10)
@@ -484,18 +535,19 @@ void Green_Block_In_Sight()
     }
   }
   center();
-  Distance_Front = SpaceUS_F();
+  Distance_Front = SpaceUltraSonicFront();
   while (Distance_Front > 30)
   {
     delay(50);
-    Distance_Front = SpaceUS_F();
+    Distance_Front = SpaceUltraSonicFront();
   }
 }
 
 /////////////////////////////////////////////////////////////////////
-// Evade_Left()
-// evades left
-void Evade_Left()
+// EvadeGreenPillar()
+// evades green block to the left until it is not in sight
+/////////////////////////////////////////////////////////////////////
+void EvadeGreenPillar()
 {
   float angle;
   float TargetDirection;
@@ -518,7 +570,6 @@ void Evade_Left()
   right(25);
   runMotor(CurveSpeed);
   // steer until orientation reached
-  // TargetDirection = IMU_TD_gerade();
   angle = IMU_getAngle();
   while (angle < TargetDirection)
   {
@@ -532,7 +583,11 @@ void Evade_Left()
   lcd.setRGB(255, 255, 255);
 }
 
-void Evade_Right()
+/////////////////////////////////////////////////////////////////////
+// EvadeRedPillar()
+// evades red block to the right until it is not in sight
+/////////////////////////////////////////////////////////////////////
+void EvadeRedPillar()
 {
   float angle;
   float TargetDirection;
@@ -574,9 +629,9 @@ void Evade_Right()
 /////////////////////////////////////////////////////////////////////
 void measureAllCurrentDistances()
 {
-  Distance_Front = SpaceUS_F();
-  Distance_Left = SpaceUS_L();
-  Distance_Right = SpaceUS_R();
+  Distance_Front = SpaceUltraSonicFront();
+  Distance_Left = SpaceUltraSonicLeft();
+  Distance_Right = SpaceUltraSonicRight();
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -594,7 +649,7 @@ void printAllCurrentDistancesToLCD()
   lcd.setCursor(0, 1);
   lcd.print(angle);
   lcd.print("  ");
-  lcd.print(TargetDirection);
+  lcd.print(DrivingDirection);
   lcd.print("  ");
   lcd.print(P_color);
 }
@@ -624,13 +679,70 @@ void saveCurrentTime()
   LastCurveTime = millis() - NextCurveDelay;
 }
 
-/////////////////////////////////////////////////////////////////////
-// Get_Current_Block()
-// gets the current block and cleares the LCD
-/////////////////////////////////////////////////////////////////////
-void Get_Current_Block()
+///////////////////////////////////////////////////////////////////////
+// evaluateRaspiData()
+// evaluates the data from the raspi handshake
+///////////////////////////////////////////////////////////////////////
+void evaluateRaspiData()
 {
-  findNextPillar();
+  if (P_color != 'U')
+  {
+    if (P_x < 110)
+    {
+      DrivingDirection = 'L';
+    }
+    else if (P_x > 210)
+    {
+      DrivingDirection = 'R';
+    }
+  }
+}
+
+///////////////////////////////////////////////////////////
+// startPhase()
+// starts the phase
+///////////////////////////////////////////////////////////
+void startPhase()
+{
+  runMotor(SlowSpeed);
+
+  if ((P_color == 'R') && (P_x < 210) && (P_x == 110))
+  {
+    EvadeRedPillar();
+  }
+
+  else if ((P_color == 'L') && (P_x > 210) && (P_x == 110))
+  {
+    EvadeGreenPillar();
+  }
+
+  else
+  {
+    while (Distance_Front > 20)
+    {
+      Gyro_steer_straight();
+      Distance_Front = SpaceUltraSonicFront();
+    }
+    stopMotor();
+
+    if (DrivingDirection == 'U')
+    {
+      Distance_Left = SpaceUltraSonicLeft();
+      Distance_Right = SpaceUltraSonicRight();
+
+      if (Distance_Left > 80)
+      {
+        DrivingDirection = 'L';
+        TurnLeft();
+      }
+
+      else if (Distance_Right > 80)
+      {
+        DrivingDirection = 'R';
+        TurnRight();
+      }
+    }
+  }
 }
 
 ///////////////////////////////////////////
@@ -647,13 +759,14 @@ void Get_Current_Block()
 void setup()
 {
   Wire.begin();
-  // LCD SETUP
+
   pinMode(Button, INPUT); // button
+
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
   lcd.setRGB(255, 0, 0);
   lcd.print("obstacle race");
-  //------------------------------------------------
+
   // from Steering.h
   servosetup();
 
@@ -674,7 +787,7 @@ void setup()
   // distance to wall
   measureAllCurrentDistances();
 
-  Get_Current_Block();
+  findNextPillar();
 
   // count corners
   angle = IMU_getAngle();
@@ -696,8 +809,9 @@ void setup()
   // Steering centered
   center();
 
-  // slow start
-  runMotor(SlowSpeed);
+  startPhase();
+
+  stopMotor();
 }
 // Done
 
@@ -714,189 +828,4 @@ void setup()
 
 void loop()
 {
-
-  int coincidence;
-  // check for block
-
-  findNextPillar();
-  Distance_Front = SpaceUS_F();
-
-  // show block on LCD
-  if (P_color == 'R')
-  {
-    lcd.setRGB(255, 0, 0);
-  }
-  else if (P_color == 'L')
-  {
-    lcd.setRGB(0, 255, 0);
-  }
-  else
-  {
-    lcd.setRGB(255, 255, 255);
-  }
-
-  // red: check if block in sight
-  if ((P_color == 'R') && (P_x > 80) && (P_Bottom_edge > 150))
-  {
-    // if too close = slight reverse
-    if (P_Bottom_edge > 200)
-    {
-      runMotor_R(180);
-      delay(500);
-      stopMotor();
-      runMotor(SlowSpeed);
-    }
-    // red: evade right
-    Evade_Right();
-  }
-
-  else if ((P_color == 'L') && (P_x < 240) && (P_Bottom_edge > 150))
-  {
-    // if too close = slight reverse
-    if (P_Bottom_edge > 200)
-    {
-      runMotor_R(180);
-      delay(500);
-      stopMotor();
-      runMotor(SlowSpeed);
-    }
-    // green: evade left
-    Evade_Left();
-  }
-  else // no block in sight to evade
-  {
-
-    Distance_Front = SpaceUS_F();
-    Distance_Left = SpaceUS_L();
-    Distance_Right = SpaceUS_R();
-
-    if (TargetDirection == 'U')
-    {
-      if (Distance_Left > 80)
-      {
-        TargetDirection = 'L';
-      }
-      else if (Distance_Right > 80)
-      {
-        TargetDirection = 'R';
-      }
-    }
-
-    // infront wall
-    if (Distance_Front < 30) // close to wall
-    {
-
-      stopMotor();
-
-      if (millis() - LastCurveTime > NextCurveDelay) // corners detected
-      {
-        if (TargetDirection == 'U')
-        {
-          Distance_Left = SpaceUS_L();
-          Distance_Right = SpaceUS_R();
-          if (Distance_Left > 60)
-          {
-            TargetDirection = 'L';
-          }
-          else if (Distance_Right > 60)
-          {
-            TargetDirection = 'R';
-          }
-          else
-          {
-
-            // if TargetDirection still unclear, select at random
-            coincidence = random(2);
-            if (coincidence == 0)
-            {
-              TargetDirection = 'R';
-            }
-            else
-            {
-              TargetDirection = 'L';
-            }
-          }
-        }
-
-        lcd.setCursor(0, 0);
-        lcd.print(TargetDirection);
-        delay(500);
-        // check: turning or curve
-        if (TargetDirection == 'R')
-        {
-          Distance_Left = SpaceUS_L();
-          if (Distance_Left > 35)
-          {
-            TurnRight();
-          }
-          else
-          {
-            // back and curve
-            runMotor_R(180);
-            while (Distance_Front < 70)
-            {
-              delay(20);
-              Distance_Front = SpaceUS_F();
-            }
-            stopMotor();
-            CurveRightUntilBlock();
-          }
-        }
-        else // TargetDirection == L
-        {
-
-          Distance_Right = SpaceUS_R();
-          if (Distance_Right > 35)
-          {
-            TurnLeft();
-          }
-          else
-          {
-            // back and curve
-            runMotor_R(180);
-            while (Distance_Front < 60)
-            {
-              delay(20);
-              Distance_Front = SpaceUS_F();
-            }
-            stopMotor();
-            CurveLeftUntilBlock();
-          }
-          stopMotor();
-          lcd.setRGB(255, 255, 255); // End of curve, turning
-          delay(100);
-          runMotor(SlowSpeed);
-        }
-      } // end of curve detected
-
-      else
-      {
-        // emergency brake if obstacle not detected
-        runMotor_R(180);
-        delay(2000);
-        stopMotor();
-        delay(500);
-        runMotor(NormalSpeed);
-      }
-
-    } // end of distance < 25
-
-    else
-    {
-      // orientate towards the outer wall
-      Distance_Left = SpaceUS_L();
-      Distance_Right = SpaceUS_R();
-      if (TargetDirection == 'R')
-      {
-        alignLeft();
-      }
-      else if (TargetDirection == 'L')
-      {
-        alignRight();
-      }
-
-      delay(20);
-    }
-
-  } // End not a block to the evade in sight
 }

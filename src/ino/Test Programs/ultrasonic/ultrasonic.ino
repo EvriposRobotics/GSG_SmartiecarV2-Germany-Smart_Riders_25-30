@@ -20,9 +20,9 @@ void setup()
 void loop()
 {
     //distance definitions
-    int Distance_Left = SpaceUS_L();
-    int Distance = SpaceUS_F();
-    int Distance_Right = SpaceUS_R();
+    int Distance_Left = SpaceUltraSonicLeft();
+    int Distance = SpaceUltraSonicFront();
+    int Distance_Right = SpaceUltraSonicRight();
 
     //print all distances
     lcd.setCursor(0,0);

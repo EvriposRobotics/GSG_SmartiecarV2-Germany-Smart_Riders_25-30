@@ -30,7 +30,7 @@ void setup()
 //empty loop because everything is done is the setup
 void loop()
 {
-  int Distance = SpaceUS_F();
+  int Distance = SpaceUltraSonicFront();
   if(Distance<140) 
   {
     stopMotor();
