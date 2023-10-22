@@ -262,8 +262,25 @@ Softwarepackages:
 
 ## Software 💻
 
+<a name="software-development"></a>
+
+### Software Development
+
+![blockdiagram_software](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/5b52f9c3-a2cb-43c9-ac6e-0e6e4c6b5113)
+
+
+<a name="Opening-Race"></a>
+
+### Opening Race
+
+
+<a name="Obstacle-Race"></a>
+
+### Obstacle Race
 
 <a name="programming-languages"></a>
+
+
 
 
 ### Programming Languages 👩‍💻
