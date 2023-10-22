@@ -21,9 +21,12 @@
     - [Sensors](#Sensors)
     - [Components List](#components-list) 🔍
 3. [Software Design](#software) 💻👨‍💻
+    - [Software Development](#software-development)
+    - [Opening Race](#opening-race)
+    - [Obstacle Race](#obstacle-race)
     - [Programming Languages](#programming-languages) 👩‍💻
     - [Dependencies](#dependencies) 
-4. [Utilities](#utilities) 🛠
+5. [Utilities](#utilities) 🛠
     - [Failsafe Mechanisms](#failsafe)
     - [Debugging Tools](#debugging-tools) 🐞🔍
 6. [Team Photos](#team-photos) 📸
@@ -269,12 +272,29 @@ Softwarepackages:
 ![blockdiagram_software](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/5b52f9c3-a2cb-43c9-ac6e-0e6e4c6b5113)
 
 
-<a name="Opening-Race"></a>
+<a name="opening-race"></a>
 
 ### Opening Race
+![Diagram_open_phases](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/2c19f09d-0d59-42b5-858b-588c2e19e0fa)
+
+![Diagram_open_init_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/51bd0f29-fc57-4b6d-8ca0-c4c87b1cc3fe)
+
+![Diagram_open_start_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/256168aa-4b73-4df9-82f2-407d8ddf0279)
+
+![Diagram_open_run_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/55016df2-c66b-4c70-bcf0-099ffa39064f)
+
+![Diagram_open_end_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/3bef31ec-63fa-43af-b891-40bf17d13757)
 
 
-<a name="Obstacle-Race"></a>
+
+
+
+
+
+
+
+
+<a name="obstacle-race"></a>
 
 ### Obstacle Race
 
