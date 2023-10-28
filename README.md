@@ -442,7 +442,6 @@ The raspberry pi answers with the latest processing result string.
 First, we just wanted to send the data from the pi to the arduino as fast as possible, but this has a risk of the pi filling up the arduinos serial buffer.
 When the arduino then reads the next result, it would be already outdated. So we decided to let the raspberry pi process as fast as it can and just send data the most recent data to the arduino when it needs them.
 
-{flowchart raspberry_pi_main_run}
 ![Raspberry_Pi_main_run](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/b2b6ec6b-dc3f-4678-a3f4-ea79f93baadb)
 
 ------------------------------------------------
@@ -486,7 +485,7 @@ As these min and max values vary for different locations with different lights, 
 The tool has a trackbar for each value. It shows the live camera image and processes a mask, where green/red parts appear white, the rest appears black when the filter values are correct.
 The tool can store the adjusted filter values in files (one for green, one for red).
 
-{screenshot trackbar tool}
+![imgProc settings](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/d656a8d4-e3d8-497e-b361-78ad3aef6fb9)
 
 The live image processor reads these filter values from the files when it starts.
 The image processot then filters the image to get a mask for red, where the red pillars appears white and the rest appears black. 
@@ -502,10 +501,10 @@ The disadvantage is, that it just gives an area size information to determine th
 When we tested, we had the problem, that the blob detector sometimes detected part of the orange line as a red pillar.
 With the contours method, we can discard blobs where width is bigger than height to avoid this type of problem.
 
-{bild pillar_detection}
+
 ![pillar_detector](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/350c4fe0-f3b5-4a76-b5a1-d5e64a57f9b4)
 
-{diagram raspberry_pi_detect_pillars}
+
 ![Raspberry_Pi_detect_pillars](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/bdcc6720-e357-4e31-b171-1be4dae4c5e4)
 
 
@@ -520,7 +519,7 @@ As the camera has a wide angle lens, the raspberry pi can also detect pillars ri
 The pillar's x-position in the image tells the arduino whether the pillar in the image is in front or behind the curve.
 When the first pillar is detected behind the curve, the arduino already knows the turning direction.
 
-{diagram init phase}
+
 ![Diagram_obstacle_init_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/88528b2c-3c65-4423-a112-af514e76d03b)
 
 
