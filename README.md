@@ -226,6 +226,17 @@ The two step-downs both produce 5V,one is used for the controllers ( Raspberry  
 
 
 ### Sensors
+
+Our car is equipped with a total of four sensors.
+Three of them are ultrasonic sensors, which allow for the detection of nearby obstacles.
+In addition our vehicle has a gyro sensor, which is located in the second level of the car.
+Our gyro sensor helps measure rotational movements, providing more precise control.
+
+
+![Foto 01 10 23, 13 21 16](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/3d9320cd-b7b1-484e-a440-67566e307d7c)
+
+
+
 -Gyro
 - ultrasonic
 
