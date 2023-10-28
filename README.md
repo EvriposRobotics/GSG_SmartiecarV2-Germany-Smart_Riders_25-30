@@ -443,6 +443,7 @@ First, we just wanted to send the data from the pi to the arduino as fast as pos
 When the arduino then reads the next result, it would be already outdated. So we decided to let the raspberry pi process as fast as it can and just send data the most recent data to the arduino when it needs them.
 
 {flowchart raspberry_pi_main_run}
+![Raspberry_Pi_main_run](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/b2b6ec6b-dc3f-4678-a3f4-ea79f93baadb)
 
 ------------------------------------------------
 
@@ -502,8 +503,10 @@ When we tested, we had the problem, that the blob detector sometimes detected pa
 With the contours method, we can discard blobs where width is bigger than height to avoid this type of problem.
 
 {bild pillar_detection}
+![pillar_detector](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/350c4fe0-f3b5-4a76-b5a1-d5e64a57f9b4)
 
 {diagram raspberry_pi_detect_pillars}
+![Raspberry_Pi_detect_pillars](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/bdcc6720-e357-4e31-b171-1be4dae4c5e4)
 
 
 ## Obstacle Arduino Software
@@ -518,6 +521,8 @@ The pillar's x-position in the image tells the arduino whether the pillar in the
 When the first pillar is detected behind the curve, the arduino already knows the turning direction.
 
 {diagram init phase}
+![Diagram_obstacle_init_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/88528b2c-3c65-4423-a112-af514e76d03b)
+
 
 Our strategy for the obstacle race is to divide the necessary car movements into functions and then run a sequence of those functions.
 On the first level, we have a function to run a curve and a function to run a lane with obstacles.
