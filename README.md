@@ -247,7 +247,7 @@ The arduino is responsible to control all motors and sensors, the raspberry pi h
 
 Our car is equipped with a total of four sensors.
 Three of them are ultrasonic sensors, which allow for the detection of nearby obstacles.
-In addition our vehicle has a gyro sensor, which is located in the second level of the car.
+In addition our vehicle has a gyro sensor, which is located in the Third level of the car.
 Our gyro sensor helps measure rotational movements, providing more precise control.
 
 
