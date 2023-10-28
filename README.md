@@ -161,8 +161,9 @@ With this motor driver, the motor starts running at much lower PWM settings and 
 The braking distance is down to a few centimeters now. As it uses a different type (MOSFET) transistors, heat is much lower. 
 And it has a nice cable plugin socket, which was very convenient for our hardware layers concept.
 It also comes with a very good Arduino library by the manufacturer, which made it easy to use in the arduino software.
-{Bilder L298D und Cytron md13S einfügen}
 
+
+![rmsFhK30](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/8894ff8a-f424-47e5-81c8-1b6b1415c278)
 
 
 
