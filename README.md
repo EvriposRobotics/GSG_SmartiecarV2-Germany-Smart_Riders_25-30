@@ -12,13 +12,14 @@
     - [Mobility Management](#Mobility-Management)
     - [Chassis](#Chassis)
     - [Assembly Instructions](#assembly-instructions) 🛠
-    - [Schematics](#schematics) 📐👀
     - [Driving Motor and Gearing](#Driving-Motor-and-Gearing)
     - [Steering Mechanism](#Steering-Mechanism)
     - [Power and Sense Management](#Power-and-Sense-Management)  
     - [Power supply](#Power-supply)
     - [Controllers](#Controllers)
     - [Sensors](#Sensors)
+    - [Camera](#camera)
+    - [Schematics](#schematics) 📐👀
     - [Components List](#components-list) 🔍
 3. [Software Design](#software) 💻👨‍💻
     - [Software Development](#software-development)
@@ -137,12 +138,6 @@ Next you have to again cut the beams and assemble them according to the schemati
 ![Layer 3](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/d80702c1-a0fb-4a31-8272-6fe0d7570646)
 
 
-<a name="schematics"></a>
-
-
-### Schematics 📐
-
-Circuit schematics and hardware layouts are available in the [Schematics folder](schematics).
 
 
 <a name="Driving-Motor-and-Gearing"></a>
@@ -153,6 +148,19 @@ Circuit schematics and hardware layouts are available in the [Schematics folder]
 We tested two different motors. One which operates on 6V and another which does on 12V. In our last version of our car we used a 12V motor. We wanted to use the 6V motor so that we do not have so many different voltages in our car. In our testing the 6V motor broke quite often. The 12V motor was more reliable. That is why we decided to use the 12V motor instead of the 6V. After we had decided what motor to use we had to decide how to screw it to the frame. In our first version of our car the axis of the motor was parallel to the back axle. Because of the limited space we had we had to turn the motor so taht its axis pointed to the back axle. We connected the motor and the back axle with bevel gears for a 1:1 ratio.
 
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/f8b99575-93f0-4b29-bc44-e6aac457f7e1" width="50%">
+
+In our previous car version, we used a L298D motor driver. We had several issues with motor control. 
+With this driver, the minimum PWM speed control value to make the car start running was rather high, so we could not drive slow enough for a good control.
+As a result, the braking distance was also rather long, almost 30cm. Additionally, the L298D dissipates 1.4V as heat during operation.
+To solve these issues, we experimented with other motor drivers and finally decided to use the Cytron MD13S motor driver instead.
+With this motor driver, the motor starts running at much lower PWM settings and therefore allows us to drive much slower. 
+The braking distance is down to a few centimeters now. As it uses a different type (MOSFET) transistors, heat is much lower. 
+And it has a nice cable plugin socket, which was very convenient for our hardware layers concept.
+It also comes with a very good Arduino library by the manufacturer, which made it easy to use in the arduino software.
+{Bilder L298D und Cytron md13S einfügen}
+
+
+
 
 <a name="Steering-Mechanism"></a>
 
@@ -219,8 +227,18 @@ The two step-downs both produce 5V,one is used for the controllers ( Raspberry  
 
 
 ### Controllers
-- PI
-- Arduino
+In our previous car version, we used an Arduino Nano as a controller and a Smart Camera Module for the image processing. 
+Due to the problems with the smart camera solution, we wanted to replace it with a raspberry pi and our own image processing.
+We considered moving all functionality over to raspberry pi but decided against it. The arduino with its sensors worked quite well.
+We were afraid to hit hardware and compatibility problems we could not solve fast enough when running all on the raspberry pi.
+Due to having two controllers, we needed to let them communicate with each other. The communication runs over serial interface.
+We tried to establish the serial communcation via the RX/TX Pins of the raspberry pi and the arduino. 
+As the raspberry pi runs on 3.3V and the arduino on 5V, we needed a level shifter in between. But this solution did not work, the connection failed.
+Therefore, we got back to the easy way: the arduino is plugged into one of the USB ports of the raspberry pi.
+The problem we had to solve with this setup is, that on Power-on, the raspberry pi always resets the arduino when it opens the serial connection.
+We solved that with a software handshake between arduino and raspberry pi during startup.
+The arduino is responsible to control all motors and sensors, the raspberry pi has a camera attached to it and does the image processing.
+
 
 <a name="Sensors"></a>
 
@@ -235,10 +253,37 @@ Our gyro sensor helps measure rotational movements, providing more precise contr
 
 ![Foto 01 10 23, 13 21 16](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/3d9320cd-b7b1-484e-a440-67566e307d7c)
 
+In the front sensor grid, we have three ultrasonic sensors to measure distances to the left, the front and the right. 
+The ultrasonics are all mounted in the front part, as we use them to detect the curves. In the opening race, some of the streets can be narrow. To run a good curve,
+the car must sense the opening of the curve as soon as possible.
+We chose the DFRobot ultrasonic boards as they can be mounted easily on our chassis. Additionally, they have plastic covers to avoid damage when the robot runs into something.
+To run rather reliable turns and to go straight no matter which starting place, we use a Bosch BNO055 IMU sensor. 
+This sensor has a gyroscope, an accelerometer and a compass onboard. What we need from the sensor is the orientation angle on the field. In theory, a gyroscope only would do that.
+However, gyroscopes tend to drift, when mounted on moving vehicles. The BNO055 has an onboard processor to calculate reliable angles by combining measurements from all its sensors.
+As the compass is unreliable indoors, we switch it off and run on gyroscope and accelerometer data only.
+
+<a name="camera"></a>
 
 
--Gyro
-- ultrasonic
+### camera
+
+One of the problems withour previous smart cam was the angle of view. We wanted to use a wide angle camera.
+For raspberry pi 4, there are different options. The native raspberry pi v3 wide angle camera is not yet compatible with the opencv image processing package, so we could not use it.
+We tested the Waveshare wide angle camera and skipped it, because the color saturation of the image was poor. In some light conditions, it was hard to distinguish green pillars and the walls.
+The best fit was the raspberry pi HQ camera with M12 mount and a Arducam wide angle lens. The driver allows to set color saturation and brightness so we get a bright image with clear colors.
+The disadvantage of this camera is, that it is rather big and heavy compared with the others.
+
+
+
+
+
+<a name="schematics"></a>
+
+
+### Schematics 📐
+
+Circuit schematics and hardware layouts are available in the [Schematics folder](schematics).
+
 
 <a name="components-list"></a>
 
