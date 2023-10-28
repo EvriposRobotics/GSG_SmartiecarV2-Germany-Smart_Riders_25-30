@@ -243,7 +243,8 @@ Chassis:
 Driving and Steering components:
 - Tower Pro MG995 Servo
 - Motor Controller Cytron MD13S
-
+- totem CHRGM25-370 Gear Box Motor (12.0V)
+- Matrix Ep Rubber Tires (6,5 cm)
 
 Sensors and Controllers:
 - Arduino Nano
@@ -332,10 +333,44 @@ Softwarepackages:
 ### Failsafe Mechanisms
 We inculded different failsafe mechanisms to avoid mistakes.
 
-Hardware failsafe
+Hardware failsafe:
+
+Colorcoding the wires:
+We used different colored tape to mmark wires which belong to the same component or mechanism. It reduces the amount of mistakes we make while wiriring the car back up. 
+In our first competion one of the wires of our car became unplugged and it took us a while to locate where it had been before. Now we know where the wires belong and where to put them incase of an emergency.
+
+![arduino_wiring](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/df454e80-426f-4515-aae1-7075e8a02669)
 
 
 Software failsafe:
+
+Colorcoding the LCD:
+Like in our previous car we use LCD screen to give us feedback from our programm. The only difference is that we now use an arduino and a rasperry pi. That is why we use 2 LCD screens istead of one. We differenciate between colorcodes for the opening race and for the obstacle race. 
+
+Opening race (rasperry pi not in use):
+- red = starting sequence
+- yellow = ready to start -> wating for button (shwoing sensors)
+- green = driving
+- blue = curve
+
+obstacle race (rasperry pi):
+- red = autostart 
+- then showing what it sees through the camera
+- white = no pillar
+- red = red pillar
+- green = green pillar
+
+obstacele race (arduino):
+- red = starting sequence
+- yellow = ready -> waiting for button 
+- then showing what pillar color it is working on
+- white = no pillar
+- red = working on red pillar
+- green = working on green pillar
+- blue = curve
+- purple = turn 
+
+
 
 
 <a name="debugging-tools"></a>
