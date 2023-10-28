@@ -131,7 +131,7 @@ First start with the first layer. Cut the beams and connectors to size and conne
 Link Totemmaker Build Instructions
 After you built the frame you can build and attach the front axle. You will need the 3D printed parts from Totemmake.net. For the back axle we used parts from the Make-Block construction set, which we cut to size as well. Additionally you have to use another 3D printed part from Totemmaker.net to screw the motor in place. Because the frame is very thinn you will have to connect the motor with the back axle via a set of bevel gears. Next you build the second layer like shown in the schematics. You will have to cut the parts again:
 
-![Layer 2 ](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/74bc6621-d1cb-463a-be06-c65dcb2172c3)
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/41f219ce-67e9-4a65-90ca-390a18fd90e6" width="75%">
 
 Next you have to again cut the beams and assemble them according to the schematics to build the third layer:
 
