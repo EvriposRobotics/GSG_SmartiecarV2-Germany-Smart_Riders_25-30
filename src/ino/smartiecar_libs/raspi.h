@@ -2,12 +2,12 @@
 
 void raspi_handshake()
 {
-    Serial.begin(9600);
+    Serial.begin(115200);
     lcd.begin(16, 2);
     lcd.setRGB(255, 0, 0);
     lcd.setCursor(0, 0);
     lcd.print("Wait for Raspi");
-    Serial.print("ready");
+    Serial.print("ready\n");
 
     // while no data is available
     while (Serial.available() == 0)
@@ -29,7 +29,7 @@ String raspi_get_data()
     // empty string
     String data = "";
 
-    Serial.print("req"); // request data from raspi
+    Serial.print("r\n"); // request data from raspi
 
     // while no data is available
     while (Serial.available() == 0)
@@ -41,6 +41,5 @@ String raspi_get_data()
     // read answer
     data = Serial.readStringUntil('\n');
     lcd.setCursor(0, 0);
-    lcd.print(data);
     return data; // blocked reading functions
 }

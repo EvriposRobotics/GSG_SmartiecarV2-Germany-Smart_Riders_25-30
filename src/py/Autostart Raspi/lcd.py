@@ -25,6 +25,3 @@ def setColor_none():
     
 def print(message):
     setText(message)
-    
-def clear():
-    setText("\n\n")

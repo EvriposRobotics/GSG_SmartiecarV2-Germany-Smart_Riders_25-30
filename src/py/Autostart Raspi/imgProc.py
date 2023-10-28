@@ -11,12 +11,14 @@ frameHeight = 240
 # empty cam obj
 cam = None
 
-# empty detector obj
+#empty detector obj
 detector = None
-
+logged = False
 
 R_mask = None
 G_mask = None
+pathMask_L = None
+pathMask_R = None
 
 # green and red trackbar values as globally accessable variables
 G_h_min = 0
@@ -33,9 +35,9 @@ R_s_max = 0
 R_v_min = 0
 R_v_max = 0
 
-wz_L_x1 = 20
+wz_L_x1 = 40
 wz_L_y1 = 40
-wz_L_x2 = wz_L_x1 + 50
+wz_L_x2 = wz_L_x1 + 80
 wz_L_y2 = wz_L_y1 + 70
 
 wz_R_x1 = 320 - wz_L_x2
@@ -44,86 +46,62 @@ wz_R_x2 = 320 - wz_L_x1
 wz_R_y2 = wz_L_y2
 
 
-def startCam():
-    global cam
-
-    try:
-        cam = cv2.VideoCapture(0)
-        cam.set(cv2.CAP_PROP_FRAME_WIDTH, frameWidth)
-        cam.set(cv2.CAP_PROP_FRAME_HEIGHT, frameHeight)
-        cam.set(cv2.CAP_PROP_BRIGHTNESS, 80.0)
-        cam.set(cv2.CAP_PROP_CONTRAST, 80.0)
-        ret, frame = cam.read()  # read test frame
-        return True
-
-    except:
-        print("cam err")
-        return False
-
-
-def stopCam():
-    global cam
-    cam.release()
-
-
-def getImg():
-    ret, imgraw = cam.read()
-    imgraw2 = cv2.flip(imgraw, -1)
-    # crop Region of Interest img[y:y+h, x:x+w]
-    img_h = round(0.56 * frameHeight)
-    img_w = frameWidth
-    img = imgraw[0:img_h, 0:img_w]
-    img2 = cv2.flip(img, -1)
-
-    return img2
-
-
-def procImg(img):
-    data = "U 0 0"
-    # global imgHsv
-    # global imgWall_L
-    # global imgWall_R
-    # global imgWallZone_L
-    # global imgWallZone_R
-    global R_mask
-    global G_mask
-    # global B_mask
-
-    # init return values
-    pillar_col = "U"
-    pillar_dist = 0
-    pillar_x = 0
-    wall_l = "N"
-    wall_r = "N"
-
+def detectWalls(img):
+    wall_L = 'N'
+    wall_R = 'N'
     img_contrast1 = img
-    detector = cv2.SimpleBlobDetector_create()
+    #detector = cv2.SimpleBlobDetector_create()
+    
     # crop wall collision zones and convert to grayscale to filter walls
-    imgWallZone_L = cv2.cvtColor(
-        img_contrast1[wz_L_y1:wz_L_y2, wz_L_x1:wz_L_x2], cv2.COLOR_BGR2GRAY
-    )
-    imgWallZone_R = cv2.cvtColor(
-        img_contrast1[wz_R_y1:wz_R_y2, wz_R_x1:wz_R_x2], cv2.COLOR_BGR2GRAY
-    )
-    ret, imgWall_L = cv2.threshold(imgWallZone_L, 10, 255, cv2.THRESH_BINARY)
-    ret, imgWall_R = cv2.threshold(imgWallZone_R, 10, 255, cv2.THRESH_BINARY)
+    imgWallZone_L = img_contrast1[wz_L_y1:wz_L_y2, wz_L_x1:wz_L_x2]
+    imgWallZone_L = cv2.cvtColor(imgWallZone_L,cv2.COLOR_BGR2GRAY)
+    
+    imgWallZone_R = img_contrast1[wz_R_y1:wz_R_y2, wz_R_x1:wz_R_x2]
+    imgWallZone_R = cv2.cvtColor(imgWallZone_R,cv2.COLOR_BGR2GRAY)
+    
+       # dark parts (walls appear white in threshold image
+    ret,imgWall_L = cv2.threshold(imgWallZone_L,70,255,cv2.THRESH_BINARY_INV)
+    ret,imgWall_R = cv2.threshold(imgWallZone_R,70,255,cv2.THRESH_BINARY_INV)
+    
+    imgWall_L = cv2.medianBlur(imgWall_L,5)
+    imgWall_R = cv2.medianBlur(imgWall_R,5)
+ 
+    # Do a bitwise-and of pathMasks and image wall Zones to find walls:
+    # walls are white, the path projection is white, too -> collisions occur in areas, that are white in both images
+
+    collision_L = cv2.bitwise_and(imgWall_L,pathMask_L)
+    collision_R = cv2.bitwise_and(imgWall_R,pathMask_R)
+    
+    # Invert result image to be usable in opencv blob detector
+    collision_L = cv2.bitwise_not(collision_L)
+    collision_R = cv2.bitwise_not(collision_R)
+
+    collision_L = cv2.medianBlur(collision_L,5)
+    collision_R = cv2.medianBlur(collision_R,5)
 
     # opencv does not detect blobs touching the border, therefore draw white frame
-    imgWall_L = cv2.copyMakeBorder(
-        imgWall_L, 1, 1, 1, 1, cv2.BORDER_CONSTANT, value=[255, 255, 255]
-    )
-    imgWall_R = cv2.copyMakeBorder(
-        imgWall_R, 1, 1, 1, 1, cv2.BORDER_CONSTANT, value=[255, 255, 255]
-    )
+    collision_L = cv2.copyMakeBorder(collision_L,1,1,1,1, cv2.BORDER_CONSTANT, value=[255,255,255])
+    collision_R = cv2.copyMakeBorder(collision_R,1,1,1,1, cv2.BORDER_CONSTANT, value=[255,255,255])
 
-    wall_L_keypoints = detector.detect(imgWall_L)
-    wall_R_keypoints = detector.detect(imgWall_R)
+    wall_L_keypoints = detector.detect(collision_L)
+    wall_R_keypoints = detector.detect(collision_R)
+
     # Noise is filtered by detector minimum area
     if len(wall_L_keypoints) > 0:
-        wall_l = "Y"
+        wall_L = "Y"
+        
     if len(wall_R_keypoints) > 0:
-        wall_r = "Y"
+        wall_R = "Y"
+        
+    return wall_L, wall_R
+    
 
+def detectPillars(img):
+    global R_mask
+    global G_mask
+    global logged
+
+    img_contrast1 = img
     # convert to HSV to filter colors
     imgHsv = cv2.cvtColor(img_contrast1, cv2.COLOR_BGR2HSV)
 
@@ -224,6 +202,7 @@ def procImg(img):
         pillar_height = r_height
         pillar_width = r_width
         lcd.setColor_red()
+        
 
     else:
         pillar_col = "U"
@@ -232,18 +211,81 @@ def procImg(img):
         pillar_height = 0
         pillar_width = 0
         lcd.setColor_white()
+    
+    return pillar_col, pillar_x, pillar_y, pillar_height, pillar_width
 
-    data = (
-        pillar_col
-        + " "
-        + str(pillar_x)
-        + " "
-        + str(pillar_y)
-        + " "
-        + str(pillar_height)
-        + " "
-        + str(pillar_width)
-    )
+
+def startCam():
+    global cam
+
+    try:
+        cam = cv2.VideoCapture(0)
+        cam.set(cv2.CAP_PROP_FRAME_WIDTH, frameWidth)
+        cam.set(cv2.CAP_PROP_FRAME_HEIGHT, frameHeight)
+        cam.set(cv2.CAP_PROP_BRIGHTNESS, 80.0)
+        cam.set(cv2.CAP_PROP_CONTRAST, 80.0)
+        ret, frame = cam.read()  # read test frame
+        return True
+
+    except:
+        print("cam err")
+        return False
+
+
+def stopCam():
+    global cam
+    cam.release()
+
+
+def getImg():
+    ret, imgraw = cam.read()
+    imgraw2 = cv2.flip(imgraw, -1)
+    # crop Region of Interest img[y:y+h, x:x+w]
+    img_h = 134
+    img_w = 320
+    img = imgraw[0:img_h, 0:img_w]
+    img2 = cv2.flip(img, -1)
+
+    return img2
+
+
+def procImg(img):
+    data = "U 0 0"
+    # global imgHsv
+    # global imgWall_L
+    # global imgWall_R
+    # global imgWallZone_L
+    # global imgWallZone_R
+    global R_mask
+    global G_mask
+    global logged
+     # global B_mask
+
+    # init return values
+    pillar_col = "U"
+    pillar_dist = 0
+    pillar_x = 0
+    pillar_y = 0
+    pillar_height = 0
+    pillar_width = 0
+    wall_L = "N"
+    wall_R = "N"
+
+    if logged == False:
+        print("R_h_min=",R_h_min)
+        print("R_s_min=",R_s_min)
+        print("R_v_min=",R_v_min)
+        print("R_h_max=",R_h_max)
+        print("R_s_max=",R_s_max)
+        print("R_v_max=",R_v_max)
+        logged = True
+            
+    img_contrast1 = img
+    
+    #call the wall detector
+    wall_L, wall_R = detectWalls(img_contrast1)
+    pillar_col, pillar_x, pillar_y, pillar_height, pillar_width = detectPillars(img_contrast1)
+    data = pillar_col + " " + str(pillar_x) + " " + str(pillar_height) + " " + wall_L + " " + wall_R
     return data
 
 
@@ -282,9 +324,27 @@ def init():
     global R_v_min
     global R_v_max
     global detector
+    global logged
+    
+    global pathMask_L
+    global pathMask_R
+    
+    logged = False
+  
+  
+    #create blob detector
+    blob_params = cv2.SimpleBlobDetector_Params()
+    blob_params.filterByArea = True
+    blob_params.minArea = 30
+    blob_params.maxArea = 10000
+    blob_params.filterByCircularity = False
+    blob_params.filterByConvexity = False
+    blob_params.filterByInertia = False
 
-    detector = cv2.SimpleBlobDetector_create()
-    # hard coded paths
+    # Create blob detectors
+    detector = cv2.SimpleBlobDetector_create(blob_params)
+
+# hard coded paths
     file_path1 = "/home/pi/Desktop/tools/G_params.txt"
     file_path2 = "/home/pi/Desktop/tools/R_params.txt"
 
@@ -327,6 +387,20 @@ def init():
     R_v_max = load_params_from_file(
         file_path2, "R VAL Max", "R_HSV", 5, default_value=255
     )
+    
+    #load Mask for path projection
+    file_path3 = "/home/pi/Desktop/tools/Path_mask.jpg"
+    pathImg = cv2.imread(file_path3)
+    pathGray = cv2.cvtColor(pathImg,cv2.COLOR_BGR2GRAY)
+
+    #crop wall collision zones from path Image
+    pathGray_L = pathGray[wz_L_y1:wz_L_y2,wz_L_x1:wz_L_x2]
+    pathGray_R = pathGray[wz_R_y1:wz_R_y2,wz_R_x1:wz_R_x2]
+
+    # make masks for wall zones
+    ret,pathMask_L = cv2.threshold(pathGray_L,10,255,cv2.THRESH_BINARY)
+    ret,pathMask_R = cv2.threshold(pathGray_R,10,255,cv2.THRESH_BINARY)
+    
 
 
 ##############################################################################################################################

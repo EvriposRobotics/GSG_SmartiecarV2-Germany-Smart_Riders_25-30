@@ -2,8 +2,6 @@ import time
 import serial
 import serial.tools.list_ports
 
-import lcd
-
 # empty serial obj for all funcs
 ser = None
 
@@ -20,7 +18,7 @@ def handshake():
                 arduino_port = port
 
         # open serial port
-        ser = serial.Serial(arduino_port, 9600, timeout=1)
+        ser = serial.Serial(arduino_port, 115200, timeout=1)
         ser.reset_input_buffer()
 
         # Wait until arduino has reset
@@ -41,8 +39,5 @@ def handshake():
 def answer2req(data):
     if ser.in_waiting > 0:
         line = ser.readline().decode("utf-8").rstrip()
-        lcd.clear()
-        lcd.setText(line)
         msg = data + "\n"
         ser.write(msg.encode("utf-8"))
-        lcd.setText(msg)
