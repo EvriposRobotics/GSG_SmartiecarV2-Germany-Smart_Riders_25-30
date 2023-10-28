@@ -128,7 +128,7 @@ First start with the first layer. Cut the beams and connectors to size and conne
 
 ![Layer 1 SIde](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/01643d91-ad0c-45a6-9f48-54e8f5fc4d56)
 
-Link Totemmaker Build Instructions
+[Totemmaker Build Instructions](https://totemmaker.net/wiki/robocar-chassis-building-instruction/)
 After you built the frame you can build and attach the front axle. You will need the 3D printed parts from Totemmake.net. For the back axle we used parts from the Make-Block construction set, which we cut to size as well. Additionally you have to use another 3D printed part from Totemmaker.net to screw the motor in place. Because the frame is very thinn you will have to connect the motor with the back axle via a set of bevel gears. Next you build the second layer like shown in the schematics. You will have to cut the parts again:
 
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/41f219ce-67e9-4a65-90ca-390a18fd90e6" width="75%">
