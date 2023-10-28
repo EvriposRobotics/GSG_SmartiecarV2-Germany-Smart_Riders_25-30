@@ -12,13 +12,14 @@
     - [Mobility Management](#Mobility-Management)
     - [Chassis](#Chassis)
     - [Assembly Instructions](#assembly-instructions) 🛠
-    - [Schematics](#schematics) 📐👀
     - [Driving Motor and Gearing](#Driving-Motor-and-Gearing)
     - [Steering Mechanism](#Steering-Mechanism)
     - [Power and Sense Management](#Power-and-Sense-Management)  
     - [Power supply](#Power-supply)
     - [Controllers](#Controllers)
     - [Sensors](#Sensors)
+    - [Camera](#camera)
+    - [Schematics](#schematics) 📐👀
     - [Components List](#components-list) 🔍
 3. [Software Design](#software) 💻👨‍💻
     - [Software Development](#software-development)
@@ -127,22 +128,20 @@ First start with the first layer. Cut the beams and connectors to size and conne
 
 ![Layer 1 SIde](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/01643d91-ad0c-45a6-9f48-54e8f5fc4d56)
 
-Link Totemmaker Build Instructions
-After you built the frame you can build and attach the front axle. You will need the 3D printed parts from Totemmake.net. For the back axle we used parts from the Make-Block construction set, which we cut to size as well. Additionally you have to use another 3D printed part from Totemmaker.net to screw the motor in place. Because the frame is very thinn you will have to connect the motor with the back axle via a set of bevel gears. Next you build the second layer like shown in the schematics. You will have to cut you parts again:
+[Totemmaker Build Instructions](https://totemmaker.net/wiki/robocar-chassis-building-instruction/)
+After you built the frame you can build and attach the front axle. You will need the 3D printed parts from Totemmake.net. For the back axle we used parts from the Make-Block construction set, which we cut to size as well. Additionally you have to use another 3D printed part from Totemmaker.net to screw the motor in place. Because the frame is very thinn you will have to connect the motor with the back axle via a set of bevel gears. Next you build the second layer like shown in the schematics. You will have to cut the parts again:
 
-![Layer 2 ](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/74bc6621-d1cb-463a-be06-c65dcb2172c3)
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/41f219ce-67e9-4a65-90ca-390a18fd90e6" width="75%">
 
 Next you have to again cut the beams and assemble them according to the schematics to build the third layer:
 
-![Layer 3](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/d80702c1-a0fb-4a31-8272-6fe0d7570646)
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/d80702c1-a0fb-4a31-8272-6fe0d7570646" width="75%">
+
+Next you will have to put all of the other electronic components on the layers. The sensors and the controllers on the third layer. The power management on the second and the motor with the servo on the first.
+
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/88f3d4e9-18e9-400f-a58b-6c2d27d12d84" width="75%">
 
 
-<a name="schematics"></a>
-
-
-### Schematics 📐
-
-Circuit schematics and hardware layouts are available in the [Schematics folder](schematics).
 
 
 <a name="Driving-Motor-and-Gearing"></a>
@@ -153,6 +152,20 @@ Circuit schematics and hardware layouts are available in the [Schematics folder]
 We tested two different motors. One which operates on 6V and another which does on 12V. In our last version of our car we used a 12V motor. We wanted to use the 6V motor so that we do not have so many different voltages in our car. In our testing the 6V motor broke quite often. The 12V motor was more reliable. That is why we decided to use the 12V motor instead of the 6V. After we had decided what motor to use we had to decide how to screw it to the frame. In our first version of our car the axis of the motor was parallel to the back axle. Because of the limited space we had we had to turn the motor so taht its axis pointed to the back axle. We connected the motor and the back axle with bevel gears for a 1:1 ratio.
 
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/f8b99575-93f0-4b29-bc44-e6aac457f7e1" width="50%">
+
+In our previous car version, we used a L298D motor driver. We had several issues with motor control. 
+With this driver, the minimum PWM speed control value to make the car start running was rather high, so we could not drive slow enough for a good control.
+As a result, the braking distance was also rather long, almost 30cm. Additionally, the L298D dissipates 1.4V as heat during operation.
+To solve these issues, we experimented with other motor drivers and finally decided to use the Cytron MD13S motor driver instead.
+With this motor driver, the motor starts running at much lower PWM settings and therefore allows us to drive much slower. 
+The braking distance is down to a few centimeters now. As it uses a different type (MOSFET) transistors, heat is much lower. 
+And it has a nice cable plugin socket, which was very convenient for our hardware layers concept.
+It also comes with a very good Arduino library by the manufacturer, which made it easy to use in the arduino software.
+
+
+![rmsFhK30](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/8894ff8a-f424-47e5-81c8-1b6b1415c278)
+
+
 
 <a name="Steering-Mechanism"></a>
 
@@ -219,15 +232,63 @@ The two step-downs both produce 5V,one is used for the controllers ( Raspberry  
 
 
 ### Controllers
-- PI
-- Arduino
+In our previous car version, we used an Arduino Nano as a controller and a Smart Camera Module for the image processing. 
+Due to the problems with the smart camera solution, we wanted to replace it with a raspberry pi and our own image processing.
+We considered moving all functionality over to raspberry pi but decided against it. The arduino with its sensors worked quite well.
+We were afraid to hit hardware and compatibility problems we could not solve fast enough when running all on the raspberry pi.
+Due to having two controllers, we needed to let them communicate with each other. The communication runs over serial interface.
+We tried to establish the serial communcation via the RX/TX Pins of the raspberry pi and the arduino. 
+As the raspberry pi runs on 3.3V and the arduino on 5V, we needed a level shifter in between. But this solution did not work, the connection failed.
+Therefore, we got back to the easy way: the arduino is plugged into one of the USB ports of the raspberry pi.
+The problem we had to solve with this setup is, that on Power-on, the raspberry pi always resets the arduino when it opens the serial connection.
+We solved that with a software handshake between arduino and raspberry pi during startup.
+The arduino is responsible to control all motors and sensors, the raspberry pi has a camera attached to it and does the image processing.
+
 
 <a name="Sensors"></a>
 
 
 ### Sensors
--Gyro
-- ultrasonic
+
+Our car is equipped with a total of four sensors.
+Three of them are ultrasonic sensors, which allow for the detection of nearby obstacles.
+In addition our vehicle has a gyro sensor, which is located in the Third level of the car.
+Our gyro sensor helps measure rotational movements, providing more precise control.
+
+
+![Foto 01 10 23, 13 21 16](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/3d9320cd-b7b1-484e-a440-67566e307d7c)
+
+In the front sensor grid, we have three ultrasonic sensors to measure distances to the left, the front and the right. 
+The ultrasonics are all mounted in the front part, as we use them to detect the curves. In the opening race, some of the streets can be narrow. To run a good curve,
+the car must sense the opening of the curve as soon as possible.
+We chose the DFRobot ultrasonic boards as they can be mounted easily on our chassis. Additionally, they have plastic covers to avoid damage when the robot runs into something.
+To run rather reliable turns and to go straight no matter which starting place, we use a Bosch BNO055 IMU sensor. 
+This sensor has a gyroscope, an accelerometer and a compass onboard. What we need from the sensor is the orientation angle on the field. In theory, a gyroscope only would do that.
+However, gyroscopes tend to drift, when mounted on moving vehicles. The BNO055 has an onboard processor to calculate reliable angles by combining measurements from all its sensors.
+As the compass is unreliable indoors, we switch it off and run on gyroscope and accelerometer data only.
+
+<a name="camera"></a>
+
+
+### camera
+
+One of the problems withour previous smart cam was the angle of view. We wanted to use a wide angle camera.
+For raspberry pi 4, there are different options. The native raspberry pi v3 wide angle camera is not yet compatible with the opencv image processing package, so we could not use it.
+We tested the Waveshare wide angle camera and skipped it, because the color saturation of the image was poor. In some light conditions, it was hard to distinguish green pillars and the walls.
+The best fit was the raspberry pi HQ camera with M12 mount and a Arducam wide angle lens. The driver allows to set color saturation and brightness so we get a bright image with clear colors.
+The disadvantage of this camera is, that it is rather big and heavy compared with the others.
+
+
+
+
+
+<a name="schematics"></a>
+
+
+### Schematics 📐
+
+Circuit schematics and hardware layouts are available in the [Schematics folder](schematics).
+
 
 <a name="components-list"></a>
 
@@ -243,7 +304,8 @@ Chassis:
 Driving and Steering components:
 - Tower Pro MG995 Servo
 - Motor Controller Cytron MD13S
-
+- totem CHRGM25-370 Gear Box Motor (12.0V)
+- Matrix Ep Rubber Tires (6,5 cm)
 
 Sensors and Controllers:
 - Arduino Nano
@@ -269,34 +331,216 @@ Softwarepackages:
 
 ### Software Development
 
+Our car has two controllers, an arduino nano and a raspberry pi. 
+For our Arduino software, we have used Microsoft Visual Studio Code as our IDE. We have directly synchronized VSCode with our source code repository on GitHub, which is part of our overall documentation repository.
+The Arduino software is written in the Arduinio variant of C++.
+The complete arduino source code listings are found in https://github.com/Nezar187/GSG_SmartiecarV2/tree/main/src/ino.
+Our raspberry pi software is written in python 3. On the raspberry pi, we have used Thonny IDE as our development tool. The updating of the source code repository on Github for our python software has been done manually.
+The complete raspberry pi python source code listings are found in https://github.com/Nezar187/GSG_SmartiecarV2/tree/main/src/py.
+We have structured our source code in layers. For the arduino software, we have put all functions dealing with specific hardware components or specific interfaces in separate header files. This allows us to include them in the opening race and obstacle race programs as well. 
+Changes and fixes then apply to both programms immediately.
+In the main programs for the two race types, we have created own functions for repeating movement sequences like curves or steerig straight using gyro orientation angles.
+For a better overview, the main programms themselves are structured in race phases.
+
+{Bild Software Building blocks}
+
+
 ![blockdiagram_software](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/5b52f9c3-a2cb-43c9-ac6e-0e6e4c6b5113)
 
 
 <a name="opening-race"></a>
 
 ### Opening Race
+In the opening race, we only use the arduino and the sensors attached to it, so the software for the opening race is arduino software only.
+The opening race consists of four phases: init phase, start phase, run phase and end phase.
+
 ![Diagram_open_phases](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/2c19f09d-0d59-42b5-858b-588c2e19e0fa)
+
+Init Phase
+In the init phase, we initialize all sensors and motors. Next is a handshake with the raspberry pi, even though we do not really use the pi during the opening race. 
+The handshake is necessary, because the arduino is powered via the raspberry pi's USB port and we do not switch off the raspberry pi's image processing software during the opening race.
+When the image processing software on the raspberry pi starts, it automatically resets the arduino. 
+As the arduino boots much faster as the raspberry pi, there is a risk that we would start the opening race before the reset is done.
+To avoid that, we use the handshake to be sure that the reset is done before the arduino indicates that the init is completed.
+To show the current state of the software, we use a RGB LCD display. During initialization and handshake, the background color is red. 
+When all sensors are ready, the background color switches to yellow. Ee get a first set of measurements from all sensors and display them on the screen, so we can see if we get proper readings before the race is started.
+The arduino already tries to determine the turning direction (clockwise = R(ight) or counter-clockwise = L(eft)) of the race. 
+If the starting position is in a narrow street and distance to one of the walls is < 10cm, this is the inner wall. Now the arduino waits for the start button to be pressed.
+
 
 ![Diagram_open_init_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/51bd0f29-fc57-4b6d-8ca0-c4c87b1cc3fe)
 
+Start phase
+In the start phase, the arduino first runs the motor at slow speed. If the car is placed very close to a wall, it first steers away from that wall to avoid hitting it.
+The car now drives slowly and steers straight using its gyro, until one of the side ultrasonics measure a distance > 80 cm, which indicates a curve. If the turning direction was not already known, it is now.
+The arduino now runs the first curve.
+To make the most use of the gyro, we measure the orientation angle and map it to -180.0 to 180.0 degrees. 
+Whith every call of the gyro, we also accumulate the total angle the car has turned, so we can easily calculate the target angle of a curve by just adding 90 degrees for clockwise or subtracting 90 degrees for counter-clockwise.
+
+
 ![Diagram_open_start_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/256168aa-4b73-4df9-82f2-407d8ddf0279)
+
+Run phase
+In the run phase, the arduino knows the turning direction and so knows the inner wall. 
+So we can reduce ultrasonic measurement to just the sensor facing the inner wall, which makes our loop run faster and more reliable.
+The curve is detected as early as possible and a turn to a narrow street is detected before the car comes too close to the opposite outer wall.
+The arduino tries to steer with a configurable fixed distance to the inner wall, which lets the car run the shortest way possible. 30cm was the most stable in our tests. 
+When the distance to the inner wall exceeds 60cm, a curve is detected.
+Every curve is counted to go to the end phase after 12 curves.
+During start phase and run phase, the LCD background color is set to green while the car is driving along a wall and to blue when a curve is detected. 
+It is set back to green, when the inner wall is found again after the curve.
+These color changes can be watched easily while the car is driving (better than small text on the LCD screen). 
+In case of an error or strange behaviour of the car, this helps us to know immediately, in which part of the program we have to look for the problem.
+
 
 ![Diagram_open_run_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/55016df2-c66b-4c70-bcf0-099ffa39064f)
 
+After 12 curves, the car must find starting area the middle of the street no matter which inner wall setup. 
+Our strategy for this is to measure the distance to the opposite outer wall using our front ultrasonic sensor and stop when the distance is below 120cm. 
+Unfortunately, when the car points slightly to one side after the last curve, the front sensor gets readings from the side wall rather than the opposite wall and stops early.
+To avoid that, we drive slowly after the last curve and adjust the car's orientation with the gyro before starting to measure the front distance.
+
+
 ![Diagram_open_end_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/3bef31ec-63fa-43af-b891-40bf17d13757)
-
-
-
-
-
-
-
-
 
 
 <a name="obstacle-race"></a>
 
 ### Obstacle Race
+
+During the obstacle race, the raspberry pi processes camera images in an endless loop. The arduino receives the image processing results via serial interface and steers accordinrly.
+
+## Raspberry Pi software
+
+The purpose of the raspberry pi software is to process camera images and send the results to the arduino.
+We decided to use a rather small image resolution of 320x240 pixels. 
+These images are big enough for a good pillar detection and can be processed fast enough to use it for driving.
+We tried 640x480 first, but image processing was too slow with that resolution.
+Additionally, we crop the region of interest = view of the playfield from the image before processing it.
+First, this prevents the pillar detector from getting false positives from red or green colors in the environment, second, it further reduces the amount of data to be processed.
+
+The image processing is split into two major parts:
+red/green pillar detection and wall collision detection.
+The pillar detection function processes the camera image to find the biggest=nearest pillar. It returns 3 values:
+- color of the biggest pillar (R=red, G=green, U=unkown, when no pillar is in sight)
+- x-coordinate in pixels = left-right position of the pillar's center in the image -> this tells the arduino where to steer
+- pillar height in pixels, this tells the arduino the distance of the pillar
+
+The wall collision detector finds out, whether the car would collide with a wall on the left or right when it continues to drive in the current direction.
+It returns two values:
+- wall_L = Y for wall ahead on left side,  N for no collision danger
+- wall_R = Y for wall ahead on right side, N for no collision danger
+
+The main function combines these 5 values to a result string that can be sent to the arduino.
+For debugging and testing purposes, the raspberry pi has an RGB LCD, too.
+It sets its LCD's background color according to the color of the pillar currently in sight, white for no pillar.
+The current result string is displayed too.
+However, the raspberry pi image processing is faster than the LCD display, so the result string on the display is only updated ever 200 msec.
+
+To send the result to the arduino, we have developed a request-response protocol. The arduino send the character 'r' to request the most recent result. 
+The raspberry pi answers with the latest processing result string. 
+First, we just wanted to send the data from the pi to the arduino as fast as possible, but this has a risk of the pi filling up the arduinos serial buffer.
+When the arduino then reads the next result, it would be already outdated. So we decided to let the raspberry pi process as fast as it can and just send data the most recent data to the arduino when it needs them.
+
+![Raspberry_Pi_main_run](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/b2b6ec6b-dc3f-4678-a3f4-ea79f93baadb)
+
+------------------------------------------------
+
+- Raspberry Pi Software test
+
+To test the image processing software, we first took and saved a number of testimages on the playfield. 
+In the first test versions, we read one of the saved image from a file, processed it and displayed the steps on the screen.
+After the software worked from single files, we started using live images from the camera.
+The image processor module has its own unit test included. To use it, the background process running the autostarted image processor must be stopped to free the camera.
+Then the image processor module can be run interactively in the Thonny IDE and displays intermediate image processing steps to debug problems on the playfield.
+
+
+- Raspberry pi autostart
+
+When the car is powered up, the image processing software on the raspberry pi must startup automatically. 
+We start it as a background process using the operating system method systemd. 
+To be able to use our opencv image processing library, the background process must run as the user'pi', not the user 'root', which is the default.
+With systemd, it is possible to configure dependencies which must be started first and the user that shall be logged in.
+The systemctl tool of the raspberry pi operating system allows us to start and stop the background process manually.
+
+- Raspberry pi error handling
+
+Any outputs or errors are logged in the background processes' logfile and can be accessed with the systemctl tool.
+When running tests, we need to notice that the image processor has crashed. To catch any error exception, we use python try-except blocks.
+In our error handler, the Raspberry's LCD is switched to red and the text "CRASH" is displayed. 
+After that, the error handler raises the exception again that it can be written to the logfile by the operating system. 
+
+- Performance tests
+
+We tested the image processing and communication performance with a test program.
+In this test, the arduino reads image processing results from the raspberry pi as fast as possible. It the measures the time for 50 requests.
+We achieve a rate of about 25 images/frames per second. Without the arduino communication, the raspberry pi can run at about 35-40 images per second.
+
+## Pillar detection
+
+For the pillar detection, we filter the red and green parts from the image. To do this, we use the opencv image processing library.
+We first convert the image to the HSV (Hue,Saturation,Value) color space. This makes it easier to filter for specific colors.
+For the filter, we need minimum and maximum vales for the three HSV values for green and for red.
+As these min and max values vary for different locations with different lights, we developed a tool (trackbars_....py) to determine these.
+The tool has a trackbar for each value. It shows the live camera image and processes a mask, where green/red parts appear white, the rest appears black when the filter values are correct.
+The tool can store the adjusted filter values in files (one for green, one for red).
+
+![imgProc settings](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/d656a8d4-e3d8-497e-b361-78ad3aef6fb9)
+
+The live image processor reads these filter values from the files when it starts.
+The image processot then filters the image to get a mask for red, where the red pillars appears white and the rest appears black. 
+We then use the opencv functions findContours to find the white shape. With the opencv function boundingRect we get the center point, height and width of each white blob in the mask.
+We then calculate the biggest one (= biggest height), this is the nearest red pillar.
+We repeat the same for green. We then compare the biggest red and biggest green to find the biggest pillar in the image.
+Its color, x-coordinate of center point and height are returned. These are the minimum data the arduino needs for steering.
+
+In general, there are two different technics available in opencv to detect a pillar on the mask image. 
+One is the opencv simple blob detector, the other is findContours and boundingRect. 
+The blob detector has the advantage that it can filter small noise elements in advance by setting a minimum size in pixels. 
+The disadvantage is, that it just gives an area size information to determine the height. 
+When we tested, we had the problem, that the blob detector sometimes detected part of the orange line as a red pillar.
+With the contours method, we can discard blobs where width is bigger than height to avoid this type of problem.
+
+
+![pillar_detector](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/350c4fe0-f3b5-4a76-b5a1-d5e64a57f9b4)
+
+
+![Raspberry_Pi_detect_pillars](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/bdcc6720-e357-4e31-b171-1be4dae4c5e4)
+
+
+## Obstacle Arduino Software
+
+In the obstacle race, we use the arduino with the sensors attached to it and the raspberry pi.
+The obstacle race consists of four phases: init phase, start phase, run phase and end phase.
+
+The init phase is very similar to the init phase of the opening race. The difference is, that the arduino requests a first result from the raspberry pi.
+From the image processing result, the arduino knows, if there is a pillar in front of it. If yes, it needs to evade this pillar immediately.
+As the camera has a wide angle lens, the raspberry pi can also detect pillars right behind the first curve from the start position. 
+The pillar's x-position in the image tells the arduino whether the pillar in the image is in front or behind the curve.
+When the first pillar is detected behind the curve, the arduino already knows the turning direction.
+
+
+![Diagram_obstacle_init_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/88528b2c-3c65-4423-a112-af514e76d03b)
+
+
+Our strategy for the obstacle race is to divide the necessary car movements into functions and then run a sequence of those functions.
+On the first level, we have a function to run a curve and a function to run a lane with obstacles.
+In the runLane function, the car first drives towards the first obstacle. It approaches the obstacle until it is near enough to evade it.
+The car remembers the Straight direction for this lane and steers back to a straight orientation after evading the obstacle. 
+It then finds out, whether there is a second obstacle in this lane. If yes, it approaches it and then evades it. If there is no second obstacle,
+our car steers to the center of the lane and then goes straight with its gyro until the next curve. 
+It then uses its front ultrasonic to know when it has arrived at the curve.
+After this, the lane is done.
+Then, our car executes a runCurve. The goal of the runCurve function is to steer to the straight orientation of the next lane.
+We also try to steer to a position in the center of the curve field. From this position, we can steer to each possible next obstacle behind the curve.
+To reach the center position, we have implemented a curve- and a turn- maneuver for each driving direction.
+The curve maneuver is chosen when the car starts the curve from very near the outer wall. It changes its LCD color to blue to indicate that.
+If there is enough room to the outer wall, the car runs a turn. For the turn, it changes its LCD color to purple.
+A turn starts with turning backwards for the first 45 degrees and the turn forward for the second 45 degrees. A curve does it vice-versa.
+ 
+
+
+
 
 <a name="programming-languages"></a>
 
@@ -332,10 +576,50 @@ Softwarepackages:
 ### Failsafe Mechanisms
 We inculded different failsafe mechanisms to avoid mistakes.
 
-Hardware failsafe
+Hardware failsafe:
+
+Colorcoding the wires:
+We used different colored tape to mmark wires which belong to the same component or mechanism. It reduces the amount of mistakes we make while wiriring the car back up. 
+In our first competion one of the wires of our car became unplugged and it took us a while to locate where it had been before. Now we know where the wires belong and where to put them incase of an emergency.
+
+![arduino_wiring](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/df454e80-426f-4515-aae1-7075e8a02669)
+
+Warning light:
+On the left side of our car we put the step down converter (5.0V). 
+It has a light which turns of automticly and shuts the usb port when it recieves less than 7.5V. When that happens 
+the servo won´t work. That is when we know that we have to switch the batteries. Ideally we switch it before that, but this lamp
+indicates us when we have to incase we forget to switch it before.
 
 
 Software failsafe:
+
+Colorcoding the LCD:
+Like in our previous car we use LCD screen to give us feedback from our programm. The only difference is that we now use an arduino and a rasperry pi. That is why we use 2 LCD screens istead of one. We differenciate between colorcodes for the opening race and for the obstacle race. 
+
+Opening race (rasperry pi not in use):
+- red = starting sequence
+- yellow = ready to start -> wating for button (shwoing sensors)
+- green = driving
+- blue = curve
+
+obstacle race (rasperry pi):
+- red = autostart 
+- then showing what it sees through the camera
+- white = no pillar
+- red = red pillar
+- green = green pillar
+
+obstacele race (arduino):
+- red = starting sequence
+- yellow = ready -> waiting for button 
+- then showing what pillar color it is working on
+- white = no pillar
+- red = working on red pillar
+- green = working on green pillar
+- blue = curve
+- purple = turn 
+
+
 
 
 <a name="debugging-tools"></a>
