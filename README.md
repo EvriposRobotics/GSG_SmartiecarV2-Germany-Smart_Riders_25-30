@@ -129,13 +129,17 @@ First start with the first layer. Cut the beams and connectors to size and conne
 ![Layer 1 SIde](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/01643d91-ad0c-45a6-9f48-54e8f5fc4d56)
 
 Link Totemmaker Build Instructions
-After you built the frame you can build and attach the front axle. You will need the 3D printed parts from Totemmake.net. For the back axle we used parts from the Make-Block construction set, which we cut to size as well. Additionally you have to use another 3D printed part from Totemmaker.net to screw the motor in place. Because the frame is very thinn you will have to connect the motor with the back axle via a set of bevel gears. Next you build the second layer like shown in the schematics. You will have to cut you parts again:
+After you built the frame you can build and attach the front axle. You will need the 3D printed parts from Totemmake.net. For the back axle we used parts from the Make-Block construction set, which we cut to size as well. Additionally you have to use another 3D printed part from Totemmaker.net to screw the motor in place. Because the frame is very thinn you will have to connect the motor with the back axle via a set of bevel gears. Next you build the second layer like shown in the schematics. You will have to cut the parts again:
 
 ![Layer 2 ](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/74bc6621-d1cb-463a-be06-c65dcb2172c3)
 
 Next you have to again cut the beams and assemble them according to the schematics to build the third layer:
 
-![Layer 3](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/d80702c1-a0fb-4a31-8272-6fe0d7570646)
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/d80702c1-a0fb-4a31-8272-6fe0d7570646" width="75%">
+
+Next you will have to put all of the other electronic components on the layers. The sensors and the controllers on the third layer. The power management on the second and the motor with the servo on the first.
+
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/88f3d4e9-18e9-400f-a58b-6c2d27d12d84" width="75%">
 
 
 
