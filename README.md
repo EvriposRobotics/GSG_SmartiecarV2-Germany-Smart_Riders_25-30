@@ -4,7 +4,6 @@
 
 ![logo](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/ee130cae-55c6-4d7b-ba02-26129456f831)
 
-# !! Please note: this repository is still under construction!! 
 ## Table of Contents 📚👇
 
 1. [Overview](#overview) 🌟
