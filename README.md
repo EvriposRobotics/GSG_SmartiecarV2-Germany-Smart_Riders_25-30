@@ -4,12 +4,12 @@
 
 ![logo](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/ee130cae-55c6-4d7b-ba02-26129456f831)
 
-# !! Please note: this repository is still under construction!! 
 ## Table of Contents 📚👇
 
 1. [Overview](#overview) 🌟
 2. [Design Process](#Design-Process)🔧
-    - [Mobility Management](#Mobility-Management)
+3. [Car Photos](#carphoto)
+4. [Mobility Management](#Mobility-Management)
     - [Chassis](#Chassis)
     - [Assembly Instructions](#assembly-instructions) 🛠
     - [Driving Motor and Gearing](#Driving-Motor-and-Gearing)
@@ -21,19 +21,19 @@
     - [Camera](#camera)
     - [Schematics](#schematics) 📐👀
     - [Components List](#components-list) 🔍
-3. [Software Design](#software) 💻👨‍💻
+5. [Software Design](#software) 💻👨‍💻
     - [Software Development](#software-development)
     - [Opening Race](#opening-race)
     - [Obstacle Race](#obstacle-race)
     - [Programming Languages](#programming-languages) 👩‍💻
     - [Dependencies](#dependencies) 
-5. [Utilities](#utilities) 🛠
+6. [Utilities](#utilities) 🛠
     - [Failsafe Mechanisms](#failsafe)
     - [Debugging Tools](#debugging-tools) 🐞🔍
-6. [Team Photos](#team-photos) 📸
-7. [Demonstration Videos](#demonstration-videos) 🎥
-8. [Contributors](#contributors) 👥
-9. [Resources](#sources) ℹ
+7. [Team Photos](#team-photos) 📸
+8. [Demonstration Videos](#demonstration-videos) 🎥
+9. [Contributors](#contributors) 👥
+10. [Resources](#sources) ℹ
 
    
 <a name="overview"></a>
@@ -81,6 +81,19 @@ inprove:
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/40d8d0fe-efb5-4642-bb60-c71df9333944" width="75%">
 
 
+
+<a name="carphoto"></a>
+
+
+### Car Photos
+
+Here are our official photos of our car:
+
+![All Pictures](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/9b42ea9a-2da7-4fc8-b259-429de187d35e)
+
+
+For high resulution pictures please visit: [Car Photos](Carphotos)
+
 <a name="Mobility-Management"></a>
 
 
@@ -106,7 +119,7 @@ Layer 3:
 
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/86b0d644-9015-47d7-bda9-f8d0e95e0f0b" width="50%">
 
-
+For more sketches of the chassis please visit [Schematics](schematics)
 
 
 Tires:
@@ -163,8 +176,7 @@ And it has a nice cable plugin socket, which was very convenient for our hardwar
 It also comes with a very good Arduino library by the manufacturer, which made it easy to use in the arduino software.
 
 
-![rmsFhK30](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/8894ff8a-f424-47e5-81c8-1b6b1415c278)
-
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/8894ff8a-f424-47e5-81c8-1b6b1415c278" width="50%">
 
 
 <a name="Steering-Mechanism"></a>
@@ -181,10 +193,9 @@ Steering Trapeze:
 
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/d627f769-6dab-4882-8252-478ff478e4c7" width="50%">
 
-Because of the layers in our car, the servo motor for the steering had to be mounted on the first (lowest) layer. Because of that it was difficult to connect the servo with the steering mechanism. The plastic beams from the layer around the servo limited its range of motion. That is why we had to extend the steering rod to succesfully connect the servo to the steering mechanism. The servo is now directly connected to the steering mechanism via the steering shaft.
+Because of the layers in our car, the servo motor for the steering had to be mounted on the first (lowest) layer. Because of that it was difficult to connect the servo with the steering mechanism. The plastic beams from the layer around the servo limited its range of motion. That is why we had to extend the connection between the steering shaft and the servo. The servo is now directly connected to the steering mechanism via the steering shaft.
 
-(Picture steering rod)
-
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/187e7521-fa72-4f78-aafa-8d5d0df6fac5" width="75%">
 
 
 <a name="Power-and-Sense-Management"></a>
@@ -220,9 +231,8 @@ The on/off switch is connectetet directly to the output of the Lipo Behind the s
 
 The step-up converter produces 12V for our motor driver. 
 The two step-downs both produce 5V,one is used for the controllers ( Raspberry  Pi and Arduino ), the other for the steering servo and lights.
- See circuit diagram for details on connections.
- 
-  
+See circuit diagram for details on connections.
+[Schematics](#schematics)
 
 
 
@@ -288,6 +298,13 @@ The disadvantage of this camera is, that it is rather big and heavy compared wit
 ### Schematics 📐
 
 Circuit schematics and hardware layouts are available in the [Schematics folder](schematics).
+
+Circuit Diagramm:
+
+In our last car we used HCSR 04 Ultra- Sonic Sensors. The ones we use now are compatible but have a common echo and trigger pin. That is why we connected the two pins.
+
+![circuit diagram3](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/fea9d000-b137-442d-b9b0-54673bf2bf8d)
+
 
 
 <a name="components-list"></a>
@@ -356,7 +373,8 @@ The opening race consists of four phases: init phase, start phase, run phase and
 
 ![Diagram_open_phases](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/2c19f09d-0d59-42b5-858b-588c2e19e0fa)
 
-Init Phase
+## Init Phase
+
 In the init phase, we initialize all sensors and motors. Next is a handshake with the raspberry pi, even though we do not really use the pi during the opening race. 
 The handshake is necessary, because the arduino is powered via the raspberry pi's USB port and we do not switch off the raspberry pi's image processing software during the opening race.
 When the image processing software on the raspberry pi starts, it automatically resets the arduino. 
@@ -370,7 +388,8 @@ If the starting position is in a narrow street and distance to one of the walls 
 
 ![Diagram_open_init_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/51bd0f29-fc57-4b6d-8ca0-c4c87b1cc3fe)
 
-Start phase
+## Start phase
+
 In the start phase, the arduino first runs the motor at slow speed. If the car is placed very close to a wall, it first steers away from that wall to avoid hitting it.
 The car now drives slowly and steers straight using its gyro, until one of the side ultrasonics measure a distance > 80 cm, which indicates a curve. If the turning direction was not already known, it is now.
 The arduino now runs the first curve.
@@ -380,7 +399,8 @@ Whith every call of the gyro, we also accumulate the total angle the car has tur
 
 ![Diagram_open_start_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/256168aa-4b73-4df9-82f2-407d8ddf0279)
 
-Run phase
+## Run phase
+
 In the run phase, the arduino knows the turning direction and so knows the inner wall. 
 So we can reduce ultrasonic measurement to just the sensor facing the inner wall, which makes our loop run faster and more reliable.
 The curve is detected as early as possible and a turn to a narrow street is detected before the car comes too close to the opposite outer wall.
@@ -676,7 +696,11 @@ Software-Guidelines:
 
 ## Resources
 - Help with code Errors [Stackoverflow](https://stackoverflow.com/)
+- Ackerman Steering Mechanism [Wikipedia](https://en.wikipedia.org/wiki/Ackermann_steering_geometry)
+- [Totemmaker Build Instructions](https://totemmaker.net/wiki/robocar-chassis-building-instruction/)
+- [Help with adafruit](https://learn.adafruit.com/)
+- [Help with Open CV](https://learnopencv.com/)
+- [GitHub CO Pilot](https://github.com/features/copilot)
 - 
--
 
 [Back to top](#top)
