@@ -697,6 +697,10 @@ Software-Guidelines:
 ## Resources
 - Help with code Errors [Stackoverflow](https://stackoverflow.com/)
 - Ackerman Steering Mechanism [Wikipedia](https://en.wikipedia.org/wiki/Ackermann_steering_geometry)
--
+- [Totemmaker Build Instructions](https://totemmaker.net/wiki/robocar-chassis-building-instruction/)
+- [Help with adafruit](https://learn.adafruit.com/)
+- [Help with Open CV](https://learnopencv.com/)
+- [GitHub CO Pilot](https://github.com/features/copilot)
+- 
 
 [Back to top](#top)
