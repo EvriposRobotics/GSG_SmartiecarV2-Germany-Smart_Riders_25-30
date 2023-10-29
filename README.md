@@ -119,6 +119,7 @@ Layer 3:
 
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/86b0d644-9015-47d7-bda9-f8d0e95e0f0b" width="50%">
 
+For more sketches of the chassis please visit [Schematics](schematics)
 
 
 Tires:
