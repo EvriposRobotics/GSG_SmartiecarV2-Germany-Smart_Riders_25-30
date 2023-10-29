@@ -9,6 +9,7 @@
 
 1. [Overview](#overview) 🌟
 2. [Design Process](#Design-Process)🔧
+3. [Car Photos](carphoto)
     - [Mobility Management](#Mobility-Management)
     - [Chassis](#Chassis)
     - [Assembly Instructions](#assembly-instructions) 🛠
@@ -21,7 +22,7 @@
     - [Camera](#camera)
     - [Schematics](#schematics) 📐👀
     - [Components List](#components-list) 🔍
-3. [Software Design](#software) 💻👨‍💻
+4. [Software Design](#software) 💻👨‍💻
     - [Software Development](#software-development)
     - [Opening Race](#opening-race)
     - [Obstacle Race](#obstacle-race)
@@ -81,6 +82,19 @@ inprove:
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/40d8d0fe-efb5-4642-bb60-c71df9333944" width="75%">
 
 
+
+<a name="carphoto"></a>
+
+
+### Car Photos
+
+Here are our official photos of our car:
+
+![All Pictures](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/9b42ea9a-2da7-4fc8-b259-429de187d35e)
+
+
+For high resulution pictures please visit: 
+
 <a name="Mobility-Management"></a>
 
 
@@ -105,7 +119,6 @@ Layer 2:
 Layer 3:
 
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/86b0d644-9015-47d7-bda9-f8d0e95e0f0b" width="50%">
-
 
 
 
