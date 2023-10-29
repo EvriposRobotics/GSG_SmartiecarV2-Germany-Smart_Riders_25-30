@@ -676,7 +676,7 @@ Software-Guidelines:
 
 ## Resources
 - Help with code Errors [Stackoverflow](https://stackoverflow.com/)
-- 
+- Ackerman Steering Mechanism [Wikipedia](https://en.wikipedia.org/wiki/Ackermann_steering_geometry)
 -
 
 [Back to top](#top)
