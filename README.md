@@ -301,6 +301,8 @@ Circuit schematics and hardware layouts are available in the [Schematics folder]
 
 Circuit Diagramm:
 
+In our last car we used HCSR 04 Ultra- Sonic Sensors. The ones we use now are compatible but have a common echo and trigger pin. That is why we connected the two pins.
+
 ![circuit diagram3](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/fea9d000-b137-442d-b9b0-54673bf2bf8d)
 
 
