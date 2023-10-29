@@ -371,7 +371,8 @@ The opening race consists of four phases: init phase, start phase, run phase and
 
 ![Diagram_open_phases](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/2c19f09d-0d59-42b5-858b-588c2e19e0fa)
 
-Init Phase
+## Init Phase
+
 In the init phase, we initialize all sensors and motors. Next is a handshake with the raspberry pi, even though we do not really use the pi during the opening race. 
 The handshake is necessary, because the arduino is powered via the raspberry pi's USB port and we do not switch off the raspberry pi's image processing software during the opening race.
 When the image processing software on the raspberry pi starts, it automatically resets the arduino. 
@@ -385,7 +386,8 @@ If the starting position is in a narrow street and distance to one of the walls 
 
 ![Diagram_open_init_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/51bd0f29-fc57-4b6d-8ca0-c4c87b1cc3fe)
 
-Start phase
+## Start phase
+
 In the start phase, the arduino first runs the motor at slow speed. If the car is placed very close to a wall, it first steers away from that wall to avoid hitting it.
 The car now drives slowly and steers straight using its gyro, until one of the side ultrasonics measure a distance > 80 cm, which indicates a curve. If the turning direction was not already known, it is now.
 The arduino now runs the first curve.
@@ -395,7 +397,8 @@ Whith every call of the gyro, we also accumulate the total angle the car has tur
 
 ![Diagram_open_start_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/256168aa-4b73-4df9-82f2-407d8ddf0279)
 
-Run phase
+## Run phase
+
 In the run phase, the arduino knows the turning direction and so knows the inner wall. 
 So we can reduce ultrasonic measurement to just the sensor facing the inner wall, which makes our loop run faster and more reliable.
 The curve is detected as early as possible and a turn to a narrow street is detected before the car comes too close to the opposite outer wall.
