@@ -93,7 +93,7 @@ Here are our official photos of our car:
 ![All Pictures](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/9b42ea9a-2da7-4fc8-b259-429de187d35e)
 
 
-For high resulution pictures please visit: 
+For high resulution pictures please visit: [Car Photos](Carphotos)
 
 <a name="Mobility-Management"></a>
 
