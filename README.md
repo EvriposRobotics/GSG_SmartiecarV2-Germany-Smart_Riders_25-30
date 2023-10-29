@@ -175,8 +175,7 @@ And it has a nice cable plugin socket, which was very convenient for our hardwar
 It also comes with a very good Arduino library by the manufacturer, which made it easy to use in the arduino software.
 
 
-![rmsFhK30](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/8894ff8a-f424-47e5-81c8-1b6b1415c278)
-
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/8894ff8a-f424-47e5-81c8-1b6b1415c278" width="50%">
 
 
 <a name="Steering-Mechanism"></a>
@@ -193,10 +192,9 @@ Steering Trapeze:
 
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/d627f769-6dab-4882-8252-478ff478e4c7" width="50%">
 
-Because of the layers in our car, the servo motor for the steering had to be mounted on the first (lowest) layer. Because of that it was difficult to connect the servo with the steering mechanism. The plastic beams from the layer around the servo limited its range of motion. That is why we had to extend the steering rod to succesfully connect the servo to the steering mechanism. The servo is now directly connected to the steering mechanism via the steering shaft.
+Because of the layers in our car, the servo motor for the steering had to be mounted on the first (lowest) layer. Because of that it was difficult to connect the servo with the steering mechanism. The plastic beams from the layer around the servo limited its range of motion. That is why we had to extend the connection between the steering shaft and the servo. The servo is now directly connected to the steering mechanism via the steering shaft.
 
-(Picture steering rod)
-
+<img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/187e7521-fa72-4f78-aafa-8d5d0df6fac5" width="75%">
 
 
 <a name="Power-and-Sense-Management"></a>
@@ -232,9 +230,8 @@ The on/off switch is connectetet directly to the output of the Lipo Behind the s
 
 The step-up converter produces 12V for our motor driver. 
 The two step-downs both produce 5V,one is used for the controllers ( Raspberry  Pi and Arduino ), the other for the steering servo and lights.
- See circuit diagram for details on connections.
- 
-  
+See circuit diagram for details on connections.
+[Schematics](#schematics)
 
 
 
@@ -300,6 +297,11 @@ The disadvantage of this camera is, that it is rather big and heavy compared wit
 ### Schematics 📐
 
 Circuit schematics and hardware layouts are available in the [Schematics folder](schematics).
+
+Circuit Diagramm:
+
+![circuit diagram3](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/fea9d000-b137-442d-b9b0-54673bf2bf8d)
+
 
 
 <a name="components-list"></a>
