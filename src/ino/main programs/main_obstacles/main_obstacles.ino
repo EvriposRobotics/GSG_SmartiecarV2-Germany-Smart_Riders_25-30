@@ -90,6 +90,7 @@ char Block = 'U';
 char P_color = 'U'; // Unknown
 char P_wall_L = 'N';
 char P_wall_R = 'N';
+char LastPillarColor = 'U';
 int P_x = 0;
 int P_height = 0;
 
@@ -818,6 +819,7 @@ void EvadeGreenPillar()
   // drive past
   delay(200);
   lcd.setRGB(255, 255, 255);
+  LastPillarColor = 'G';
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -877,6 +879,7 @@ void EvadeRedPillar()
   // drive past
   delay(200);
   lcd.setRGB(255, 255, 255);
+  LastPillarColor = 'R';
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -951,12 +954,11 @@ void runLane()
   }
   else
   {
-
     EvadeGreenPillar();
   }
 
   // Another pillar in this lane?
-  steerToLaneCenter();
+  // steerToLaneCenter();
   findNextPillar();
   // check if pillar is in lane
   if (P_color != 'U')
@@ -967,6 +969,8 @@ void runLane()
   {
     check = false;
   }
+
+  runMotor(SlowSpeed);
   if ((P_color == 'R') && (check == true))
   {
     ApproachPillar();
@@ -991,11 +995,11 @@ void runLane()
 bool CheckPillarIsInLane()
 {
   findNextPillar();
-  if ((DrivingDirection == 'L') && (P_color != 'U') && (P_x < 100))
+  if ((DrivingDirection == 'L') && (P_color != 'U') && (P_x > 100))
   {
     return true;
   }
-  else if ((DrivingDirection == 'R') && (P_color != 'U') && (P_x > 210))
+  else if ((DrivingDirection == 'R') && (P_color != 'U') && (P_x < 210))
   {
     return true;
   }
@@ -1080,24 +1084,66 @@ void evaluateRaspiData()
 }
 
 ///////////////////////////////////////////////////////////
-// startPhase()
+// startPhase();
 // starts the phase
 ///////////////////////////////////////////////////////////
 void startPhase()
 {
   runMotor(SlowSpeed);
-
-  // Check if pillar is right ahead
-  if ((P_color == 'R') && (P_x < 210) && (P_x == 110))
+  findNextPillar(); // requests what is seen in front
+  //  Check if pillar is right ahead
+  if ((P_color == 'R') && (P_x < 210) && (P_x > 110))
   {
     ApproachPillar();
     EvadeRedPillar();
+    while (Distance_Front > 10)
+    {
+      Gyro_steer_straight();
+      Distance_Front = SpaceUltraSonicFront();
+    }
+    stopMotor();
+    if (DrivingDirection == 'U')
+    {
+      Distance_Left = SpaceUltraSonicLeft();
+      Distance_Right = SpaceUltraSonicRight();
+
+      if (Distance_Left > 100)
+      {
+        DrivingDirection = 'L';
+      }
+
+      if (Distance_Right > 100)
+      {
+        DrivingDirection = 'R';
+      }
+    }
   }
 
-  else if ((P_color == 'L') && (P_x > 210) && (P_x == 110))
+  else if ((P_color == 'G') && (P_x > 210) && (P_x > 110))
   {
     ApproachPillar();
     EvadeGreenPillar();
+    while (Distance_Front > 10)
+    {
+      Gyro_steer_straight();
+      Distance_Front = SpaceUltraSonicFront();
+    }
+    stopMotor();
+    if (DrivingDirection == 'U')
+    {
+      Distance_Left = SpaceUltraSonicLeft();
+      Distance_Right = SpaceUltraSonicRight();
+
+      if (Distance_Left > 100)
+      {
+        DrivingDirection = 'L';
+      }
+
+      if (Distance_Right > 100)
+      {
+        DrivingDirection = 'R';
+      }
+    }
   }
 
   else
@@ -1110,7 +1156,6 @@ void startPhase()
     }
     // wall reached
     stopMotor();
-
     // if driving direction is unclear, find out
     if (DrivingDirection == 'U')
     {
@@ -1127,14 +1172,51 @@ void startPhase()
         DrivingDirection = 'R';
       }
     }
+  }
 
-    lcd.setCursor(0, 0);
-    lcd.print(DrivingDirection);
+  stopMotor();
+  lcd.setCursor(0, 0);
+  lcd.print(DrivingDirection);
+  lcd.print("  ");
+  lcd.print(Distance_Left);
+  lcd.print("  ");
+  lcd.print(Distance_Right);
+  delay(500);
+  runMotor(SlowSpeed);
 
-    // Turn
-    if (DrivingDirection == 'L')
+  // Turn
+  if (DrivingDirection == 'L')
+  {
+    if (Distance_Right < 25)
+    {
+      Distance_Front = SpaceUltraSonicFront();
+      runMotor_R(SlowSpeed);
+      while (Distance_Front < 50)
+      {
+        Distance_Front = SpaceUltraSonicFront();
+      }
+      stopMotor();
+      runMotor(SlowSpeed);
+      CurveLeftUntilBlock();
+    }
+    else
     {
       TurnLeft();
+    }
+  }
+  else
+  {
+    if (Distance_Left < 25)
+    {
+      Distance_Front = SpaceUltraSonicFront();
+      runMotor_R(SlowSpeed);
+      while (Distance_Front < 50)
+      {
+        Distance_Front = SpaceUltraSonicFront();
+      }
+      stopMotor();
+      runMotor(SlowSpeed);
+      CurveRightUntilBlock();
     }
     else
     {
@@ -1143,6 +1225,168 @@ void startPhase()
   }
 }
 
+///////////////////////////////////////////
+// LanewithUnknownTurn()
+// special func for lane with unknown turn
+///////////////////////////////////////////
+void LanewithUnknownTurn()
+{
+  bool check = false;
+  DriveUntilFirstPillarInLane();
+  ApproachPillar();
+  if (P_color == 'R')
+  {
+    EvadeRedPillar();
+  }
+  else
+  {
+    EvadeGreenPillar();
+  }
+
+  if (LastPillarColor == 'R')
+  {
+    UnknownTurn();
+    if (DrivingDirection == 'R')
+    {
+      DrivingDirection = 'L';
+    }
+
+    else
+    {
+      DrivingDirection = 'R';
+    }
+  }
+  // Another pillar in this lane?
+  // steerToLaneCenter();
+  findNextPillar();
+  // check if pillar is in lane
+  if (P_color != 'U')
+  {
+    check = CheckPillarIsInLane();
+  }
+  else
+  {
+    check = false;
+  }
+
+  runMotor(SlowSpeed);
+  if ((P_color == 'R') && (check == true))
+  {
+    ApproachPillar();
+    EvadeRedPillar();
+  }
+  else if ((P_color == 'G') && (check == true))
+  {
+    ApproachPillar();
+    EvadeGreenPillar();
+  }
+  else
+  {
+    DriveUntilNextCurve();
+  }
+}
+
+void UTurn()
+{
+  float TargetDirection;
+  float angle;
+  stopMotor();
+  Distance_Left = SpaceUltraSonicLeft();
+  Distance_Right = SpaceUltraSonicRight();
+  if (Distance_Left > Distance_Right)
+  {
+    TargetDirection = StraightAngle - 90.0;
+    left(45);
+    angle = IMU_getAngle();
+    runMotor(SlowSpeed);
+
+    while (angle > TargetDirection)
+    {
+      angle = IMU_getAngle();
+    }
+    center();
+
+    Distance_Front = SpaceUltraSonicFront();
+    while (Distance_Front > 10)
+    {
+      delay(10);
+    }
+
+    stopMotor();
+    runMotor_R(SlowSpeed);
+    while (Distance_Front < 65)
+    {
+      delay(10);
+    }
+    stopMotor();
+    TargetDirection - 90.0;
+    left(45);
+    angle = IMU_getAngle();
+    runMotor(SlowSpeed);
+
+    while (angle > TargetDirection)
+    {
+      angle = IMU_getAngle();
+    }
+    center();
+    stopMotor();
+    runMotor_R(SlowSpeed);
+    delay(1500);
+    stopMotor();
+    runMotor(SlowSpeed);
+  }
+
+  StraightAngle = TargetDirection;
+
+  else
+  {
+    TargetDirection = StraightAngle + 90.0;
+    right(45);
+    angle = IMU_getAngle();
+    runMotor(SlowSpeed);
+
+    while (angle < TargetDirection)
+    {
+      angle = IMU_getAngle();
+    }
+    center();
+
+    while (Distance_Front > 10)
+    {
+      delay(10);
+    }
+
+    stopMotor();
+    runMotor_R(SlowSpeed);
+    while (Distance_Front < 65)
+    {
+      delay(10);
+    }
+    stopMotor();
+    TargetDirection + 90.0;
+    right(45);
+    angle = IMU_getAngle();
+    runMotor(SlowSpeed);
+
+    while (angle < TargetDirection)
+    {
+      angle = IMU_getAngle();
+    }
+    center();
+    stopMotor();
+    runMotor_R(SlowSpeed);
+    delay(1500);
+    stopMotor();
+    runMotor(SlowSpeed);
+  }
+
+  StraightAngle = TargetDirection;
+}
+
+///////////////////////////////////////////
+// start_test()
+// example test race
+///////////////////////////////////////////
 void start_test()
 {
   // Test: Fixed sequence
@@ -1183,6 +1427,21 @@ void start_test()
 
 void setup()
 {
+
+  //////////////////////////////////////////////////////
+  /*
+   _       _ _           _
+  (_)     (_) |         | |
+   _ _ __  _| |_   _ __ | |__   __ _ ___  ___
+  | | '_ \| | __| | '_ \| '_ \ / _` / __|/ _ \
+  | | | | | | |_  | |_) | | | | (_| \__ \  __/
+  |_|_| |_|_|\__| | .__/|_| |_|\__,_|___/\___|
+                  | |
+                  |_|
+  init phase initalises all components and waits for button press
+  */
+  //////////////////////////////////////////////////////
+
   Wire.begin();
 
   pinMode(Button, INPUT); // button
@@ -1225,6 +1484,23 @@ void setup()
   // waits for button press
   waitOnButtonPress();
 
+  //////////////////////////////////////////////////////
+  /*
+        _             _           _
+       | |           | |         | |
+    ___| |_ __ _ _ __| |_   _ __ | |__   __ _ ___  ___
+   / __| __/ _` | '__| __| | '_ \| '_ \ / _` / __|/ _ \
+   \__ \ || (_| | |  | |_  | |_) | | | | (_| \__ \  __/
+   |___/\__\__,_|_|   \__| | .__/|_| |_|\__,_|___/\___|
+                           | |
+                           |_|
+  Start phase run:
+  drive straight until first curve is detected,
+  detect driving direction clockwise or counterclockwise
+  run until first curve is completed
+  */
+  //////////////////////////////////////////////////////
+
   lcd.clear();
 
   // LCD goes White
@@ -1236,9 +1512,7 @@ void setup()
   // Steering centered
   center();
 
-  start_test();
-
-  stopMotor();
+  startPhase();
 }
 // Done
 
@@ -1255,6 +1529,31 @@ void setup()
 
 void loop()
 {
+  /////////////////////////////////////////////////////
+  /*
+                             _
+                            | |
+    _ __ _   _ _ __    _ __ | |__   __ _ ___  ___
+   | '__| | | | '_ \  | '_ \| '_ \ / _` / __|/ _ \
+   | |  | |_| | | | | | |_) | | | | (_| \__ \  __/
+   |_|   \__,_|_| |_| | .__/|_| |_|\__,_|___/\___|
+                      | |
+                      |_|
+  run phase:
+  checks if curve is detected and calls curve(L/R) function
+  if no curve alligned to inner wall with fixxed distance
+  runs until 12 curves are counted
+  */
+  /////////////////////////////////////////////////////
+
+  while (corners < 8)
+  {
+    runLane();
+    runCurve();
+  }
+
+  LanewithUnknownTurn();
+  runCurve();
 
   while (corners < 12)
   {
@@ -1262,6 +1561,20 @@ void loop()
     runCurve();
   }
 
-  // Finish after 12 corners/curves
+  ////////////////////////////////////////////////////
+  /*
+                 _         _
+                | |       | |
+   ___ _ __   __| |  _ __ | |__   __ _ ___  ___
+  / _ \ '_ \ / _` | | '_ \| '_ \ / _` / __|/ _ \
+ |  __/ | | | (_| | | |_) | | | | (_| \__ \  __/
+  \___|_| |_|\__,_| | .__/|_| |_|\__,_|___/\___|
+                    | |
+                    |_|
+end phase:
+stops car and shows counted time in milliseconds
+Finish after 12 corners/curves
+*/
+  ////////////////////////////////////////////////////
   ProgramStop();
 }
