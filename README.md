@@ -9,7 +9,7 @@
 1. [Overview](#overview) 🌟
 2. [Design Process](#Design-Process)🔧
 3. [Car Photos](#carphoto)
-    - [Mobility Management](#Mobility-Management)
+4. [Mobility Management](#Mobility-Management)
     - [Chassis](#Chassis)
     - [Assembly Instructions](#assembly-instructions) 🛠
     - [Driving Motor and Gearing](#Driving-Motor-and-Gearing)
@@ -21,19 +21,19 @@
     - [Camera](#camera)
     - [Schematics](#schematics) 📐👀
     - [Components List](#components-list) 🔍
-4. [Software Design](#software) 💻👨‍💻
+5. [Software Design](#software) 💻👨‍💻
     - [Software Development](#software-development)
     - [Opening Race](#opening-race)
     - [Obstacle Race](#obstacle-race)
     - [Programming Languages](#programming-languages) 👩‍💻
     - [Dependencies](#dependencies) 
-5. [Utilities](#utilities) 🛠
+6. [Utilities](#utilities) 🛠
     - [Failsafe Mechanisms](#failsafe)
     - [Debugging Tools](#debugging-tools) 🐞🔍
-6. [Team Photos](#team-photos) 📸
-7. [Demonstration Videos](#demonstration-videos) 🎥
-8. [Contributors](#contributors) 👥
-9. [Resources](#sources) ℹ
+7. [Team Photos](#team-photos) 📸
+8. [Demonstration Videos](#demonstration-videos) 🎥
+9. [Contributors](#contributors) 👥
+10. [Resources](#sources) ℹ
 
    
 <a name="overview"></a>
