@@ -178,12 +178,7 @@ void Gyro_steer_straight()
 /////////////////////////////////////////////////////////////////////
 float CalculateTargetDirection()
 {
-  float angle;
-  // float StraightAngle;
   float CalculateAngle = 0.0;
-
-  angle = IMU_getAngle();
-  // StraightAngle = CalculateStraightAngle(angle);
 
   if (DrivingDirection == 'R')
   {
@@ -238,6 +233,8 @@ void TurnLeft()
     angle = IMU_getAngle();
     delay(20);
   }
+  center();
+  delay(500);
   stopMotor();
 
   // turn forward
@@ -257,12 +254,9 @@ void TurnLeft()
   Distance_Left = SpaceUltraSonicLeft();
   Distance_Right = SpaceUltraSonicRight();
   Distance_Front = SpaceUltraSonicFront();
-  if (Distance_Front < 20)
-  {
-    runMotor_R(SlowSpeed);
-    delay(1000);
-    stopMotor();
-  }
+  runMotor_R(SlowSpeed);
+  delay(1000);
+  stopMotor();
   runMotor(SlowSpeed);
   lcd.setRGB(255, 255, 255);
   LastCurveTime = millis();
@@ -293,8 +287,9 @@ void TurnRight()
     angle = IMU_getAngle();
     delay(20);
   }
+  center();
+  delay(1000);
   stopMotor();
-
   // turn forward
   right(45);
   runMotor(SlowSpeed);
@@ -302,14 +297,6 @@ void TurnRight()
   {
 
     angle = IMU_getAngle();
-    /*
-    Speed = Speed + 5;
-    if (Speed > CurveSpeed)
-    {
-      Speed = CurveSpeed;
-    }
-    runMotor_R(Speed);
-    */
     delay(20);
   }
   stopMotor();
@@ -317,9 +304,14 @@ void TurnRight()
   corners = corners + 1;
   StraightAngle = TargetDirection;
   center();
-  runMotor(SlowSpeed);
+  stopMotor();
+  Distance_Front = SpaceUltraSonicFront();
   Distance_Left = SpaceUltraSonicLeft();
   Distance_Right = SpaceUltraSonicRight();
+  runMotor_R(SlowSpeed);
+  delay(1000);
+  stopMotor();
+  runMotor(SlowSpeed);
   lcd.setRGB(255, 255, 255);
   LastCurveTime = millis();
   runMotor(SlowSpeed);
@@ -477,7 +469,58 @@ void CurveLeftUntilBlock()
   LastCurveTime = millis();
 }
 
-/////////////////////////////////////////////////////////////////////
+void CurveRightUntilBlock()
+{
+  int Speed;
+  float TargetDirection;
+  Speed = SlowSpeed;
+  lcd.setRGB(0, 0, 255);
+  TargetDirection = CalculateTargetDirection();
+  lcd.setCursor(0, 0);
+  lcd.print(TargetDirection);
+  Distance_Front = SpaceUltraSonicFront();
+  // go straight to opposite wall
+  while (Distance_Front > 50)
+  {
+    Gyro_steer_straight();
+    Distance_Front = SpaceUltraSonicFront();
+  }
+  // wall reached
+  stopMotor();
+  // start turning
+  right(45);
+  runMotor(SlowSpeed);
+  angle = IMU_getAngle();
+  // replaces quadrantenSYS
+  runMotor(SlowSpeed);
+
+  while (angle < StraightAngle + 45.0)
+  {
+    angle = IMU_getAngle();
+  }
+  stopMotor();
+  center();
+  runMotor(SlowSpeed);
+  delay(500);
+  stopMotor();
+  left(45);
+  runMotor_R(SlowSpeed);
+  while (angle < TargetDirection)
+  {
+    angle = IMU_getAngle();
+  }
+  stopMotor();
+  center();
+  runMotor(SlowSpeed);
+  delay(500);
+  corners = corners + 1;
+  StraightAngle = TargetDirection;
+  runMotor(SlowSpeed);
+  lcd.setRGB(255, 255, 255);
+  LastCurveTime = millis();
+}
+
+/*/////////////////////////////////////////////////////////////////////
 // CurveRightUntilBlock()
 // makes right turn until 90 degrees or block in sight to adjust speed
 /////////////////////////////////////////////////////////////////////
@@ -491,7 +534,7 @@ void CurveRightUntilBlock()
   angle = IMU_getAngle();
   // replaces complicated quadrantSYS
   TargetDirection = CalculateTargetDirection();
-  findNextPillar();
+  Distance_Front = SpaceUltraSonicFront();
   while (angle < TargetDirection - correction_Right)
   {
     angle = IMU_getAngle();
@@ -525,76 +568,8 @@ void CurveRightUntilBlock()
   lcd.setRGB(255, 255, 255);
   LastCurveTime = millis();
 }
-
-/*
-/////////////////////////////////////////////////////////////////////
-// DriveUntilRedBlockInSight()
-// drives towards red block and tries to drive right
-/////////////////////////////////////////////////////////////////////
-void DriveUntilRedBlockInSight()
-{
-  findNextPillar();
-  if (P_x > Picturemiddle_x - 10)
-  {
-    right(25);
-    while (P_x > Picturemiddle_x - 10)
-    {
-      delay(20);
-      findNextPillar();
-    }
-  }
-  else if (P_x < Picturemiddle_x)
-  {
-    left(25);
-    while (P_x > Picturemiddle_x - 10)
-    {
-      delay(20);
-      findNextPillar();
-    }
-  }
-  center();
-  Distance_Front = SpaceUltraSonicFront();
-  while (Distance_Front > 30)
-  {
-    delay(50);
-    Distance_Front = SpaceUltraSonicFront();
-  }
-}
-
-/////////////////////////////////////////////////////////////////////
-// DriveUntilGreenBlockInSight()
-// drives towards green block and tries to drive left
-/////////////////////////////////////////////////////////////////////
-void DriveUntilGreenBlockInSight()
-{
-  findNextPillar();
-  if (P_x > Picturemiddle_x - 10)
-  {
-    left(25);
-    while (P_x > Picturemiddle_x - 10)
-    {
-      delay(20);
-      findNextPillar();
-    }
-  }
-  else if (P_x < Picturemiddle_x)
-  {
-    right(25);
-    while (P_x > Picturemiddle_x - 10)
-    {
-      delay(20);
-      findNextPillar();
-    }
-  }
-  center();
-  Distance_Front = SpaceUltraSonicFront();
-  while (Distance_Front > 30)
-  {
-    delay(50);
-    Distance_Front = SpaceUltraSonicFront();
-  }
-}
 */
+
 /////////////////////////////////////////////////////////////////////
 // DriveUntilFirstPillarInLane()
 // drive straight until next pillar in lane is found
@@ -633,7 +608,6 @@ void DriveUntilFirstPillarInLane()
 /////////////////////////////////////////////////////////////////////
 void DriveUntilNextCurve()
 {
-  steerToLaneCenter();
   Distance_Front = SpaceUltraSonicFront();
   while (Distance_Front > 100)
   {
@@ -1226,10 +1200,10 @@ void startPhase()
 }
 
 ///////////////////////////////////////////
-// LanewithUnknownTurn()
+// LanewithUTurn()
 // special func for lane with unknown turn
 ///////////////////////////////////////////
-void LanewithUnknownTurn()
+void LanewithUTurn()
 {
   bool check = false;
   DriveUntilFirstPillarInLane();
@@ -1245,7 +1219,7 @@ void LanewithUnknownTurn()
 
   if (LastPillarColor == 'R')
   {
-    UnknownTurn();
+    UTurn();
     if (DrivingDirection == 'R')
     {
       DrivingDirection = 'L';
@@ -1335,8 +1309,6 @@ void UTurn()
     stopMotor();
     runMotor(SlowSpeed);
   }
-
-  StraightAngle = TargetDirection;
 
   else
   {
@@ -1552,7 +1524,7 @@ void loop()
     runCurve();
   }
 
-  LanewithUnknownTurn();
+  LanewithUTurn();
   runCurve();
 
   while (corners < 12)
