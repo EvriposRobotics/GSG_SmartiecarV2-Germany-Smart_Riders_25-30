@@ -8,7 +8,10 @@
 ![Third-level](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/e043465f-fae7-43ca-b02d-5035bf4b80f4)
 ## Transmisson 
 ![Transmisson](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/81a72656-89fd-4d49-b64a-b7e57e7d6bcb)
+## back
+![back](back.jpg)
+## bottom
+![bottom](botton.jpg)
 
-
-
-
+## front
+![front](front-1.jpg)

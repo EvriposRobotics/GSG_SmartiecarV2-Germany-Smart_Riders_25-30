@@ -121,20 +121,54 @@ int walldistance = 40;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////
-// ProgramStop()
-// stops the program and saves current time in millis
+// ProgramStopUsingGyro()
+// stops the car using the gyrovalues saved from beginning
 /////////////////////////////////////////////////////////////////////
-void ProgramStop()
+void ProgramStopUsingGyro()
 {
-  unsigned long DrivingTime;
+  unsigned long DrivingTime; // driving time
+  unsigned long temporaryTime;
+
+  runMotor(SlowSpeed); // slow down
+  // slight countersteering to compensate for overshooting
+  if (DrivingDirection == 'R')
+  {
+    left(10);
+  }
+
+  else
+  {
+    right(10);
+  }
+
+  delay(400);
+  center();
+
+  // Go straight for at least 400 msec
+  Gyro_steer_straight();
+  temporaryTime = millis();
+  while (millis() < temporaryTime + 3000)
+  {
+    Gyro_steer_straight();
+  }
+
+  // drive straight to finish and stop
+  Distance_Front = SpaceUltraSonicFront();
+  while (Distance_Front > 140)
+  {
+    Gyro_steer_straight();
+    Distance_Front = SpaceUltraSonicFront();
+  }
+
   stopMotor();
-  // save time
+  // save current time in milliseconds
   DrivingTime = millis() - start_time;
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("time: ");
   lcd.print(DrivingTime);
-  delay(9999999);
+  lcd.print(Distance_Front);
+  delay(9999999); // wait forever
 }
 
 /////////////////////////////////////////////////////////////////////

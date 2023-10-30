@@ -386,7 +386,7 @@ The arduino already tries to determine the turning direction (clockwise = R(ight
 If the starting position is in a narrow street and distance to one of the walls is < 10cm, this is the inner wall. Now the arduino waits for the start button to be pressed.
 
 
-![Diagram_open_init_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/51bd0f29-fc57-4b6d-8ca0-c4c87b1cc3fe)
+![init phase](<src/ino/flow charts/init phase.jpg>)
 
 ## Start phase
 
