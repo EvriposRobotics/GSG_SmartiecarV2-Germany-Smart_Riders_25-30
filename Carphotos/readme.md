@@ -12,6 +12,11 @@
 ![back](back.jpg)
 ## bottom
 ![bottom](botton.jpg)
-
 ## front
-![front](front-1.jpg)
+![front](front.jpg)
+## left
+![left](left.jpg)
+## right
+![right](right.jpg)
+## top
+![top](top.jpg)
