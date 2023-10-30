@@ -669,16 +669,6 @@ Meet the team behind this project in the [Team Photos section](./Teamphotos).
 
 
 
-<a name="safety-guidelines"></a>
-
-
-## Safety Guidelines ⚠️
-
-Hardware-Guidelines:
-
-
-Software-Guidelines:
-
 
 <a name="contributors"></a>
 
