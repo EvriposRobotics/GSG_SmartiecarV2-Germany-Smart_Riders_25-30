@@ -525,22 +525,49 @@ With the contours method, we can discard blobs where width is bigger than height
 
 
 ![Raspberry_Pi_detect_pillars](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/bdcc6720-e357-4e31-b171-1be4dae4c5e4)
+---
 
+Wall collision detector
+---
 
+When the car evades a pillar which is placed close to a wall, there is a risk of colliding with the wall. 
+The problem is, that the car drives toward the wall at an angle, so the ultrasonic reads too big distances.
+So we defined two "wall collision zones" in the camera image. 
+We crop those areas from the image and process only these to make the detector run faster.
+First try: When a wall appears in a collision zone, the wall detector returns a 'Y' for this zone.
+The walls are the darkest elements in the image, so to detect these, we convert the zones images to grayscale and did a threshold. 
+Problem: This tends to give false positives, when the car just drives along a wall.
+There would only be a collision, if the car's path in the image overlaps with the wall.
+So we created a triangle mask which gives the projektion of the car's path in the image. The path is white, the rest is black.
+We crop the wall collision areas from this mask, too.
+We then inverted the wall threshold, so now walls appear white, the rest is black.
+When there are areas, that are white in the path image AND in the wall threshold, that is where the car will hit the wall.
+So we combine the two images by logical-and to get white areas, where both images have white pixels.
+We apply a blur to eliminate noise and reflections.
+We then invert the resulting image and use the opencv simple blob detector to find blobs on this image. 
+If any, a collision will occur and the detector returns a 'Y' for this area.
+We do the same processing for the left wall collision area and the right wall collision area.
+
+![wall collision detector](<src/ino/flow charts/wall_detector.jpg>)
+
+---
+
+Wall collison flow chart
+---
+
+![wall collision detector flowchart](<src/ino/flow charts/Raspberry_Pi_detect_wall_collisions.jpg>)
+
+---
 ## Obstacle Arduino Software
 
+Introduction
+---
 In the obstacle race, we use the arduino with the sensors attached to it and the raspberry pi.
+
 The obstacle race consists of four phases: init phase, start phase, run phase and end phase.
 
-The init phase is very similar to the init phase of the opening race. The difference is, that the arduino requests a first result from the raspberry pi.
-From the image processing result, the arduino knows, if there is a pillar in front of it. If yes, it needs to evade this pillar immediately.
-As the camera has a wide angle lens, the raspberry pi can also detect pillars right behind the first curve from the start position. 
-The pillar's x-position in the image tells the arduino whether the pillar in the image is in front or behind the curve.
-When the first pillar is detected behind the curve, the arduino already knows the turning direction.
-
-
-![Diagram_obstacle_init_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/88528b2c-3c65-4423-a112-af514e76d03b)
-
+general obstacle race description
+---
 
 Our strategy for the obstacle race is to divide the necessary car movements into functions and then run a sequence of those functions.
 On the first level, we have a function to run a curve and a function to run a lane with obstacles.
@@ -556,10 +583,50 @@ To reach the center position, we have implemented a curve- and a turn- maneuver 
 The curve maneuver is chosen when the car starts the curve from very near the outer wall. It changes its LCD color to blue to indicate that.
 If there is enough room to the outer wall, the car runs a turn. For the turn, it changes its LCD color to purple.
 A turn starts with turning backwards for the first 45 degrees and the turn forward for the second 45 degrees. A curve does it vice-versa.
+
+This strategy enables the car to navigate the track, effectively evading obstacles and maneuvering through curves by leveraging sensor feedback and implementing adaptive maneuvers based on the car's orientation using the gyro and the distances to obstacles and walls.
+
+---
+
+init phase
+---
+The init phase is very similar to the init phase of the opening race. The difference is, that the arduino requests a first result from the raspberry pi.
+From the image processing result, the arduino knows, if there is a pillar in front of it. If yes, it needs to evade this pillar immediately.
+As the camera has a wide angle lens, the raspberry pi can also detect pillars right behind the first curve from the start position. 
+The pillar's x-position in the image tells the arduino whether the pillar in the image is in front or behind the curve.
+When the first pillar is detected behind the curve, the arduino already knows the turning direction.
+
+
+![Diagram_obstacle_init_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/88528b2c-3c65-4423-a112-af514e76d03b)
+---
  
+start phase
+---
+At the beginning the car drives at slow speed. As soon as a pillar is detected in the field of vision, the car checks its position. If the pillar is directly in front of the car, it will be avoided. The car then heads to the opposite wall to determine the exact direction of travel. Depending on whether the pillar was left or right, the car determines its direction of rotation and continues its journey. It then enters the running phase of the race.
+
+![obstacle start phase](<src/ino/flow charts/Diagram_obstacle_start_phase.jpg>)
+---
+
+run phase
+---
+In the run phase, we navigate a lane with obstacles followed by a curve until we've passed 8 corners. Upon reaching the next lane, we conclude the second round and need to determine whether to execute a U-Turn. This decision is facilitated by a specialized version of the 'runLane' function. Afterward, we proceed to the final round.
+
+![obstacle run phase](<src/ino/flow charts/Obstacle Run Phase.jpg>)
+---
+
+runlane detailed
+---
+In the 'runLane' detail, the process begins by driving straight until a pillar is detected. Upon detection, the car approaches and subsequently evades the pillar. The system then assesses whether a second pillar is visible. By evaluating its x-position in the camera image, it determines whether the pillar is positioned within the lane or beyond the upcoming curve. If the pillar is within the lane, the car approaches and evades it. If not, the car continues driving straight until the next curve is detected.
+
+![run lanes](<src/ino/flow charts/runlane.jpg>)
+---
 
 
-
+Information
+---
+all of our flow charts can be found by clicking ->
+[Flow charts](https://github.com/Nezar187/GSG_SmartiecarV2/tree/50eac4c4b92e603ed27ed5b83ed94a7224463f0e/src/ino/flow%20charts)
+---
 
 <a name="programming-languages"></a>
 
