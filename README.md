@@ -359,7 +359,6 @@ Changes and fixes then apply to both programms immediately.
 In the main programs for the two race types, we have created own functions for repeating movement sequences like curves or steerig straight using gyro orientation angles.
 For a better overview, the main programms themselves are structured in race phases.
 
-{Bild Software Building blocks}
 
 
 ![blockdiagram_software](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/5b52f9c3-a2cb-43c9-ac6e-0e6e4c6b5113)
@@ -579,9 +578,42 @@ A turn starts with turning backwards for the first 45 degrees and the turn forwa
 
 ### Dependencies 📚
 
-- Python Libraries: List here
-- C++ Libraries: List here
-- C Libraries: List here
+C++ (Arduino) Libraries
+----
+
+Servo.h
+
+wire.h
+
+rgb_lcd.h
+
+Adafruit_Sensor.h
+
+Adafruit_BNO055.h
+
+utility/imumaths.h
+
+---
+
+Python (Raspberry pi) Libraries:
+---
+Opencv
+
+pyserial
+
+time
+
+os
+
+sys
+
+grove_rgb_lcd
+
+numpy
+
+datetime
+
+---
 
 
 <a name="utilities"></a>

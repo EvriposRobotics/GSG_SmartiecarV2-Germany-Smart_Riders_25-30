@@ -135,10 +135,10 @@ void ProgramStopUsingGyro()
   delay(400);
   center();
 
-  // Go straight for at least 400 msec
+  // Go straight for at least x msec
   Gyro_steer_straight();
   temporaryTime = millis();
-  while (millis() < temporaryTime + 3000)
+  while (millis() < temporaryTime + 1500)
   {
     Gyro_steer_straight();
   }
