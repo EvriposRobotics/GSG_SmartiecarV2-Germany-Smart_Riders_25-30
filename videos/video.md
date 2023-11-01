@@ -1,10 +1,7 @@
 Videos World finals
 ===
 
-Opening race  2.0:
+[Opening race](https://youtu.be/UzlpRsvUVNU?si=EGeO1xqyyNf2n6sp)
 
-https://youtu.be/UzlpRsvUVNU
+[Obstacle race](https://youtu.be/PQc_8ovzd-A)
 
-Obstacle race  2.0:
-
-[https://www.youtube.com/watch?v=kWGVBycZVr8](https://youtu.be/PQc_8ovzd-A)https://youtu.be/PQc_8ovzd-A

@@ -142,7 +142,7 @@ First start with the first layer. Cut the beams and connectors to size and conne
 ![Layer 1 SIde](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/01643d91-ad0c-45a6-9f48-54e8f5fc4d56)
 
 [Totemmaker Build Instructions](https://totemmaker.net/wiki/robocar-chassis-building-instruction/)
-After you built the frame you can build and attach the front axle. You will need the 3D printed parts from Totemmake.net. For the back axle we used parts from the Make-Block construction set, which we cut to size as well. Additionally you have to use another 3D printed part from Totemmaker.net to screw the motor in place. Because the frame is very thinn you will have to connect the motor with the back axle via a set of bevel gears. Next you build the second layer like shown in the schematics. You will have to cut the parts again:
+After you built the frame you can build and attach the front axle. You will need the 3D printed parts from Totemmaker.net. For the back axle we used parts from the Make-Block construction set, which we cut to size as well. Additionally you have to use another 3D printed part from Totemmaker.net to screw the motor in place. Because the frame is very thinn you will have to connect the motor with the back axle via a set of bevel gears. Next you build the second layer like shown in the schematics. You will have to cut the parts again:
 
 <img src="https://github.com/Nezar187/GSG_SmartiecarV2/assets/131177565/41f219ce-67e9-4a65-90ca-390a18fd90e6" width="75%">
 
@@ -385,7 +385,7 @@ The arduino already tries to determine the turning direction (clockwise = R(ight
 If the starting position is in a narrow street and distance to one of the walls is < 10cm, this is the inner wall. Now the arduino waits for the start button to be pressed.
 
 
-![Diagram_open_init_phase](https://github.com/Nezar187/GSG_SmartiecarV2/assets/131591590/51bd0f29-fc57-4b6d-8ca0-c4c87b1cc3fe)
+![init phase](<src/ino/flow charts/init phase.jpg>)
 
 ## Start phase
 
@@ -700,16 +700,6 @@ Meet the team behind this project in the [Team Photos section](./Teamphotos).
 - [Video folder-Races](videos/video.md)
 
 
-
-<a name="safety-guidelines"></a>
-
-
-## Safety Guidelines ⚠️
-
-Hardware-Guidelines:
-
-
-Software-Guidelines:
 
 
 <a name="contributors"></a>
