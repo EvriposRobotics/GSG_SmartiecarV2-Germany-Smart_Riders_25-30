@@ -268,7 +268,7 @@ void TurnLeft()
     delay(20);
   }
   center();
-  delay(500);
+  delay(1000);
   stopMotor();
 
   // turn forward
@@ -289,7 +289,7 @@ void TurnLeft()
   Distance_Right = SpaceUltraSonicRight();
   Distance_Front = SpaceUltraSonicFront();
   runMotor_R(SlowSpeed);
-  delay(1000);
+  delay(1500);
   stopMotor();
   runMotor(SlowSpeed);
   lcd.setRGB(255, 255, 255);
@@ -324,12 +324,12 @@ void TurnRight()
   center();
   delay(1000);
   stopMotor();
+
   // turn forward
   right(45);
   runMotor(SlowSpeed);
   while (angle < TargetDirection)
   {
-
     angle = IMU_getAngle();
     delay(20);
   }
@@ -339,11 +339,11 @@ void TurnRight()
   StraightAngle = TargetDirection;
   center();
   stopMotor();
-  Distance_Front = SpaceUltraSonicFront();
   Distance_Left = SpaceUltraSonicLeft();
   Distance_Right = SpaceUltraSonicRight();
+  Distance_Front = SpaceUltraSonicFront();
   runMotor_R(SlowSpeed);
-  delay(1000);
+  delay(1500);
   stopMotor();
   runMotor(SlowSpeed);
   lcd.setRGB(255, 255, 255);
@@ -954,45 +954,65 @@ void runCurve()
 void runLane()
 {
   bool check = false;
-  DriveUntilFirstPillarInLane();
-  ApproachPillar();
-  if (P_color == 'R')
-  {
-    EvadeRedPillar();
-  }
-  else
-  {
-    EvadeGreenPillar();
-  }
-
-  // Another pillar in this lane?
-  // steerToLaneCenter();
+  stopMotor();
   findNextPillar();
-  // check if pillar is in lane
-  if (P_color != 'U')
+  if (P_height > 20)
   {
-    check = CheckPillarIsInLane();
-  }
-  else
-  {
-    check = false;
+    // lane may have 2 pillars
+    DriveUntilFirstPillarInLane();
+    ApproachPillar();
+    if (P_color == 'R')
+    {
+      EvadeRedPillar();
+    }
+    else
+    {
+      EvadeGreenPillar();
+    }
+    stopMotor();
+    // Another pillar in this lane?
+    findNextPillar();
+    // check if pillar is in lane
+    lcd.setCursor(0, 0);
+    lcd.print(P_color);
+    if (P_color != 'U')
+    {
+      check = CheckPillarIsInLane();
+    }
+    else
+    {
+      check = false;
+    }
+
+    runMotor(SlowSpeed);
+    if ((P_color == 'R') && (check == true))
+    {
+      ApproachPillar();
+      EvadeRedPillar();
+    }
+    else if ((P_color == 'G') && (check == true))
+    {
+      ApproachPillar();
+      EvadeGreenPillar();
+    }
   }
 
-  runMotor(SlowSpeed);
-  if ((P_color == 'R') && (check == true))
-  {
-    ApproachPillar();
-    EvadeRedPillar();
-  }
-  else if ((P_color == 'G') && (check == true))
-  {
-    ApproachPillar();
-    EvadeGreenPillar();
-  }
   else
   {
-    DriveUntilNextCurve();
+    // lane has ony 1 pillar
+    DriveUntilFirstPillarInLane();
+    ApproachPillar();
+    if (P_color == 'R')
+    {
+      EvadeRedPillar();
+    }
+    else
+    {
+      EvadeGreenPillar();
+    }
   }
+
+  DriveUntilNextCurve();
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -1003,11 +1023,11 @@ void runLane()
 bool CheckPillarIsInLane()
 {
   findNextPillar();
-  if ((DrivingDirection == 'L') && (P_color != 'U') && (P_x > 100))
+  if ((DrivingDirection == 'L') && (P_color != 'U') && (P_x > 90))
   {
     return true;
   }
-  else if ((DrivingDirection == 'R') && (P_color != 'U') && (P_x < 210))
+  else if ((DrivingDirection == 'R') && (P_color != 'U') && (P_x < 200))
   {
     return true;
   }
@@ -1127,7 +1147,7 @@ void startPhase()
     }
   }
 
-  else if ((P_color == 'G') && (P_x > 210) && (P_x > 110))
+  else if ((P_color == 'G') && (P_x < 210) && (P_x > 110))
   {
     ApproachPillar();
     EvadeGreenPillar();
@@ -1582,5 +1602,5 @@ stops car and shows counted time in milliseconds
 Finish after 12 corners/curves
 */
   ////////////////////////////////////////////////////
-  ProgramStop();
+  ProgramStopUsingGyro();
 }
