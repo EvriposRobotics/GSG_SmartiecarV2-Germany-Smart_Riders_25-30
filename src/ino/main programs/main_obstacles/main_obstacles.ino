@@ -251,8 +251,21 @@ void TurnLeft()
 {
   float TargetDirection;
   int Speed;
+  int backtime;
   lcd.setRGB(125, 0, 125);
   Speed = SlowSpeed;
+  stopMotor();
+  Distance_Right = SpaceUltraSonicRight();
+  if (Distance_Right > 50)
+  {
+    // position left of center
+    backtime = 1500;
+  }
+  else
+  {
+    backtime = 200;
+  }
+  runMotor(SlowSpeed);
   right(45);
 
   angle = IMU_getAngle();
@@ -289,7 +302,7 @@ void TurnLeft()
   Distance_Right = SpaceUltraSonicRight();
   Distance_Front = SpaceUltraSonicFront();
   runMotor_R(SlowSpeed);
-  delay(1500);
+  delay(backtime);
   stopMotor();
   runMotor(SlowSpeed);
   lcd.setRGB(255, 255, 255);
@@ -305,8 +318,22 @@ void TurnRight()
 {
   float TargetDirection;
   int Speed;
+  int backtime;
   lcd.setRGB(125, 0, 125);
   Speed = SlowSpeed;
+  stopMotor();
+  Distance_Left = SpaceUltraSonicLeft();
+  if (Distance_Left > 50)
+  {
+    // position left of center
+    backtime = 1500;
+  }
+  else
+  {
+    backtime = 200;
+  }
+  runMotor(SlowSpeed);
+
   left(45);
 
   angle = IMU_getAngle();
@@ -343,7 +370,7 @@ void TurnRight()
   Distance_Right = SpaceUltraSonicRight();
   Distance_Front = SpaceUltraSonicFront();
   runMotor_R(SlowSpeed);
-  delay(1500);
+  delay(backtime);
   stopMotor();
   runMotor(SlowSpeed);
   lcd.setRGB(255, 255, 255);
@@ -503,6 +530,10 @@ void CurveLeftUntilBlock()
   LastCurveTime = millis();
 }
 
+/////////////////////////////////////////////////////////////////////
+// CurveRightUntilBlock()
+// makes right turn until 90 degrees or block in sight to adjust speed
+/////////////////////////////////////////////////////////////////////
 void CurveRightUntilBlock()
 {
   int Speed;
@@ -553,56 +584,6 @@ void CurveRightUntilBlock()
   lcd.setRGB(255, 255, 255);
   LastCurveTime = millis();
 }
-
-/*/////////////////////////////////////////////////////////////////////
-// CurveRightUntilBlock()
-// makes right turn until 90 degrees or block in sight to adjust speed
-/////////////////////////////////////////////////////////////////////
-void CurveRightUntilBlock()
-{
-  int Speed;
-  float TargetDirection;
-  Speed = SlowSpeed;
-  lcd.setRGB(0, 0, 255);
-  right(45);
-  angle = IMU_getAngle();
-  // replaces complicated quadrantSYS
-  TargetDirection = CalculateTargetDirection();
-  Distance_Front = SpaceUltraSonicFront();
-  while (angle < TargetDirection - correction_Right)
-  {
-    angle = IMU_getAngle();
-    Speed = Speed + 5;
-    if (Speed > CurveSpeed)
-    {
-      Speed = CurveSpeed;
-    }
-    runMotor(Speed);
-    findNextPillar();
-    if ((P_color != 'U') && (P_x >= 160))
-    {
-      // Pillar is in view and in the middle -> end curve
-      break;
-    }
-  }
-
-  stopMotor();
-  center();
-  if ((P_color != 'U') && (P_height > 30))
-  {
-    // already too near, go back a little bit to better approach next pillar
-    runMotor_R(SlowSpeed);
-    delay(500);
-    stopMotor();
-    runMotor(SlowSpeed);
-  }
-  corners = corners + 1;
-  StraightAngle = TargetDirection;
-  runMotor(SlowSpeed);
-  lcd.setRGB(255, 255, 255);
-  LastCurveTime = millis();
-}
-*/
 
 /////////////////////////////////////////////////////////////////////
 // DriveUntilFirstPillarInLane()
@@ -777,6 +758,7 @@ void EvadeGreenPillar()
   float angle;
   float TargetDirection;
   int Speed;
+  int prev_x;
   lcd.setRGB(0, 255, 0);
   // save orientation
   angle = IMU_getAngle();
@@ -791,9 +773,6 @@ void EvadeGreenPillar()
   while ((P_x < 290) && (P_color == 'G'))
   {
     findNextPillar();
-    lcd.setCursor(0, 0);
-    lcd.print(P_x);
-    lcd.print("   ");
   }
   // Go past pillar, until it is not longer seen or wall collision
   // while ((P_color != 'U') && (P_wall_R == 'N'))
@@ -803,29 +782,31 @@ void EvadeGreenPillar()
   while (P_color == 'G')
   {
     findNextPillar();
-    lcd.setCursor(0, 0);
-    lcd.print(P_color);
-    lcd.print(" ");
-    lcd.print(P_wall_L);
   }
 
-  delay(400);
+  delay(200);
   // back to straight
-  right(25);
+  right(35);
 
   angle = IMU_getAngle();
   while (angle < TargetDirection)
   {
     angle = IMU_getAngle();
-    lcd.setCursor(0, 0);
-    lcd.print(angle);
-    lcd.print("   ");
-    // delay(20);
+    delay(10);
   }
   center();
   runMotor(SlowSpeed);
   // drive past
-  delay(200);
+  prev_x = P_x;
+  findNextPillar();
+  while ((P_color == 'G') && (P_x >= prev_x))
+  {
+    P_x = prev_x;
+    findNextPillar();
+    Gyro_steer_straight();
+  }
+
+  delay(100);
   lcd.setRGB(255, 255, 255);
   LastPillarColor = 'G';
 }
@@ -839,6 +820,8 @@ void EvadeRedPillar()
   float angle;
   float TargetDirection;
   int Speed;
+  int prev_x;
+
   lcd.setRGB(255, 0, 0);
   // save orientation
   angle = IMU_getAngle();
@@ -853,9 +836,6 @@ void EvadeRedPillar()
   while ((P_x > 30) && (P_color == 'R'))
   {
     findNextPillar();
-    lcd.setCursor(0, 0);
-    lcd.print(P_x);
-    lcd.print("   ");
   }
   // Go past pillar, until it is not longer seen or wall collision
   // while ((P_color != 'U') && (P_wall_R == 'N'))
@@ -866,26 +846,31 @@ void EvadeRedPillar()
   while (P_color == 'R')
   {
     findNextPillar();
-    lcd.setCursor(0, 0);
-    lcd.print(P_color);
-    lcd.print(" ");
-    lcd.print(P_wall_R);
   }
 
-  delay(400);
+  delay(200);
   // back to straight
-  left(25);
+  left(35);
 
   angle = IMU_getAngle();
   while (angle > TargetDirection /*- correction_Left*/)
   {
     angle = IMU_getAngle();
-    delay(20);
+    delay(10);
   }
   center();
   runMotor(SlowSpeed);
   // drive past
-  delay(200);
+  prev_x = P_x;
+  findNextPillar();
+  while ((P_color == 'R') && (P_x <= prev_x))
+  {
+    P_x = prev_x;
+    findNextPillar();
+    Gyro_steer_straight();
+  }
+
+  delay(100);
   lcd.setRGB(255, 255, 255);
   LastPillarColor = 'R';
 }
@@ -908,11 +893,8 @@ void runCurve()
     }
     else
     {
-      if (Distance_Right > 60)
-      {
-        steerToLaneCenter();
-      }
       // Go straight to opposite wall
+      Distance_Front = SpaceUltraSonicFront();
       while (Distance_Front > 10)
       {
         Gyro_steer_straight();
@@ -933,6 +915,7 @@ void runCurve()
     else
     {
       // Go straight to opposite wall
+      Distance_Front = SpaceUltraSonicFront();
       while (Distance_Front > 10)
       {
         Gyro_steer_straight();
@@ -949,13 +932,19 @@ void runCurve()
 /////////////////////////////////////////////////////////////////////
 // runLane()
 // run along one lane with obstacles
-// minimum 1 obstacle, maximum 2 obstacles
+// checks for minimum 1 obstacle, maximum 2 obstacles
 /////////////////////////////////////////////////////////////////////
 void runLane()
 {
   bool check = false;
   stopMotor();
   findNextPillar();
+  lcd.setCursor(0, 0);
+  lcd.print(P_color);
+  lcd.print(" ");
+  lcd.print(P_height);
+  delay(200);
+
   if (P_height > 20)
   {
     // lane may have 2 pillars
@@ -1027,7 +1016,7 @@ bool CheckPillarIsInLane()
   {
     return true;
   }
-  else if ((DrivingDirection == 'R') && (P_color != 'U') && (P_x < 200))
+  else if ((DrivingDirection == 'R') && (P_color != 'U') && (P_x < 215))
   {
     return true;
   }
@@ -1117,6 +1106,11 @@ void evaluateRaspiData()
 ///////////////////////////////////////////////////////////
 void startPhase()
 {
+  bool centerRight = false;
+  bool centerLeft = false;
+  float TargetDirection;
+  float angle;
+
   runMotor(SlowSpeed);
   findNextPillar(); // requests what is seen in front
   //  Check if pillar is right ahead
@@ -1124,6 +1118,8 @@ void startPhase()
   {
     ApproachPillar();
     EvadeRedPillar();
+
+    runMotor(SlowSpeed);
     while (Distance_Front > 10)
     {
       Gyro_steer_straight();
@@ -1135,14 +1131,39 @@ void startPhase()
       Distance_Left = SpaceUltraSonicLeft();
       Distance_Right = SpaceUltraSonicRight();
 
-      if (Distance_Left > 100)
+      if (Distance_Left > 150)
       {
         DrivingDirection = 'L';
       }
 
-      if (Distance_Right > 100)
+      else if (Distance_Right > 150)
       {
         DrivingDirection = 'R';
+      }
+      else
+      {
+        // Problem: cannot find driving direction
+        // try with direction of next pillar
+        runMotor_R(SlowSpeed);
+        delay(800);
+        stopMotor();
+        findNextPillar();
+        if (P_x > 160)
+        {
+          DrivingDirection = 'R';
+        }
+        else
+        {
+          DrivingDirection = 'L';
+        }
+        Distance_Front = SpaceUltraSonicFront();
+        runMotor(SlowSpeed);
+        while (Distance_Front > 10)
+        {
+          Gyro_steer_straight();
+          Distance_Front = SpaceUltraSonicFront();
+        }
+        stopMotor();
       }
     }
   }
@@ -1151,6 +1172,9 @@ void startPhase()
   {
     ApproachPillar();
     EvadeGreenPillar();
+
+    runMotor(SlowSpeed);
+    Distance_Front = SpaceUltraSonicFront();
     while (Distance_Front > 10)
     {
       Gyro_steer_straight();
@@ -1162,14 +1186,39 @@ void startPhase()
       Distance_Left = SpaceUltraSonicLeft();
       Distance_Right = SpaceUltraSonicRight();
 
-      if (Distance_Left > 100)
+      if (Distance_Left > 150)
       {
         DrivingDirection = 'L';
       }
 
-      if (Distance_Right > 100)
+      else if (Distance_Right > 150)
       {
         DrivingDirection = 'R';
+      }
+      else
+      {
+        // Problem: cannot determine Driving direction,
+        // try with direction of next pillar
+        runMotor_R(SlowSpeed);
+        delay(800);
+        stopMotor();
+        findNextPillar();
+        if (P_x > 160)
+        {
+          DrivingDirection = 'R';
+        }
+        else
+        {
+          DrivingDirection = 'L';
+        }
+        Distance_Front = SpaceUltraSonicFront();
+        runMotor(SlowSpeed);
+        while (Distance_Front > 10)
+        {
+          Gyro_steer_straight();
+          Distance_Front = SpaceUltraSonicFront();
+        }
+        stopMotor();
       }
     }
   }
@@ -1198,6 +1247,10 @@ void startPhase()
       else if (Distance_Right > 80)
       {
         DrivingDirection = 'R';
+      }
+      else
+      {
+        // Problem: cannot find driving drection
       }
     }
   }
@@ -1273,6 +1326,9 @@ void LanewithUTurn()
 
   if (LastPillarColor == 'R')
   {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("UTurn");
     UTurn();
     if (DrivingDirection == 'R')
     {
@@ -1285,7 +1341,6 @@ void LanewithUTurn()
     }
   }
   // Another pillar in this lane?
-  // steerToLaneCenter();
   findNextPillar();
   // check if pillar is in lane
   if (P_color != 'U')
@@ -1314,96 +1369,121 @@ void LanewithUTurn()
   }
 }
 
-void UTurn()
+float UTurnRight()
 {
   float TargetDirection;
   float angle;
+  runMotor(SlowSpeed);
+  TargetDirection = StraightAngle + 45.0;
+  right(45);
+  angle = IMU_getAngle();
+  runMotor(SlowSpeed);
+
+  while (angle < TargetDirection)
+  {
+    angle = IMU_getAngle();
+  }
+  stopMotor();
+  left(45);
+  TargetDirection = StraightAngle + 90.0;
+  runMotor_R(SlowSpeed);
+  while (angle < TargetDirection)
+  {
+    angle = IMU_getAngle();
+  }
+  stopMotor();
+
+  TargetDirection = StraightAngle + 135.0;
+  right(45);
+  angle = IMU_getAngle();
+  runMotor(SlowSpeed);
+
+  while (angle < TargetDirection)
+  {
+    angle = IMU_getAngle();
+  }
+  stopMotor();
+  left(45);
+  TargetDirection = StraightAngle + 180.0;
+  runMotor_R(SlowSpeed);
+  while (angle < TargetDirection)
+  {
+    angle = IMU_getAngle();
+  }
+  stopMotor();
+
+  center();
+
+  runMotor(SlowSpeed);
+
+  return TargetDirection;
+}
+
+float UTurnLeft()
+{
+  float TargetDirection;
+  float angle;
+  runMotor(SlowSpeed);
+  TargetDirection = StraightAngle - 45.0;
+  left(45);
+  angle = IMU_getAngle();
+  runMotor(SlowSpeed);
+
+  while (angle > TargetDirection)
+  {
+    angle = IMU_getAngle();
+  }
+  stopMotor();
+  right(45);
+  TargetDirection = StraightAngle - 90.0;
+  runMotor_R(SlowSpeed);
+  while (angle > TargetDirection)
+  {
+    angle = IMU_getAngle();
+  }
+  stopMotor();
+
+  TargetDirection = StraightAngle - 135.0;
+  left(45);
+  angle = IMU_getAngle();
+  runMotor(SlowSpeed);
+
+  while (angle > TargetDirection)
+  {
+    angle = IMU_getAngle();
+  }
+  stopMotor();
+  right(45);
+  TargetDirection = StraightAngle - 180.0;
+  runMotor_R(SlowSpeed);
+  while (angle > TargetDirection)
+  {
+    angle = IMU_getAngle();
+  }
+  stopMotor();
+
+  center();
+
+  runMotor(SlowSpeed);
+
+  return TargetDirection;
+}
+void UTurn()
+{
+  float TargetDirection;
+  runMotor(SlowSpeed);
+  delay(1000);
   stopMotor();
   Distance_Left = SpaceUltraSonicLeft();
   Distance_Right = SpaceUltraSonicRight();
   if (Distance_Left > Distance_Right)
   {
-    TargetDirection = StraightAngle - 90.0;
-    left(45);
-    angle = IMU_getAngle();
-    runMotor(SlowSpeed);
-
-    while (angle > TargetDirection)
-    {
-      angle = IMU_getAngle();
-    }
-    center();
-
-    Distance_Front = SpaceUltraSonicFront();
-    while (Distance_Front > 10)
-    {
-      delay(10);
-    }
-
-    stopMotor();
-    runMotor_R(SlowSpeed);
-    while (Distance_Front < 65)
-    {
-      delay(10);
-    }
-    stopMotor();
-    TargetDirection - 90.0;
-    left(45);
-    angle = IMU_getAngle();
-    runMotor(SlowSpeed);
-
-    while (angle > TargetDirection)
-    {
-      angle = IMU_getAngle();
-    }
-    center();
-    stopMotor();
-    runMotor_R(SlowSpeed);
-    delay(1500);
-    stopMotor();
-    runMotor(SlowSpeed);
+    TargetDirection = UTurnLeft();
   }
 
   else
   {
-    TargetDirection = StraightAngle + 90.0;
-    right(45);
-    angle = IMU_getAngle();
-    runMotor(SlowSpeed);
-
-    while (angle < TargetDirection)
-    {
-      angle = IMU_getAngle();
-    }
-    center();
-
-    while (Distance_Front > 10)
-    {
-      delay(10);
-    }
-
-    stopMotor();
-    runMotor_R(SlowSpeed);
-    while (Distance_Front < 65)
-    {
-      delay(10);
-    }
-    stopMotor();
-    TargetDirection + 90.0;
-    right(45);
-    angle = IMU_getAngle();
-    runMotor(SlowSpeed);
-
-    while (angle < TargetDirection)
-    {
-      angle = IMU_getAngle();
-    }
-    center();
-    stopMotor();
-    runMotor_R(SlowSpeed);
-    delay(1500);
-    stopMotor();
-    runMotor(SlowSpeed);
+    TargetDirection = UTurnRight();
   }
 
   StraightAngle = TargetDirection;
@@ -1436,6 +1516,21 @@ void start_test()
   EvadeRedPillar();
   ApproachPillar();
   EvadeGreenPillar();
+  runCurve();
+  stopMotor();
+  delay(1000000000);
+}
+void start_test2()
+{
+  DrivingDirection = 'L';
+  corners = 8;
+  LanewithUTurn();
+  stopMotor();
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print(DrivingDirection);
+  delay(3000);
+  runMotor(SlowSpeed);
   runCurve();
   stopMotor();
   delay(1000000000);
